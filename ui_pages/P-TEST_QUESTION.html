@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心探 - 测试答题</title>
+    <script src="https://unpkg.byted-static.com/coze/space_ppt_lib/1.0.3-alpha.12/lib/tailwindcss.js"></script>
+    <script src="https://unpkg.byted-static.com/fortawesome/fontawesome-free/6.7.2/js/all.min.js" data-auto-replace-svg="nest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        tertiary: '#06b6d4',
+                        accent: '#f59e0b',
+                        glassBg: 'rgba(255, 255, 255, 0.1)',
+                        glassBorder: 'rgba(255, 255, 255, 0.2)',
+                        textPrimary: '#1f2937',
+                        textSecondary: '#6b7280',
+                        textLight: '#9ca3af'
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                        'glass-inset': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .option-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .option-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .option-card.selected {
+            background: rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.8) 0%, rgba(139, 92, 246, 0.8) 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .safe-top {
+            padding-top: env(safe-area-inset-top);
+        }
+        
+        .safe-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        .loading-spinner {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 2px solid white;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .scale-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+        
+        .scale-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #6366f1;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+        
+        .scale-slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #6366f1;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+    </style>
+</head>
+<body class="gradient-bg">
+    <!-- 状态栏模拟 -->
+    <div id="status-bar" class="fixed top-0 left-0 right-0 h-11 bg-transparent flex justify-between items-center px-6 text-white text-sm font-medium z-50 safe-top">
+        <div class="flex items-center space-x-1">
+            <span>9:41</span>
+        </div>
+        <div class="flex items-center space-x-1">
+            <i class="fas fa-signal text-xs"></i>
+            <i class="fas fa-wifi text-xs"></i>
+            <i class="fas fa-battery-three-quarters text-xs"></i>
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div id="main-content" class="pt-11 pb-24">
+        <!-- 顶部导航栏 -->
+        <header id="top-header" class="px-6 py-4">
+            <div id="header-content" class="flex items-center justify-between">
+                <div id="header-left" class="flex items-center space-x-3">
+                    <button id="back-btn" class="w-10 h-10 glass-effect rounded-full flex items-center justify-center">
+                        <i class="fas fa-arrow-left text-white text-lg"></i>
+                    </button>
+                    <div id="test-title-section">
+                        <h1 id="test-title" class="text-lg font-semibold text-white">抑郁症评估</h1>
+                        <p id="question-progress" class="text-sm text-white/80">1/20</p>
+                    </div>
+                </div>
+                <div id="header-right" class="flex items-center space-x-3">
+                    <button id="timer-btn" class="w-10 h-10 glass-effect rounded-full flex items-center justify-center">
+                        <i class="far fa-clock text-white text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 进度条 -->
+        <div id="progress-section" class="px-6 mb-6">
+            <div id="progress-bar" class="progress-bar h-2">
+                <div id="progress-fill" class="progress-fill" style="width: 5%"></div>
+            </div>
+            <div id="progress-text" class="flex justify-between mt-2 text-white/60 text-xs">
+                <span>第1题</span>
+                <span>共20题</span>
+            </div>
+        </div>
+
+        <!-- 题目内容区 -->
+        <section id="question-section" class="px-6 mb-8">
+            <div id="question-card" class="glass-card rounded-2xl p-6">
+                <div id="question-content">
+                    <h2 id="question-text" class="text-white text-xl font-semibold mb-4 leading-relaxed">
+                        最近两周内，您是否经常感到情绪低落、沮丧或绝望？
+                    </h2>
+                    
+                    <!-- 选项区域 -->
+                    <div id="options-container" class="space-y-3">
+                        <!-- 单选题选项 -->
+                        <div id="option-1" class="option-card rounded-xl p-4 cursor-pointer" data-value="0">
+                            <div class="flex items-center space-x-3">
+                                <div class="option-radio w-5 h-5 border-2 border-white/50 rounded-full flex items-center justify-center">
+                                    <div class="option-radio-dot w-2.5 h-2.5 bg-primary rounded-full hidden"></div>
+                                </div>
+                                <span class="text-white text-base">完全没有</span>
+                            </div>
+                        </div>
+                        
+                        <div id="option-2" class="option-card rounded-xl p-4 cursor-pointer" data-value="1">
+                            <div class="flex items-center space-x-3">
+                                <div class="option-radio w-5 h-5 border-2 border-white/50 rounded-full flex items-center justify-center">
+                                    <div class="option-radio-dot w-2.5 h-2.5 bg-primary rounded-full hidden"></div>
+                                </div>
+                                <span class="text-white text-base">有几天</span>
+                            </div>
+                        </div>
+                        
+                        <div id="option-3" class="option-card rounded-xl p-4 cursor-pointer" data-value="2">
+                            <div class="flex items-center space-x-3">
+                                <div class="option-radio w-5 h-5 border-2 border-white/50 rounded-full flex items-center justify-center">
+                                    <div class="option-radio-dot w-2.5 h-2.5 bg-primary rounded-full hidden"></div>
+                                </div>
+                                <span class="text-white text-base">一半以上的天数</span>
+                            </div>
+                        </div>
+                        
+                        <div id="option-4" class="option-card rounded-xl p-4 cursor-pointer" data-value="3">
+                            <div class="flex items-center space-x-3">
+                                <div class="option-radio w-5 h-5 border-2 border-white/50 rounded-full flex items-center justify-center">
+                                    <div class="option-radio-dot w-2.5 h-2.5 bg-primary rounded-full hidden"></div>
+                                </div>
+                                <span class="text-white text-base">几乎每天</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 量表题目示例（隐藏，用于演示不同题型） -->
+        <section id="scale-question-section" class="px-6 mb-8 hidden">
+            <div id="scale-question-card" class="glass-card rounded-2xl p-6">
+                <div id="scale-question-content">
+                    <h2 id="scale-question-text" class="text-white text-xl font-semibold mb-6 leading-relaxed">
+                        请根据您的实际感受，在以下量表中选择最符合您情况的选项：
+                    </h2>
+                    
+                    <div id="scale-container" class="space-y-6">
+                        <div id="scale-item-1">
+                            <p class="text-white text-base mb-4">我对生活感到满意</p>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-white/60 text-sm w-8 text-center">完全不符合</span>
+                                <input type="range" id="scale-slider-1" class="scale-slider flex-1" min="1" max="5" value="3">
+                                <span class="text-white/60 text-sm w-8 text-center">完全符合</span>
+                            </div>
+                            <div class="flex justify-between mt-2 text-white/60 text-xs">
+                                <span>1</span>
+                                <span>2</span>
+                                <span>3</span>
+                                <span>4</span>
+                                <span>5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 底部操作区 -->
+    <div id="bottom-actions" class="fixed bottom-0 left-0 right-0 glass-effect p-6 safe-bottom">
+        <div id="action-buttons" class="flex space-x-4">
+            <button id="prev-btn" class="flex-1 py-4 glass-card rounded-xl text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                <i class="fas fa-arrow-left mr-2"></i>上一题
+            </button>
+            <button id="next-btn" class="flex-1 py-4 bg-gradient-to-r from-primary to-secondary rounded-xl text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                下一题<i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 放弃测试确认对话框 -->
+    <div id="abandon-modal" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 hidden">
+        <div id="abandon-modal-content" class="glass-card rounded-2xl p-6 mx-6 max-w-sm w-full">
+            <div id="abandon-modal-header" class="text-center mb-4">
+                <div id="abandon-modal-icon" class="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
+                </div>
+                <h3 id="abandon-modal-title" class="text-white text-lg font-semibold mb-2">确认放弃测试？</h3>
+                <p id="abandon-modal-desc" class="text-white/80 text-sm">
+                    您的答题进度将会丢失，确定要放弃当前测试吗？
+                </p>
+            </div>
+            <div id="abandon-modal-actions" class="flex space-x-3">
+                <button id="abandon-cancel-btn" class="flex-1 py-3 glass-card rounded-xl text-white font-medium">
+                    继续测试
+                </button>
+                <button id="abandon-confirm-btn" class="flex-1 py-3 bg-gradient-to-r from-orange-400 to-red-500 rounded-xl text-white font-medium">
+                    放弃测试
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提交确认对话框 -->
+    <div id="submit-modal" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 hidden">
+        <div id="submit-modal-content" class="glass-card rounded-2xl p-6 mx-6 max-w-sm w-full">
+            <div id="submit-modal-header" class="text-center mb-4">
+                <div id="submit-modal-icon" class="w-16 h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-check text-white text-2xl"></i>
+                </div>
+                <h3 id="submit-modal-title" class="text-white text-lg font-semibold mb-2">完成测试</h3>
+                <p id="submit-modal-desc" class="text-white/80 text-sm">
+                    您已完成所有题目，现在提交测试获取结果
+                </p>
+            </div>
+            <div id="submit-modal-actions" class="flex space-x-3">
+                <button id="submit-cancel-btn" class="flex-1 py-3 glass-card rounded-xl text-white font-medium">
+                    检查答案
+                </button>
+                <button id="submit-confirm-btn" class="flex-1 py-3 bg-gradient-to-r from-green-400 to-blue-500 rounded-xl text-white font-medium">
+                    提交测试
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 解析URL参数的辅助函数
+            function getUrlParams() {
+                const params = {};
+                const queryString = window.location.search.substring(1);
+                const urlParams = new URLSearchParams(queryString);
+                
+                for(const [key, value] of urlParams.entries()) {
+                    params[key] = value;
+                }
+                return params;
+            }
+
+            // 获取URL参数
+            const params = getUrlParams();
+            const testTypeId = params.test_type_id || 'depression';
+
+            // 模拟测试数据
+            const testData = {
+                'depression': {
+                    title: '抑郁症评估',
+                    questions: [
+                        {
+                            id: 1,
+                            text: '最近两周内，您是否经常感到情绪低落、沮丧或绝望？',
+                            type: 'single_choice',
+                            options: [
+                                { value: 0, text: '完全没有' },
+                                { value: 1, text: '有几天' },
+                                { value: 2, text: '一半以上的天数' },
+                                { value: 3, text: '几乎每天' }
+                            ]
+                        },
+                        {
+                            id: 2,
+                            text: '最近两周内，您是否对做事情几乎没有兴趣或乐趣？',
+                            type: 'single_choice',
+                            options: [
+                                { value: 0, text: '完全没有' },
+                                { value: 1, text: '有几天' },
+                                { value: 2, text: '一半以上的天数' },
+                                { value: 3, text: '几乎每天' }
+                            ]
+                        },
+                        {
+                            id: 3,
+                            text: '最近两周内，您是否难以入睡或保持睡眠，或睡得太多？',
+                            type: 'single_choice',
+                            options: [
+                                { value: 0, text: '完全没有' },
+                                { value: 1, text: '有几天' },
+                                { value: 2, text: '一半以上的天数' },
+                                { value: 3, text: '几乎每天' }
+                            ]
+                        }
+                    ]
+                },
+                'personality': {
+                    title: 'MBTI性格测试',
+                    questions: [
+                        {
+                            id: 1,
+                            text: '您更倾向于：',
+                            type: 'single_choice',
+                            options: [
+                                { value: 'E', text: '与他人相处时获得能量' },
+                                { value: 'I', text: '独处时获得能量' }
+                            ]
+                        },
+                        {
+                            id: 2,
+                            text: '您更关注：',
+                            type: 'single_choice',
+                            options: [
+                                { value: 'S', text: '具体的事实和细节' },
+                                { value: 'N', text: '抽象的概念和可能性' }
+                            ]
+                        }
+                    ]
+                }
+            };
+
+            // 当前测试数据
+            const currentTest = testData[testTypeId] || testData['depression'];
+            let currentQuestionIndex = 0;
+            let userAnswers = [];
+            let startTime = Date.now();
+
+            // 初始化页面
+            function initializePage() {
+                document.querySelector('#test-title').textContent = currentTest.title;
+                updateQuestionDisplay();
+                updateProgress();
+            }
+
+            // 更新题目显示
+            function updateQuestionDisplay() {
+                const question = currentTest.questions[currentQuestionIndex];
+                
+                // 更新进度显示
+                document.querySelector('#question-progress').textContent = 
+                    `${currentQuestionIndex + 1}/${currentTest.questions.length}`;
+                
+                // 更新题目内容
+                document.querySelector('#question-text').textContent = question.text;
+                
+                // 根据题目类型显示不同的选项
+                if (question.type === 'single_choice') {
+                    showSingleChoiceOptions(question.options);
+                } else if (question.type === 'scale') {
+                    showScaleOptions(question.options);
+                }
+                
+                // 更新按钮状态
+                updateButtonStates();
+            }
+
+            // 显示单选题选项
+            function showSingleChoiceOptions(options) {
+                const container = document.querySelector('#options-container');
+                container.innerHTML = '';
+                
+                options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.id = `option-${index + 1}`;
+                    optionElement.className = 'option-card rounded-xl p-4 cursor-pointer';
+                    optionElement.dataset.value = option.value;
+                    
+                    optionElement.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <div class="option-radio w-5 h-5 border-2 border-white/50 rounded-full flex items-center justify-center">
+                                <div class="option-radio-dot w-2.5 h-2.5 bg-primary rounded-full hidden"></div>
+                            </div>
+                            <span class="text-white text-base">${option.text}</span>
+                        </div>
+                    `;
+                    
+                    // 添加点击事件
+                    optionElement.addEventListener('click', function() {
+                        selectSingleChoiceOption(this);
+                    });
+                    
+                    container.appendChild(optionElement);
+                });
+                
+                // 恢复之前的选择
+                const previousAnswer = userAnswers[currentQuestionIndex];
+                if (previousAnswer !== undefined) {
+                    const optionToSelect = container.querySelector(`[data-value="${previousAnswer}"]`);
+                    if (optionToSelect) {
+                        selectSingleChoiceOption(optionToSelect);
+                    }
+                }
+            }
+
+            // 选择单选题选项
+            function selectSingleChoiceOption(selectedOption) {
+                // 清除所有选中状态
+                document.querySelectorAll('.option-card').forEach(option => {
+                    option.classList.remove('selected');
+                    option.querySelector('.option-radio-dot').classList.add('hidden');
+                });
+                
+                // 设置当前选中状态
+                selectedOption.classList.add('selected');
+                selectedOption.querySelector('.option-radio-dot').classList.remove('hidden');
+                
+                // 保存答案
+                userAnswers[currentQuestionIndex] = selectedOption.dataset.value;
+                
+                // 更新按钮状态
+                updateButtonStates();
+            }
+
+            // 显示量表选项（演示用）
+            function showScaleOptions(options) {
+                // 这里可以实现量表类型的题目显示
+                console.log('显示量表题目');
+            }
+
+            // 更新进度条
+            function updateProgress() {
+                const progress = ((currentQuestionIndex + 1) / currentTest.questions.length) * 100;
+                document.querySelector('#progress-fill').style.width = `${progress}%`;
+                document.querySelector('#progress-text').innerHTML = `
+                    <span>第${currentQuestionIndex + 1}题</span>
+                    <span>共${currentTest.questions.length}题</span>
+                `;
+            }
+
+            // 更新按钮状态
+            function updateButtonStates() {
+                const prevBtn = document.querySelector('#prev-btn');
+                const nextBtn = document.querySelector('#next-btn');
+                
+                // 上一题按钮
+                prevBtn.disabled = currentQuestionIndex === 0;
+                
+                // 下一题/提交按钮
+                const hasAnswer = userAnswers[currentQuestionIndex] !== undefined;
+                nextBtn.disabled = !hasAnswer;
+                
+                if (currentQuestionIndex === currentTest.questions.length - 1) {
+                    nextBtn.innerHTML = '<i class="fas fa-check mr-2"></i>完成测试';
+                } else {
+                    nextBtn.innerHTML = '下一题<i class="fas fa-arrow-right ml-2"></i>';
+                }
+            }
+
+            // 上一题
+            function goToPreviousQuestion() {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    updateQuestionDisplay();
+                    updateProgress();
+                }
+            }
+
+            // 下一题
+            function goToNextQuestion() {
+                if (currentQuestionIndex < currentTest.questions.length - 1) {
+                    currentQuestionIndex++;
+                    updateQuestionDisplay();
+                    updateProgress();
+                } else {
+                    // 显示提交确认对话框
+                    document.querySelector('#submit-modal').classList.remove('hidden');
+                }
+            }
+
+            // 提交测试
+            function submitTest() {
+                const endTime = Date.now();
+                const duration = Math.round((endTime - startTime) / 1000);
+                
+                // 模拟生成记录ID
+                const recordId = 'record_' + Date.now();
+                
+                // 保存测试记录（在实际应用中会保存到本地数据库）
+                const testRecord = {
+                    recordId: recordId,
+                    testTypeId: testTypeId,
+                    startTime: startTime,
+                    endTime: endTime,
+                    duration: duration,
+                    answers: userAnswers,
+                    timestamp: new Date().toISOString()
+                };
+                
+                console.log('测试记录:', testRecord);
+                
+                // 跳转到结果页面
+                window.location.href = `P-RESULT_DISPLAY.html?record_id=${recordId}`;
+            }
+
+            // 事件监听器
+            
+            // 返回按钮
+            document.querySelector('#back-btn').addEventListener('click', function() {
+                document.querySelector('#abandon-modal').classList.remove('hidden');
+            });
+
+            // 放弃测试确认
+            document.querySelector('#abandon-confirm-btn').addEventListener('click', function() {
+                window.location.href = `P-TEST_DETAIL.html?test_type_id=${testTypeId}`;
+            });
+
+            // 取消放弃测试
+            document.querySelector('#abandon-cancel-btn').addEventListener('click', function() {
+                document.querySelector('#abandon-modal').classList.add('hidden');
+            });
+
+            // 提交测试确认
+            document.querySelector('#submit-confirm-btn').addEventListener('click', function() {
+                document.querySelector('#submit-modal').classList.add('hidden');
+                submitTest();
+            });
+
+            // 取消提交测试
+            document.querySelector('#submit-cancel-btn').addEventListener('click', function() {
+                document.querySelector('#submit-modal').classList.add('hidden');
+            });
+
+            // 上一题按钮
+            document.querySelector('#prev-btn').addEventListener('click', function() {
+                if (!this.disabled) {
+                    goToPreviousQuestion();
+                }
+            });
+
+            // 下一题按钮
+            document.querySelector('#next-btn').addEventListener('click', function() {
+                if (!this.disabled) {
+                    goToNextQuestion();
+                }
+            });
+
+            // 点击模态框背景关闭
+            document.querySelector('#abandon-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
+            });
+
+            document.querySelector('#submit-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
+            });
+
+            // 初始化页面
+            initializePage();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心探 - 测试结果</title>
+    <script src="https://unpkg.byted-static.com/coze/space_ppt_lib/1.0.3-alpha.12/lib/tailwindcss.js"></script>
+    <script src="https://unpkg.byted-static.com/fortawesome/fontawesome-free/6.7.2/js/all.min.js" data-auto-replace-svg="nest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        tertiary: '#06b6d4',
+                        accent: '#f59e0b',
+                        glassBg: 'rgba(255, 255, 255, 0.1)',
+                        glassBorder: 'rgba(255, 255, 255, 0.2)',
+                        textPrimary: '#1f2937',
+                        textSecondary: '#6b7280',
+                        textLight: '#9ca3af'
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                        'glass-inset': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .score-circle {
+            background: conic-gradient(from 0deg, #6366f1 0deg, #8b5cf6 180deg, #06b6d4 360deg);
+            border-radius: 50%;
+            padding: 4px;
+        }
+        
+        .score-inner {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 50%;
+        }
+        
+        .safe-top {
+            padding-top: env(safe-area-inset-top);
+        }
+        
+        .safe-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        .result-section {
+            scroll-margin-top: 80px;
+        }
+    </style>
+</head>
+<body class="gradient-bg">
+    <!-- 状态栏模拟 -->
+    <div id="status-bar" class="fixed top-0 left-0 right-0 h-11 bg-transparent flex justify-between items-center px-6 text-white text-sm font-medium z-50 safe-top">
+        <div class="flex items-center space-x-1">
+            <span>9:41</span>
+        </div>
+        <div class="flex items-center space-x-1">
+            <i class="fas fa-signal text-xs"></i>
+            <i class="fas fa-wifi text-xs"></i>
+            <i class="fas fa-battery-three-quarters text-xs"></i>
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div id="main-content" class="pt-11 pb-24">
+        <!-- 顶部导航栏 -->
+        <header id="top-header" class="px-6 py-4">
+            <div id="header-content" class="flex items-center justify-between">
+                <div id="header-left" class="flex items-center space-x-3">
+                    <button id="back-btn" class="w-10 h-10 glass-effect rounded-full flex items-center justify-center">
+                        <i class="fas fa-arrow-left text-white text-lg"></i>
+                    </button>
+                    <div id="header-title-section">
+                        <h1 id="page-title" class="text-xl font-bold text-white">测试结果</h1>
+                        <p id="test-name" class="text-sm text-white/80 mt-1">抑郁症评估</p>
+                    </div>
+                </div>
+                <div id="header-actions" class="flex items-center space-x-3">
+                    <button id="share-btn-header" class="w-10 h-10 glass-effect rounded-full flex items-center justify-center">
+                        <i class="fas fa-share-alt text-white text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 测试分数区 -->
+        <section id="score-section" class="px-6 mb-8">
+            <div id="score-card" class="glass-card rounded-3xl p-8 text-center">
+                <div id="score-circle-container" class="flex justify-center mb-6">
+                    <div id="score-circle" class="score-circle w-32 h-32 flex items-center justify-center">
+                        <div id="score-inner" class="score-inner w-full h-full flex flex-col items-center justify-center">
+                            <span id="score-value" class="text-3xl font-bold text-gray-800">23</span>
+                            <span id="score-label" class="text-sm text-gray-600">测试分数</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="score-level" class="mb-4">
+                    <h2 id="level-title" class="text-xl font-bold text-white mb-2">轻度抑郁倾向</h2>
+                    <div id="level-bar-container" class="w-full bg-white/20 rounded-full h-3 mb-2">
+                        <div id="level-bar" class="bg-gradient-to-r from-yellow-400 to-orange-500 h-3 rounded-full" style="width: 45%"></div>
+                    </div>
+                    <div id="level-range" class="flex justify-between text-white/60 text-xs">
+                        <span>正常</span>
+                        <span>轻度</span>
+                        <span>中度</span>
+                        <span>重度</span>
+                    </div>
+                </div>
+                
+                <div id="test-meta" class="flex justify-center space-x-6 text-white/80 text-sm">
+                    <div id="test-duration" class="flex items-center">
+                        <i class="far fa-clock mr-2"></i>
+                        <span>用时 6分钟</span>
+                    </div>
+                    <div id="test-date" class="flex items-center">
+                        <i class="far fa-calendar mr-2"></i>
+                        <span>今天 14:30</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 结果解读区 -->
+        <section id="interpretation-section" class="px-6 mb-8 result-section">
+            <div id="interpretation-card" class="glass-card rounded-2xl p-6">
+                <div id="interpretation-header" class="flex items-center mb-4">
+                    <div id="interpretation-icon" class="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center mr-4">
+                        <i class="fas fa-lightbulb text-white text-lg"></i>
+                    </div>
+                    <h2 id="interpretation-title" class="text-lg font-semibold text-white">结果解读</h2>
+                </div>
+                
+                <div id="interpretation-content" class="text-white/90 leading-relaxed space-y-3">
+                    <p id="interpretation-text-1">根据您的测试结果，您目前表现出轻度抑郁倾向。这意味着您可能正在经历一些情绪上的困扰，但尚未达到临床抑郁症的诊断标准。</p>
+                    <p id="interpretation-text-2">您可能会感到偶尔的低落情绪、对日常活动的兴趣下降，或者出现睡眠和食欲的轻微变化。这些都是人体应对压力的正常反应。</p>
+                    <p id="interpretation-text-3">值得注意的是，轻度抑郁倾向是可以通过积极的生活方式调整和心理调适得到改善的。及时关注并采取行动是非常重要的。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 改善建议区 -->
+        <section id="suggestions-section" class="px-6 mb-8 result-section">
+            <div id="suggestions-card" class="glass-card rounded-2xl p-6">
+                <div id="suggestions-header" class="flex items-center mb-4">
+                    <div id="suggestions-icon" class="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-xl flex items-center justify-center mr-4">
+                        <i class="fas fa-heart text-white text-lg"></i>
+                    </div>
+                    <h2 id="suggestions-title" class="text-lg font-semibold text-white">改善建议</h2>
+                </div>
+                
+                <div id="suggestions-list" class="space-y-4">
+                    <div id="suggestion-1" class="flex items-start space-x-3">
+                        <div id="suggestion-1-icon" class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-walking text-white text-sm"></i>
+                        </div>
+                        <div id="suggestion-1-content">
+                            <h3 id="suggestion-1-title" class="text-white font-medium mb-1">增加体育锻炼</h3>
+                            <p id="suggestion-1-text" class="text-white/80 text-sm">每天进行30分钟的有氧运动，如快走、跑步或游泳，有助于释放内啡肽，改善情绪状态。</p>
+                        </div>
+                    </div>
+                    
+                    <div id="suggestion-2" class="flex items-start space-x-3">
+                        <div id="suggestion-2-icon" class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-moon text-white text-sm"></i>
+                        </div>
+                        <div id="suggestion-2-content">
+                            <h3 id="suggestion-2-title" class="text-white font-medium mb-1">改善睡眠质量</h3>
+                            <p id="suggestion-2-text" class="text-white/80 text-sm">保持规律的作息时间，创造舒适的睡眠环境，避免睡前使用电子设备。</p>
+                        </div>
+                    </div>
+                    
+                    <div id="suggestion-3" class="flex items-start space-x-3">
+                        <div id="suggestion-3-icon" class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-users text-white text-sm"></i>
+                        </div>
+                        <div id="suggestion-3-content">
+                            <h3 id="suggestion-3-title" class="text-white font-medium mb-1">加强社交联系</h3>
+                            <p id="suggestion-3-text" class="text-white/80 text-sm">与亲友保持联系，参与社交活动，分享感受，避免过度独处。</p>
+                        </div>
+                    </div>
+                    
+                    <div id="suggestion-4" class="flex items-start space-x-3">
+                        <div id="suggestion-4-icon" class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-leaf text-white text-sm"></i>
+                        </div>
+                        <div id="suggestion-4-content">
+                            <h3 id="suggestion-4-title" class="text-white font-medium mb-1">练习放松技巧</h3>
+                            <p id="suggestion-4-text" class="text-white/80 text-sm">尝试冥想、深呼吸练习或瑜伽，每天10-15分钟，有助于缓解压力和焦虑。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 专业参考资料区 -->
+        <section id="references-section" class="px-6 mb-8 result-section">
+            <div id="references-card" class="glass-card rounded-2xl p-6">
+                <div id="references-header" class="flex items-center mb-4">
+                    <div id="references-icon" class="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl flex items-center justify-center mr-4">
+                        <i class="fas fa-book text-white text-lg"></i>
+                    </div>
+                    <h2 id="references-title" class="text-lg font-semibold text-white">专业参考</h2>
+                </div>
+                
+                <div id="references-content" class="space-y-4">
+                    <div id="reference-1" class="border-l-4 border-white/30 pl-4">
+                        <h3 id="reference-1-title" class="text-white font-medium mb-2">PHQ-9 抑郁症筛查量表</h3>
+                        <p id="reference-1-text" class="text-white/80 text-sm mb-2">本测试基于PHQ-9量表，是国际通用的抑郁症筛查工具，具有良好的信度和效度。</p>
+                        <div id="reference-1-scoring" class="text-white/60 text-xs space-y-1">
+                            <div>• 0-4分：无抑郁症状</div>
+                            <div>• 5-9分：轻度抑郁倾向</div>
+                            <div>• 10-14分：中度抑郁</div>
+                            <div>• 15-27分：重度抑郁</div>
+                        </div>
+                    </div>
+                    
+                    <div id="reference-2" class="border-l-4 border-white/30 pl-4">
+                        <h3 id="reference-2-title" class="text-white font-medium mb-2">专业建议</h3>
+                        <p id="reference-2-text" class="text-white/80 text-sm">如果您的症状持续超过两周，或对日常生活造成明显影响，建议咨询专业心理医生或精神科医师进行进一步评估。</p>
+                    </div>
+                    
+                    <div id="emergency-notice" class="bg-gradient-to-r from-red-500/20 to-orange-500/20 border border-red-500/30 rounded-xl p-4 mt-4">
+                        <div id="emergency-header" class="flex items-center mb-2">
+                            <i class="fas fa-exclamation-triangle text-orange-400 mr-2"></i>
+                            <span id="emergency-title" class="text-orange-300 font-medium text-sm">重要提醒</span>
+                        </div>
+                        <p id="emergency-text" class="text-orange-200 text-sm">本测试仅供参考，不能替代专业医疗诊断。如有严重心理困扰，请及时寻求专业帮助。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 底部操作区 -->
+    <div id="bottom-actions" class="fixed bottom-0 left-0 right-0 glass-effect p-6 safe-bottom z-40">
+        <div id="actions-container" class="flex space-x-4">
+            <button id="share-btn" class="flex-1 bg-gradient-to-r from-primary to-secondary text-white font-semibold py-4 px-6 rounded-2xl flex items-center justify-center space-x-2">
+                <i class="fas fa-share-alt"></i>
+                <span>分享结果</span>
+            </button>
+            <button id="home-btn" class="flex-1 bg-white/20 text-white font-semibold py-4 px-6 rounded-2xl flex items-center justify-center space-x-2">
+                <i class="fas fa-home"></i>
+                <span>返回首页</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 解析URL参数的辅助函数
+            function getUrlParams() {
+                const params = {};
+                const queryString = window.location.search.substring(1);
+                const urlParams = new URLSearchParams(queryString);
+                
+                for(const [key, value] of urlParams.entries()) {
+                    params[key] = value;
+                }
+                return params;
+            }
+
+            // 模拟测试结果数据
+            const mockResults = {
+                "record1": {
+                    testName: "抑郁症评估",
+                    score: 23,
+                    level: "轻度抑郁倾向",
+                    levelPercentage: 45,
+                    interpretation: [
+                        "根据您的测试结果，您目前表现出轻度抑郁倾向。这意味着您可能正在经历一些情绪上的困扰，但尚未达到临床抑郁症的诊断标准。",
+                        "您可能会感到偶尔的低落情绪、对日常活动的兴趣下降，或者出现睡眠和食欲的轻微变化。这些都是人体应对压力的正常反应。",
+                        "值得注意的是，轻度抑郁倾向是可以通过积极的生活方式调整和心理调适得到改善的。及时关注并采取行动是非常重要的。"
+                    ],
+                    suggestions: [
+                        {
+                            title: "增加体育锻炼",
+                            text: "每天进行30分钟的有氧运动，如快走、跑步或游泳，有助于释放内啡肽，改善情绪状态。",
+                            icon: "fas fa-walking"
+                        },
+                        {
+                            title: "改善睡眠质量",
+                            text: "保持规律的作息时间，创造舒适的睡眠环境，避免睡前使用电子设备。",
+                            icon: "fas fa-moon"
+                        },
+                        {
+                            title: "加强社交联系",
+                            text: "与亲友保持联系，参与社交活动，分享感受，避免过度独处。",
+                            icon: "fas fa-users"
+                        },
+                        {
+                            title: "练习放松技巧",
+                            text: "尝试冥想、深呼吸练习或瑜伽，每天10-15分钟，有助于缓解压力和焦虑。",
+                            icon: "fas fa-leaf"
+                        }
+                    ]
+                },
+                "record2": {
+                    testName: "MBTI性格测试",
+                    score: 85,
+                    level: "INFP - 调停者",
+                    levelPercentage: 85,
+                    interpretation: [
+                        "您的MBTI类型为INFP（调停者），这是一种富有理想主义和同理心的性格类型。",
+                        "您重视内心的价值观，富有创造力，善于理解他人的情感需求。",
+                        "INFP类型的人通常具有强烈的道德感和对美好事物的追求。"
+                    ],
+                    suggestions: [
+                        {
+                            title: "发挥创造力",
+                            text: "寻找能够发挥您创造力的活动，如写作、艺术创作或音乐。",
+                            icon: "fas fa-palette"
+                        },
+                        {
+                            title: "建立深度关系",
+                            text: "与志同道合的人建立深厚的情感连接，分享您的理想和价值观。",
+                            icon: "fas fa-heart"
+                        },
+                        {
+                            title: "设定现实目标",
+                            text: "将您的理想主义与现实相结合，设定可实现的短期和长期目标。",
+                            icon: "fas fa-bullseye"
+                        }
+                    ]
+                }
+            };
+
+            // 获取URL参数
+            const params = getUrlParams();
+            const recordId = params.recordId || 'record1'; // 默认显示record1
+
+            // 加载测试结果
+            function loadTestResult(recordId) {
+                const result = mockResults[recordId];
+                if (!result) {
+                    console.error('未找到测试记录:', recordId);
+                    return;
+                }
+
+                // 更新页面内容
+                document.querySelector('#test-name').textContent = result.testName;
+                document.querySelector('#score-value').textContent = result.score;
+                document.querySelector('#level-title').textContent = result.level;
+                document.querySelector('#level-bar').style.width = result.levelPercentage + '%';
+
+                // 更新结果解读
+                const interpretationContainer = document.querySelector('#interpretation-content');
+                interpretationContainer.innerHTML = '';
+                result.interpretation.forEach((text, index) => {
+                    const p = document.createElement('p');
+                    p.id = `interpretation-text-${index + 1}`;
+                    p.className = 'text-white/90 leading-relaxed';
+                    p.textContent = text;
+                    interpretationContainer.appendChild(p);
+                });
+
+                // 更新改善建议
+                const suggestionsContainer = document.querySelector('#suggestions-list');
+                suggestionsContainer.innerHTML = '';
+                result.suggestions.forEach((suggestion, index) => {
+                    const suggestionDiv = document.createElement('div');
+                    suggestionDiv.id = `suggestion-${index + 1}`;
+                    suggestionDiv.className = 'flex items-start space-x-3';
+                    suggestionDiv.innerHTML = `
+                        <div id="suggestion-${index + 1}-icon" class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="${suggestion.icon} text-white text-sm"></i>
+                        </div>
+                        <div id="suggestion-${index + 1}-content">
+                            <h3 id="suggestion-${index + 1}-title" class="text-white font-medium mb-1">${suggestion.title}</h3>
+                            <p id="suggestion-${index + 1}-text" class="text-white/80 text-sm">${suggestion.text}</p>
+                        </div>
+                    `;
+                    suggestionsContainer.appendChild(suggestionDiv);
+                });
+            }
+
+            // 初始化页面
+            loadTestResult(recordId);
+
+            // 返回按钮点击事件
+            document.querySelector('#back-btn').addEventListener('click', function() {
+                // 检查是否有来源页面参数
+                const source = params.source;
+                if (source === 'history') {
+                    window.location.href = 'P-HISTORY.html';
+                } else {
+                    window.location.href = 'P-TEST_DETAIL.html';
+                }
+            });
+
+            // 分享按钮点击事件（头部）
+            document.querySelector('#share-btn-header').addEventListener('click', function() {
+                console.log('需要调用第三方接口实现分享功能');
+                // 注释：此功能需要调用系统分享API，在原型阶段仅做UI展示
+            });
+
+            // 分享按钮点击事件（底部）
+            document.querySelector('#share-btn').addEventListener('click', function() {
+                console.log('需要调用第三方接口实现分享功能');
+                // 注释：此功能需要调用系统分享API，在原型阶段仅做UI展示
+            });
+
+            // 返回首页按钮点击事件
+            document.querySelector('#home-btn').addEventListener('click', function() {
+                window.location.href = 'P-HOME.html';
+            });
+        });
+    </script>
+</body>
+</html>

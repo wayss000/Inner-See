@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心探 - 测试历史</title>
+    <script src="https://unpkg.byted-static.com/coze/space_ppt_lib/1.0.3-alpha.12/lib/tailwindcss.js"></script>
+    <script src="https://unpkg.byted-static.com/fortawesome/fontawesome-free/6.7.2/js/all.min.js" data-auto-replace-svg="nest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        tertiary: '#06b6d4',
+                        accent: '#f59e0b',
+                        glassBg: 'rgba(255, 255, 255, 0.1)',
+                        glassBorder: 'rgba(255, 255, 255, 0.2)',
+                        textPrimary: '#1f2937',
+                        textSecondary: '#6b7280',
+                        textLight: '#9ca3af'
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                        'glass-inset': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+        }
+        
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .test-record-item:hover {
+            transform: translateY(-1px);
+            transition: all 0.3s ease;
+        }
+        
+        .safe-top {
+            padding-top: env(safe-area-inset-top);
+        }
+        
+        .safe-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .empty-state {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="gradient-bg">
+    <!-- 状态栏模拟 -->
+    <div id="status-bar" class="fixed top-0 left-0 right-0 h-11 bg-transparent flex justify-between items-center px-6 text-white text-sm font-medium z-50 safe-top">
+        <div class="flex items-center space-x-1">
+            <span>9:41</span>
+        </div>
+        <div class="flex items-center space-x-1">
+            <i class="fas fa-signal text-xs"></i>
+            <i class="fas fa-wifi text-xs"></i>
+            <i class="fas fa-battery-three-quarters text-xs"></i>
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div id="main-content" class="pt-11 pb-20">
+        <!-- 顶部导航栏 -->
+        <header id="top-header" class="px-6 py-4">
+            <div id="header-content" class="flex items-center justify-between">
+                <div id="header-left" class="flex items-center space-x-4">
+                    <button id="back-btn" class="w-10 h-10 glass-effect rounded-full flex items-center justify-center">
+                        <i class="fas fa-arrow-left text-white text-lg"></i>
+                    </button>
+                    <div id="page-title-section">
+                        <h1 id="page-title" class="text-xl font-bold text-white">测试历史</h1>
+                        <p id="page-subtitle" class="text-sm text-white/80 mt-1">查看您的测试记录</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 统计概览区 -->
+        <section id="stats-section" class="px-6 mb-6">
+            <div id="stats-card" class="glass-card rounded-2xl p-5">
+                <div id="stats-grid" class="grid grid-cols-3 gap-4">
+                    <div id="total-tests-stat" class="text-center">
+                        <div id="total-tests-value" class="text-white font-bold text-2xl">8</div>
+                        <div id="total-tests-label" class="text-white/60 text-xs mt-1">总测试数</div>
+                    </div>
+                    <div id="this-week-stat" class="text-center">
+                        <div id="this-week-value" class="text-white font-bold text-2xl">3</div>
+                        <div id="this-week-label" class="text-white/60 text-xs mt-1">本周完成</div>
+                    </div>
+                    <div id="avg-score-stat" class="text-center">
+                        <div id="avg-score-value" class="text-white font-bold text-2xl">75</div>
+                        <div id="avg-score-label" class="text-white/60 text-xs mt-1">平均分数</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 测试记录列表 -->
+        <section id="test-records-section" class="px-6">
+            <div id="records-header" class="flex items-center justify-between mb-4">
+                <h2 id="records-title" class="text-lg font-semibold text-white">测试记录</h2>
+                <span id="records-count" class="text-white/60 text-sm">共8条记录</span>
+            </div>
+            
+            <div id="records-list" class="space-y-4">
+                <!-- 抑郁症评估记录 -->
+                <div id="record-depression-001" class="test-record-item glass-card rounded-2xl p-5 cursor-pointer" data-record-id="record_001">
+                    <div id="record-depression-001-content" class="flex items-center space-x-4">
+                        <div id="record-depression-001-icon" class="w-12 h-12 bg-gradient-to-br from-pink-400 to-purple-500 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-heart text-white text-lg"></i>
+                        </div>
+                        <div id="record-depression-001-info" class="flex-1">
+                            <h3 id="record-depression-001-title" class="text-white font-medium text-base mb-1">抑郁症评估</h3>
+                            <p id="record-depression-001-time" class="text-white/60 text-sm">今天 14:30</p>
+                        </div>
+                        <div id="record-depression-001-result" class="text-right">
+                            <div id="record-depression-001-score" class="text-white font-semibold text-lg">22</div>
+                            <div id="record-depression-001-level" class="text-orange-300 text-xs">轻度抑郁</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MBTI性格测试记录 -->
+                <div id="record-mbti-001" class="test-record-item glass-card rounded-2xl p-5 cursor-pointer" data-record-id="record_002">
+                    <div id="record-mbti-001-content" class="flex items-center space-x-4">
+                        <div id="record-mbti-001-icon" class="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-user text-white text-lg"></i>
+                        </div>
+                        <div id="record-mbti-001-info" class="flex-1">
+                            <h3 id="record-mbti-001-title" class="text-white font-medium text-base mb-1">MBTI性格测试</h3>
+                            <p id="record-mbti-001-time" class="text-white/60 text-sm">昨天 19:45</p>
+                        </div>
+                        <div id="record-mbti-001-result" class="text-right">
+                            <div id="record-mbti-001-type" class="text-white font-semibold text-lg">INFP</div>
+                            <div id="record-mbti-001-desc" class="text-white/60 text-xs">调停者</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 焦虑症筛查记录 -->
+                <div id="record-anxiety-001" class="test-record-item glass-card rounded-2xl p-5 cursor-pointer" data-record-id="record_003">
+                    <div id="record-anxiety-001-content" class="flex items-center space-x-4">
+                        <div id="record-anxiety-001-icon" class="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-brain text-white text-lg"></i>
+                        </div>
+                        <div id="record-anxiety-001-info" class="flex-1">
+                            <h3 id="record-anxiety-001-title" class="text-white font-medium text-base mb-1">焦虑症筛查</h3>
+                            <p id="record-anxiety-001-time" class="text-white/60 text-sm">2天前 16:20</p>
+                        </div>
+                        <div id="record-anxiety-001-result" class="text-right">
+                            <div id="record-anxiety-001-score" class="text-white font-semibold text-lg">15</div>
+                            <div id="record-anxiety-001-level" class="text-green-300 text-xs">正常范围</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 压力水平评估记录 -->
+                <div id="record-stress-001" class="test-record-item glass-card rounded-2xl p-5 cursor-pointer" data-record-id="record_004">
+                    <div id="record-stress-001-content" class="flex items-center space-x-4">
+                        <div id="record-stress-001-icon" class="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-balance-scale text-white text-lg"></i>
+                        </div>
+                        <div id="record-stress-001-info" class="flex-1">
+                            <h3 id="record-stress-001-title" class="text-white font-medium text-base mb-1">压力水平评估</h3>
+                            <p id="record-stress-001-time" class="text-white/60 text-sm">3天前 20:15</p>
+                        </div>
+                        <div id="record-stress-001-result" class="text-right">
+                            <div id="record-stress-001-score" class="text-white font-semibold text-lg">68</div>
+                            <div id="record-stress-001-level" class="text-yellow-300 text-xs">中度压力</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 睡眠质量评估记录 -->
+                <div id="record-sleep-001" class="test-record-item glass-card rounded-2xl p-5 cursor-pointer" data-record-id="record_005">
+                    <div id="record-sleep-001-content" class="flex items-center space-x-4">
+                        <div id="record-sleep-001-icon" class="w-12 h-12 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-moon text-white text-lg"></i>
+                        </div>
+                        <div id="record-sleep-001-info" class="flex-1">
+                            <h3 id="record-sleep-001-title" class="text-white font-medium text-base mb-1">睡眠质量评估</h3>
+                            <p id="record-sleep-001-time" class="text-white/60 text-sm">1周前 22:30</p>
+                        </div>
+                        <div id="record-sleep-001-result" class="text-right">
+                            <div id="record-sleep-001-score" class="text-white font-semibold text-lg">72</div>
+                            <div id="record-sleep-001-level" class="text-green-300 text-xs">良好</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 职业兴趣测试记录 -->
+                <div id="record-career-001" class="test-record-item glass-card rounded-2xl p-5 cursor-pointer" data-record-id="record_006">
+                    <div id="record-career-001-content" class="flex items-center space-x-4">
+                        <div id="record-career-001-icon" class="w-12 h-12 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-briefcase text-white text-lg"></i>
+                        </div>
+                        <div id="record-career-001-info" class="flex-1">
+                            <h3 id="record-career-001-title" class="text-white font-medium text-base mb-1">职业兴趣测试</h3>
+                            <p id="record-career-001-time" class="text-white/60 text-sm">2周前 15:45</p>
+                        </div>
+                        <div id="record-career-001-result" class="text-right">
+                            <div id="record-career-001-type" class="text-white font-semibold text-lg">艺术型</div>
+                            <div id="record-career-001-desc" class="text-white/60 text-xs">A类</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 查看更多按钮 -->
+            <div id="load-more-section" class="mt-6 text-center">
+                <button id="load-more-btn" class="glass-effect px-6 py-3 rounded-xl text-white font-medium">
+                    <i class="fas fa-chevron-down mr-2"></i>查看更多记录
+                </button>
+            </div>
+        </section>
+
+        <!-- 空状态（当没有记录时显示，默认隐藏） -->
+        <section id="empty-state-section" class="px-6 hidden">
+            <div id="empty-state-card" class="empty-state rounded-2xl p-8 text-center">
+                <div id="empty-state-icon" class="w-20 h-20 bg-gradient-to-br from-gray-400 to-gray-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-history text-white text-2xl"></i>
+                </div>
+                <h3 id="empty-state-title" class="text-white font-semibold text-lg mb-2">暂无测试记录</h3>
+                <p id="empty-state-desc" class="text-white/60 text-sm mb-6">开始您的第一次心理测试，了解更真实的自己</p>
+                <button id="start-first-test-btn" class="glass-effect px-6 py-3 rounded-xl text-white font-medium">
+                    <i class="fas fa-play mr-2"></i>开始测试
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 glass-nav flex justify-around items-center h-16 px-4 safe-bottom z-40">
+        <a id="nav-home" href="P-HOME.html" class="flex flex-col items-center p-2 text-gray-500">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-xs mt-1">首页</span>
+        </a>
+        <a id="nav-categories" href="P-TEST_CATEGORY.html" class="flex flex-col items-center p-2 text-gray-500">
+            <i class="fas fa-th-large text-xl"></i>
+            <span class="text-xs mt-1">分类</span>
+        </a>
+        <a id="nav-history" href="#" class="flex flex-col items-center p-2 text-primary">
+            <i class="fas fa-history text-xl"></i>
+            <span class="text-xs mt-1 font-medium">历史</span>
+        </a>
+        <a id="nav-profile" href="P-PERSONAL_CENTER.html" class="flex flex-col items-center p-2 text-gray-500">
+            <i class="fas fa-user text-xl"></i>
+            <span class="text-xs mt-1">我的</span>
+        </a>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 返回按钮点击事件
+            document.querySelector('#back-btn').addEventListener('click', function() {
+                window.location.href = 'P-PERSONAL_CENTER.html';
+            });
+
+            // 测试记录条目点击事件
+            const testRecordItems = document.querySelectorAll('.test-record-item');
+            testRecordItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const recordId = this.getAttribute('data-record-id');
+                    window.location.href = `P-RESULT_DISPLAY.html?recordId=${recordId}`;
+                });
+            });
+
+            // 查看更多记录按钮点击事件
+            document.querySelector('#load-more-btn').addEventListener('click', function() {
+                // 模拟加载更多记录
+                console.log('加载更多测试记录');
+                // 在实际应用中，这里会加载更多历史记录
+            });
+
+            // 开始第一次测试按钮点击事件（空状态时）
+            document.querySelector('#start-first-test-btn').addEventListener('click', function() {
+                window.location.href = 'P-HOME.html';
+            });
+
+            // 底部导航栏点击事件
+            document.querySelector('#nav-home').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'P-HOME.html';
+            });
+
+            document.querySelector('#nav-categories').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'P-TEST_CATEGORY.html';
+            });
+
+            document.querySelector('#nav-history').addEventListener('click', function(e) {
+                e.preventDefault();
+                // 已在历史页面，无需操作
+            });
+
+            document.querySelector('#nav-profile').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'P-PERSONAL_CENTER.html';
+            });
+
+            // 页面加载动画
+            setTimeout(function() {
+                document.querySelector('#main-content').style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

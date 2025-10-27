@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心探 - 测试详情</title>
+    <script src="https://unpkg.byted-static.com/coze/space_ppt_lib/1.0.3-alpha.12/lib/tailwindcss.js"></script>
+    <script src="https://unpkg.byted-static.com/fortawesome/fontawesome-free/6.7.2/js/all.min.js" data-auto-replace-svg="nest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        tertiary: '#06b6d4',
+                        accent: '#f59e0b',
+                        glassBg: 'rgba(255, 255, 255, 0.1)',
+                        glassBorder: 'rgba(255, 255, 255, 0.2)',
+                        textPrimary: '#1f2937',
+                        textSecondary: '#6b7280',
+                        textLight: '#9ca3af'
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                        'glass-inset': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .test-icon {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .start-button {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.37);
+            transition: all 0.3s ease;
+        }
+        
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.45);
+        }
+        
+        .start-button:active {
+            transform: translateY(0);
+        }
+        
+        .safe-top {
+            padding-top: env(safe-area-inset-top);
+        }
+        
+        .safe-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        .meta-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="gradient-bg">
+    <!-- 状态栏模拟 -->
+    <div id="status-bar" class="fixed top-0 left-0 right-0 h-11 bg-transparent flex justify-between items-center px-6 text-white text-sm font-medium z-50 safe-top">
+        <div class="flex items-center space-x-1">
+            <span>9:41</span>
+        </div>
+        <div class="flex items-center space-x-1">
+            <i class="fas fa-signal text-xs"></i>
+            <i class="fas fa-wifi text-xs"></i>
+            <i class="fas fa-battery-three-quarters text-xs"></i>
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div id="main-content" class="pt-11 pb-32">
+        <!-- 顶部导航栏 -->
+        <header id="top-header" class="px-6 py-4">
+            <div id="header-content" class="flex items-center">
+                <button id="back-button" class="w-10 h-10 glass-effect rounded-full flex items-center justify-center mr-4">
+                    <i class="fas fa-arrow-left text-white text-lg"></i>
+                </button>
+                <div id="header-title-section" class="flex-1">
+                    <h1 id="page-title" class="text-xl font-bold text-white">测试详情</h1>
+                </div>
+            </div>
+        </header>
+
+        <!-- 测试信息区 -->
+        <section id="test-info-section" class="px-6 mb-8">
+            <!-- 测试标题和图标 -->
+            <div id="test-header-card" class="glass-card rounded-3xl p-6 mb-6">
+                <div id="test-header-content" class="flex items-center space-x-4">
+                    <div id="test-icon-container" class="test-icon w-20 h-20 rounded-2xl flex items-center justify-center bg-gradient-to-br from-pink-400 to-purple-500">
+                        <i id="test-icon" class="fas fa-heart text-white text-3xl"></i>
+                    </div>
+                    <div id="test-title-section" class="flex-1">
+                        <h2 id="test-title" class="text-2xl font-bold text-white mb-2">抑郁症评估</h2>
+                        <p id="test-category" class="text-white/80 text-sm">心理健康</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 测试元信息 -->
+            <div id="test-meta-section" class="grid grid-cols-3 gap-4 mb-6">
+                <div id="duration-meta" class="meta-item rounded-2xl p-4 text-center">
+                    <div id="duration-icon" class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-lg flex items-center justify-center mx-auto mb-2">
+                        <i class="far fa-clock text-white text-sm"></i>
+                    </div>
+                    <div id="duration-value" class="text-white font-semibold text-lg">5-8分钟</div>
+                    <div id="duration-label" class="text-white/60 text-xs">预计时长</div>
+                </div>
+                
+                <div id="questions-meta" class="meta-item rounded-2xl p-4 text-center">
+                    <div id="questions-icon" class="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-lg flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-question-circle text-white text-sm"></i>
+                    </div>
+                    <div id="questions-value" class="text-white font-semibold text-lg">20题</div>
+                    <div id="questions-label" class="text-white/60 text-xs">题目数量</div>
+                </div>
+                
+                <div id="difficulty-meta" class="meta-item rounded-2xl p-4 text-center">
+                    <div id="difficulty-icon" class="w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-star text-white text-sm"></i>
+                    </div>
+                    <div id="difficulty-value" class="text-white font-semibold text-lg">简单</div>
+                    <div id="difficulty-label" class="text-white/60 text-xs">难度等级</div>
+                </div>
+            </div>
+
+            <!-- 测试详细描述 -->
+            <div id="test-description-card" class="glass-card rounded-3xl p-6 mb-6">
+                <h3 id="description-title" class="text-lg font-semibold text-white mb-4">测试介绍</h3>
+                <div id="test-description" class="space-y-4">
+                    <p id="description-text" class="text-white/90 text-base leading-relaxed">
+                        这是一份专业的抑郁症评估量表，基于国际通用的抑郁症状筛查标准编制。通过回答一系列问题，您可以了解自己当前的心理状态，及时发现潜在的抑郁倾向。
+                    </p>
+                    <div id="description-features" class="space-y-3">
+                        <div id="feature-1" class="flex items-center space-x-3">
+                            <div id="feature-1-icon" class="w-6 h-6 bg-gradient-to-br from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-check text-white text-xs"></i>
+                            </div>
+                            <span id="feature-1-text" class="text-white/80 text-sm">专业权威：基于国际标准量表</span>
+                        </div>
+                        <div id="feature-2" class="flex items-center space-x-3">
+                            <div id="feature-2-icon" class="w-6 h-6 bg-gradient-to-br from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-check text-white text-xs"></i>
+                            </div>
+                            <span id="feature-2-text" class="text-white/80 text-sm">隐私保护：所有数据本地存储</span>
+                        </div>
+                        <div id="feature-3" class="flex items-center space-x-3">
+                            <div id="feature-3-icon" class="w-6 h-6 bg-gradient-to-br from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-check text-white text-xs"></i>
+                            </div>
+                            <span id="feature-3-text" class="text-white/80 text-sm">详细解读：提供专业改善建议</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 测试注意事项 -->
+            <div id="test-notice-card" class="glass-card rounded-3xl p-6">
+                <h3 id="notice-title" class="text-lg font-semibold text-white mb-4">
+                    <i class="fas fa-info-circle text-accent mr-2"></i>
+                    测试须知
+                </h3>
+                <div id="test-notice" class="space-y-3">
+                    <div id="notice-1" class="flex items-start space-x-3">
+                        <div id="notice-1-bullet" class="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
+                        <span id="notice-1-text" class="text-white/80 text-sm leading-relaxed">请在安静的环境中完成测试，确保答案真实反映您的实际情况</span>
+                    </div>
+                    <div id="notice-2" class="flex items-start space-x-3">
+                        <div id="notice-2-bullet" class="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
+                        <span id="notice-2-text" class="text-white/80 text-sm leading-relaxed">测试结果仅供参考，不能替代专业的医学诊断</span>
+                    </div>
+                    <div id="notice-3" class="flex items-start space-x-3">
+                        <div id="notice-3-bullet" class="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
+                        <span id="notice-3-text" class="text-white/80 text-sm leading-relaxed">如测试结果显示需要专业帮助，请及时咨询心理医生或专业人士</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 底部开始测试按钮 -->
+    <div id="bottom-action" class="fixed bottom-0 left-0 right-0 p-6 safe-bottom">
+        <button id="start-test-button" class="start-button w-full py-4 rounded-2xl text-white font-bold text-lg flex items-center justify-center space-x-3">
+            <i class="fas fa-play text-xl"></i>
+            <span>开始测试</span>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 解析URL参数的辅助函数
+            function getUrlParams() {
+                const params = {};
+                const queryString = window.location.search.substring(1);
+                const urlParams = new URLSearchParams(queryString);
+                
+                for(const [key, value] of urlParams.entries()) {
+                    params[key] = value;
+                }
+                return params;
+            }
+
+            // 测试数据模拟
+            const testData = {
+                'depression': {
+                    title: '抑郁症评估',
+                    category: '心理健康',
+                    icon: 'fas fa-heart',
+                    iconGradient: 'from-pink-400 to-purple-500',
+                    duration: '5-8分钟',
+                    questions: '20题',
+                    difficulty: '简单',
+                    description: '这是一份专业的抑郁症评估量表，基于国际通用的抑郁症状筛查标准编制。通过回答一系列问题，您可以了解自己当前的心理状态，及时发现潜在的抑郁倾向。',
+                    features: [
+                        '专业权威：基于国际标准量表',
+                        '隐私保护：所有数据本地存储',
+                        '详细解读：提供专业改善建议'
+                    ]
+                },
+                'personality': {
+                    title: 'MBTI性格测试',
+                    category: '性格分析',
+                    icon: 'fas fa-user',
+                    iconGradient: 'from-blue-400 to-cyan-500',
+                    duration: '10-15分钟',
+                    questions: '48题',
+                    difficulty: '中等',
+                    description: '经典的MBTI 16型人格测试，通过对您的行为偏好和思维方式的评估，帮助您深入了解自己的性格特质和适合的发展方向。',
+                    features: [
+                        '经典权威：国际知名的性格测试',
+                        '深度分析：16种人格类型详细解读',
+                        '实用建议：基于性格的发展指导'
+                    ]
+                },
+                'stress': {
+                    title: '压力水平评估',
+                    category: '心理健康',
+                    icon: 'fas fa-brain',
+                    iconGradient: 'from-orange-400 to-red-500',
+                    duration: '3-5分钟',
+                    questions: '15题',
+                    difficulty: '简单',
+                    description: '科学的压力水平评估工具，帮助您了解当前的压力状态，识别压力来源，并提供有效的压力管理建议。',
+                    features: [
+                        '快速便捷：3-5分钟完成评估',
+                        '科学准确：基于压力心理学研究',
+                        '实用建议：个性化压力管理方案'
+                    ]
+                },
+                'anxiety': {
+                    title: '焦虑症筛查',
+                    category: '心理健康',
+                    icon: 'fas fa-exclamation-triangle',
+                    iconGradient: 'from-yellow-400 to-orange-500',
+                    duration: '4-6分钟',
+                    questions: '18题',
+                    difficulty: '简单',
+                    description: '专业的焦虑症状筛查工具，帮助您识别焦虑倾向，了解焦虑程度，并获得专业的应对建议。',
+                    features: [
+                        '专业筛查：早期识别焦虑症状',
+                        '分级评估：准确判断焦虑程度',
+                        '应对策略：实用的缓解方法'
+                    ]
+                },
+                'sleep': {
+                    title: '睡眠质量评估',
+                    category: '心理健康',
+                    icon: 'fas fa-moon',
+                    iconGradient: 'from-indigo-400 to-purple-500',
+                    duration: '3-4分钟',
+                    questions: '12题',
+                    difficulty: '简单',
+                    description: '全面的睡眠质量评估，帮助您了解睡眠状况，识别睡眠问题，并提供改善睡眠的专业建议。',
+                    features: [
+                        '全面评估：多维度睡眠质量分析',
+                        '问题识别：准确发现睡眠障碍',
+                        '改善方案：科学的睡眠建议'
+                    ]
+                }
+            };
+
+            // 获取URL参数
+            const params = getUrlParams();
+            const testType = params.testType || 'depression'; // 默认显示抑郁症评估
+
+            // 加载测试数据
+            function loadTestData(testType) {
+                const test = testData[testType];
+                if (!test) {
+                    console.error('测试类型不存在:', testType);
+                    return;
+                }
+
+                // 更新页面内容
+                document.querySelector('#test-title').textContent = test.title;
+                document.querySelector('#test-category').textContent = test.category;
+                document.querySelector('#test-icon').className = `${test.icon} text-white text-3xl`;
+                document.querySelector('#test-icon-container').className = `test-icon w-20 h-20 rounded-2xl flex items-center justify-center bg-gradient-to-br ${test.iconGradient}`;
+                document.querySelector('#duration-value').textContent = test.duration;
+                document.querySelector('#questions-value').textContent = test.questions;
+                document.querySelector('#difficulty-value').textContent = test.difficulty;
+                document.querySelector('#description-text').textContent = test.description;
+
+                // 更新特性列表
+                const featuresContainer = document.querySelector('#description-features');
+                featuresContainer.innerHTML = '';
+                test.features.forEach((feature, index) => {
+                    const featureElement = document.createElement('div');
+                    featureElement.id = `feature-${index + 1}`;
+                    featureElement.className = 'flex items-center space-x-3';
+                    featureElement.innerHTML = `
+                        <div class="w-6 h-6 bg-gradient-to-br from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-check text-white text-xs"></i>
+                        </div>
+                        <span class="text-white/80 text-sm">${feature}</span>
+                    `;
+                    featuresContainer.appendChild(featureElement);
+                });
+
+                // 更新页面标题
+                document.title = `心探 - ${test.title}`;
+            }
+
+            // 初始化页面数据
+            loadTestData(testType);
+
+            // 返回按钮点击事件
+            document.querySelector('#back-button').addEventListener('click', function() {
+                // 检查是否有referrer来决定返回哪里
+                const referrer = document.referrer;
+                if (referrer.includes('P-TEST_CATEGORY.html')) {
+                    window.location.href = 'P-TEST_CATEGORY.html';
+                } else {
+                    window.location.href = 'P-HOME.html';
+                }
+            });
+
+            // 开始测试按钮点击事件
+            document.querySelector('#start-test-button').addEventListener('click', function() {
+                // 添加点击反馈效果
+                this.style.transform = 'translateY(2px)';
+                this.style.boxShadow = '0 4px 16px 0 rgba(99, 102, 241, 0.3)';
+                
+                setTimeout(() => {
+                    // 跳转到测试答题页，传递测试类型参数
+                    window.location.href = `P-TEST_QUESTION.html?testType=${testType}`;
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>
