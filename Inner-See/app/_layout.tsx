@@ -3,15 +3,37 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Stack, usePathname, useGlobalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { LogBox } from 'react-native';
+import { LazyLoadingAppInitializer } from '../src/LazyLoadingAppInitializer';
 
 LogBox.ignoreLogs([
   "TurboModuleRegistry.getEnforcing(...): 'RNMapsAirModule' could not be found",
   // 添加其它想暂时忽略的错误或警告信息
 ]);
 
+// 全局应用初始化
+let appInitialized = false;
+
 export default function RootLayout() {
   const pathname = usePathname();
   const searchParams = useGlobalSearchParams();
+
+  // 应用初始化
+  useEffect(() => {
+    if (!appInitialized) {
+      initializeApp();
+      appInitialized = true;
+    }
+  }, []);
+
+  const initializeApp = async () => {
+    try {
+      console.log('开始应用初始化...');
+      await LazyLoadingAppInitializer.getInstance().initializeApp();
+      console.log('应用初始化完成');
+    } catch (error) {
+      console.error('应用初始化失败:', error);
+    }
+  };
 
   useEffect(() => {
     if (!pathname) {

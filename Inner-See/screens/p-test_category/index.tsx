@@ -1,13 +1,14 @@
 
 
-import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
 import TestTypeItem from './components/TestTypeItem';
 import styles from './styles';
+import { LazyLoadingQuestionService } from '../../src/services/LazyLoadingQuestionService';
 
 interface TestType {
   id: string;
@@ -19,10 +20,104 @@ interface TestType {
   gradientColors: [string, string];
 }
 
+interface SimpleTestType {
+  id: string;
+  name: string;
+  description: string;
+  estimated_duration: number;
+  question_count: number;
+  category: string;
+  icon: string;
+}
+
 const TestCategoryScreen = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [testTypesData, setTestTypesData] = useState<SimpleTestType[]>([]);
+  const [displayTestTypes, setDisplayTestTypes] = useState<TestType[]>([]);
 
-  const testTypes: TestType[] = [
+  // 初始化应用和加载测试数据
+  useEffect(() => {
+    loadTestTypes();
+  }, []);
+
+  const loadTestTypes = async () => {
+    try {
+      setLoading(true);
+      
+      // 使用懒加载服务获取测试类型
+      const questionService = LazyLoadingQuestionService.getInstance();
+      await questionService.initialize();
+      
+      const testTypesFromDB = await questionService.getTestTypes();
+      
+      // 转换类型以匹配SimpleTestType接口
+      const simpleTestTypes: SimpleTestType[] = testTypesFromDB.map(testType => ({
+        id: testType.id,
+        name: testType.name,
+        description: testType.description,
+        estimated_duration: testType.estimatedDuration,
+        question_count: testType.questionCount,
+        category: testType.category,
+        icon: testType.icon
+      }));
+      
+      setTestTypesData(simpleTestTypes);
+      
+      // 转换为UI组件需要的格式
+      const uiTestTypes: TestType[] = testTypesFromDB.map(testType => ({
+        id: testType.id,
+        title: testType.name,
+        description: testType.description,
+        duration: `${testType.estimatedDuration}分钟`,
+        questions: `${testType.questionCount}题`,
+        icon: testType.icon,
+        gradientColors: ['#f59e0b', '#ea580c']
+      }));
+      
+      setDisplayTestTypes(uiTestTypes);
+      console.log(`成功加载 ${testTypesFromDB.length} 个测试类型`);
+    } catch (error) {
+      console.error('加载测试类型失败:', error);
+      // 回退到模拟数据
+      const mockTestTypes: SimpleTestType[] = [
+        {
+          id: '1',
+          name: '心理健康评估',
+          description: '评估您的情绪状态、压力水平、焦虑程度和抑郁倾向',
+          estimated_duration: 10,
+          question_count: 20,
+          category: '心理健康',
+          icon: 'heart'
+        },
+        {
+          id: '2',
+          name: '人格特质分析',
+          description: '分析您的性格类型、行为倾向和价值观',
+          estimated_duration: 15,
+          question_count: 25,
+          category: '人格',
+          icon: 'person'
+        }
+      ];
+      
+      setTestTypesData(mockTestTypes);
+      const uiTestTypes: TestType[] = mockTestTypes.map(testType => ({
+        id: testType.id,
+        title: testType.name,
+        description: testType.description,
+        duration: `${testType.estimated_duration}分钟`,
+        questions: `${testType.question_count}题`,
+        icon: testType.icon,
+        gradientColors: ['#f59e0b', '#ea580c']
+      }));
+      setDisplayTestTypes(uiTestTypes);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const testTypes: TestType[] = displayTestTypes.length > 0 ? displayTestTypes : [
     {
       id: 'iq-test',
       title: '智商测试',
@@ -115,6 +210,24 @@ const TestCategoryScreen = () => {
   const handleTestTypePress = (testId: string) => {
     router.push(`/p-test_detail?test_type_id=${testId}`);
   };
+
+  if (loading) {
+    return (
+      <LinearGradient
+        colors={['#667eea', '#764ba2']}
+        style={styles.container}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+      >
+        <SafeAreaView style={styles.safeArea}>
+          <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, paddingHorizontal: 24 }}>
+            <ActivityIndicator size="large" color="#ffffff" />
+            <Text style={{ color: '#ffffff', marginTop: 16, fontSize: 16 }}>正在加载测试类型...</Text>
+          </View>
+        </SafeAreaView>
+      </LinearGradient>
+    );
+  }
 
   return (
     <LinearGradient
