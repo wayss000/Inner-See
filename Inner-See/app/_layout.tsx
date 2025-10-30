@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import * as React from "react";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Stack, usePathname, useGlobalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { LogBox } from 'react-native';
-import { LazyLoadingAppInitializer } from '../src/LazyLoadingAppInitializer';
+import { HttpAppInitializer } from '../src/HttpAppInitializer';
+
+const { useEffect } = React;
 
 LogBox.ignoreLogs([
   "TurboModuleRegistry.getEnforcing(...): 'RNMapsAirModule' could not be found",
@@ -28,7 +30,7 @@ export default function RootLayout() {
   const initializeApp = async () => {
     try {
       console.log('开始应用初始化...');
-      await LazyLoadingAppInitializer.getInstance().initializeApp();
+      await HttpAppInitializer.getInstance().initialize();
       console.log('应用初始化完成');
     } catch (error) {
       console.error('应用初始化失败:', error);
