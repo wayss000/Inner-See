@@ -22,7 +22,8 @@ interface TestData {
 
 const TestDetailScreen = () => {
   const router = useRouter();
-  const { testType } = useLocalSearchParams<{ testType: string }>();
+  const params = useLocalSearchParams();
+  const testType = (params.test_type_id as string) || 'depression';
   const [currentTestData, setCurrentTestData] = useState<TestData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 

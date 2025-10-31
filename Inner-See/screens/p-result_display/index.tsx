@@ -96,7 +96,7 @@ const ResultDisplayScreen = () => {
     const loadTestResult = async () => {
       try {
         setIsLoading(true);
-        const recordId = (params.recordId as string) || 'record1';
+        const recordId = (params.record_id as string) || 'record1';
         const result = mockResults[recordId];
         
         if (result) {
@@ -112,7 +112,7 @@ const ResultDisplayScreen = () => {
     };
 
     loadTestResult();
-  }, [params.recordId]);
+  }, [params.record_id]);
 
   const handleBackPress = () => {
     if (router.canGoBack()) {
