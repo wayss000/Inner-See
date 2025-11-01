@@ -126,31 +126,40 @@ const TestCategoryScreen = () => {
       gradientColors: ['#ec4899', '#8b5cf6']
     },
     {
-      id: 'stress',
-      title: '压力水平评估',
-      description: '科学评估当前压力状态，提供缓解建议',
-      duration: '5分钟',
-      questions: '15题',
-      icon: 'bolt',
-      gradientColors: ['#ef4444', '#ec4899']
-    },
-    {
-      id: 'anxiety',
-      title: '焦虑症筛查',
-      description: '评估焦虑症状的严重程度，提供专业建议',
-      duration: '8分钟',
-      questions: '18题',
-      icon: 'triangle-exclamation',
-      gradientColors: ['#ea580c', '#ef4444']
-    },
-    {
-      id: 'depression',
-      title: '抑郁症评估',
-      description: '专业的抑郁症状筛查，帮助您了解心理状态',
+      id: 'cognitive',
+      title: '认知能力测试',
+      description: '测试您的逻辑思维、空间想象和语言理解能力',
       duration: '12分钟',
-      questions: '22题',
-      icon: 'cloud',
-      gradientColors: ['#6366f1', '#8b5cf6']
+      questions: '15题',
+      icon: 'brain',
+      gradientColors: ['#8b5cf6', '#06b6d4']
+    },
+    {
+      id: 'career',
+      title: '职业发展评估',
+      description: '评估您的职业兴趣、工作满意度和职业规划',
+      duration: '10分钟',
+      questions: '18题',
+      icon: 'briefcase',
+      gradientColors: ['#fb923c', '#ef4444']
+    },
+    {
+      id: 'relationship',
+      title: '人际关系测评',
+      description: '评估您的亲密关系、社交能力和沟通风格',
+      duration: '8分钟',
+      questions: '16题',
+      icon: 'users',
+      gradientColors: ['#4ade80', '#3b82f6']
+    },
+    {
+      id: 'quality-of-life',
+      title: '生活质量评估',
+      description: '评估您的睡眠质量、生活习惯和情绪管理能力',
+      duration: '10分钟',
+      questions: '14题',
+      icon: 'leaf',
+      gradientColors: ['#10b981', '#f59e0b']
     }
   ];
 

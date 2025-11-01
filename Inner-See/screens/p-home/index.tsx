@@ -62,31 +62,45 @@ const HomeScreen: React.FC = () => {
   const [categories] = useState<CategoryItem[]>([
     {
       id: 'mental-health',
-      title: '心理健康',
+      title: '心理健康评估',
       count: '5个测试',
       icon: 'heart',
       gradientColors: ['#f472b6', '#a855f7'],
     },
     {
       id: 'personality',
-      title: '性格分析',
+      title: '人格特质分析',
       count: '3个测试',
       icon: 'user',
       gradientColors: ['#60a5fa', '#06b6d4'],
     },
     {
+      id: 'cognitive',
+      title: '认知能力测试',
+      count: '3个测试',
+      icon: 'brain',
+      gradientColors: ['#8b5cf6', '#06b6d4'],
+    },
+    {
       id: 'career',
-      title: '职业发展',
+      title: '职业发展评估',
       count: '4个测试',
       icon: 'briefcase',
       gradientColors: ['#fb923c', '#ef4444'],
     },
     {
       id: 'relationship',
-      title: '人际关系',
+      title: '人际关系测评',
       count: '3个测试',
       icon: 'users',
       gradientColors: ['#4ade80', '#3b82f6'],
+    },
+    {
+      id: 'quality-of-life',
+      title: '生活质量评估',
+      count: '3个测试',
+      icon: 'leaf',
+      gradientColors: ['#10b981', '#f59e0b'],
     },
   ]);
 

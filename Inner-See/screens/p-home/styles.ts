@@ -189,6 +189,7 @@ export default StyleSheet.create({
         elevation: 8,
       },
     }),
+    marginBottom: 16,
   },
   categoryIcon: {
     width: 64,
