@@ -22,31 +22,40 @@ const FALLBACK_DATA = {
       icon: 'person'
     },
     {
-      id: 'stress',
-      name: '压力水平评估',
-      description: '科学评估当前压力状态，提供缓解建议',
-      estimatedDuration: 5,
-      questionCount: 15,
-      category: '压力管理',
-      icon: 'bolt'
-    },
-    {
-      id: 'anxiety',
-      name: '焦虑症筛查',
-      description: '评估焦虑症状的严重程度，提供专业建议',
-      estimatedDuration: 8,
-      questionCount: 18,
-      category: '焦虑',
-      icon: 'triangle-exclamation'
-    },
-    {
-      id: 'depression',
-      name: '抑郁症评估',
-      description: '专业的抑郁症状筛查，帮助您了解心理状态',
+      id: 'cognitive',
+      name: '认知能力测试',
+      description: '测试您的逻辑思维、空间想象和语言理解能力',
       estimatedDuration: 12,
-      questionCount: 22,
-      category: '抑郁',
-      icon: 'cloud'
+      questionCount: 15,
+      category: '认知',
+      icon: 'brain'
+    },
+    {
+      id: 'career',
+      name: '职业发展评估',
+      description: '评估您的职业兴趣、工作满意度和职业规划',
+      estimatedDuration: 10,
+      questionCount: 18,
+      category: '职业',
+      icon: 'briefcase'
+    },
+    {
+      id: 'relationship',
+      name: '人际关系测评',
+      description: '评估您的亲密关系、社交能力和沟通风格',
+      estimatedDuration: 8,
+      questionCount: 16,
+      category: '人际',
+      icon: 'users'
+    },
+    {
+      id: 'quality-of-life',
+      name: '生活质量评估',
+      description: '评估您的睡眠质量、生活习惯和情绪管理能力',
+      estimatedDuration: 10,
+      questionCount: 14,
+      category: '生活',
+      icon: 'leaf'
     }
   ],
   questions: [
@@ -167,6 +176,477 @@ const FALLBACK_DATA = {
       sourceReference: 'GAD-7',
       aiReviewStatus: 'approved',
       sortOrder: 1
+    }
+  ],
+  // 新增的4个分类的兜底题目
+  cognitiveQuestions: [
+    {
+      id: 'Q-C-001',
+      questionId: 'Q-C-001',
+      testTypeId: 'cognitive',
+      questionType: 'multiple-choice',
+      questionText: '如果所有的A都是B，且所有的B都是C，那么以下哪项必然正确？',
+      options: JSON.stringify([
+        { value: 'A', label: '所有的C都是A' },
+        { value: 'B', label: '所有的A都是C' },
+        { value: 'C', label: '只有部分A是C' },
+        { value: 'D', label: 'A和C没有关系' }
+      ]),
+      scoreMapping: JSON.stringify({
+        'A': 0,
+        'B': 10,
+        'C': 0,
+        'D': 0
+      }),
+      sourceReference: '瑞文推理测验',
+      aiReviewStatus: 'approved',
+      sortOrder: 1
+    },
+    {
+      id: 'Q-C-002',
+      questionId: 'Q-C-002',
+      testTypeId: 'cognitive',
+      questionType: 'multiple-choice',
+      questionText: '想象一个正方体，如果将它的每个面都涂成不同的颜色，那么需要几种不同的颜色？',
+      options: JSON.stringify([
+        { value: 'A', label: '4种' },
+        { value: 'B', label: '5种' },
+        { value: 'C', label: '6种' },
+        { value: 'D', label: '7种' }
+      ]),
+      scoreMapping: JSON.stringify({
+        'A': 0,
+        'B': 0,
+        'C': 10,
+        'D': 0
+      }),
+      sourceReference: '空间想象测试',
+      aiReviewStatus: 'approved',
+      sortOrder: 2
+    },
+    {
+      id: 'Q-C-003',
+      questionId: 'Q-C-003',
+      testTypeId: 'cognitive',
+      questionType: 'multiple-choice',
+      questionText: '以下哪个词语与"慷慨"意思最接近？',
+      options: JSON.stringify([
+        { value: 'A', label: '吝啬' },
+        { value: 'B', label: '大方' },
+        { value: 'C', label: '节俭' },
+        { value: 'D', label: '自私' }
+      ]),
+      scoreMapping: JSON.stringify({
+        'A': 0,
+        'B': 10,
+        'C': 0,
+        'D': 0
+      }),
+      sourceReference: '词汇理解测试',
+      aiReviewStatus: 'approved',
+      sortOrder: 3
+    },
+    {
+      id: 'Q-C-004',
+      questionId: 'Q-C-004',
+      testTypeId: 'cognitive',
+      questionType: 'scale',
+      questionText: '请记住以下数字序列：3, 7, 1, 9, 5。然后回答：第二个数字是什么？',
+      options: JSON.stringify([
+        { value: '3', label: '3' },
+        { value: '7', label: '7' },
+        { value: '1', label: '1' },
+        { value: '9', label: '9' },
+        { value: '5', label: '5' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '3': 0,
+        '7': 10,
+        '1': 0,
+        '9': 0,
+        '5': 0
+      }),
+      sourceReference: '短期记忆测试',
+      aiReviewStatus: 'approved',
+      sortOrder: 4
+    },
+    {
+      id: 'Q-C-005',
+      questionId: 'Q-C-005',
+      testTypeId: 'cognitive',
+      questionType: 'open-ended',
+      questionText: '砖头可以用来做什么？（请列举至少3个用途）',
+      options: JSON.stringify([]),
+      scoreMapping: JSON.stringify({}),
+      sourceReference: '创造力测试',
+      aiReviewStatus: 'approved',
+      sortOrder: 5
+    }
+  ],
+  careerQuestions: [
+    {
+      id: 'Q-CV-001',
+      questionId: 'Q-CV-001',
+      testTypeId: 'career',
+      questionType: 'multiple-choice',
+      questionText: '您在选择工作时，最看重以下哪些因素？（可多选）',
+      options: JSON.stringify([
+        { value: 'A', label: '薪资待遇和发展空间' },
+        { value: 'B', label: '工作内容和兴趣匹配度' },
+        { value: 'C', label: '工作环境和团队氛围' },
+        { value: 'D', label: '工作稳定性和福利保障' },
+        { value: 'E', label: '社会价值和意义感' }
+      ]),
+      scoreMapping: JSON.stringify({
+        'A': 1,
+        'B': 1,
+        'C': 1,
+        'D': 1,
+        'E': 1
+      }),
+      sourceReference: '霍兰德职业兴趣理论',
+      aiReviewStatus: 'approved',
+      sortOrder: 1
+    },
+    {
+      id: 'Q-CV-002',
+      questionId: 'Q-CV-002',
+      testTypeId: 'career',
+      questionType: 'scale',
+      questionText: '您对目前工作的整体满意度如何？',
+      options: JSON.stringify([
+        { value: '1', label: '非常不满意' },
+        { value: '2', label: '不太满意' },
+        { value: '3', label: '一般' },
+        { value: '4', label: '比较满意' },
+        { value: '5', label: '非常满意' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5
+      }),
+      sourceReference: '工作满意度量表',
+      aiReviewStatus: 'approved',
+      sortOrder: 2
+    },
+    {
+      id: 'Q-CV-003',
+      questionId: 'Q-CV-003',
+      testTypeId: 'career',
+      questionType: 'scale',
+      questionText: '您在工作中感受到的压力程度如何？',
+      options: JSON.stringify([
+        { value: '1', label: '几乎没有压力' },
+        { value: '2', label: '压力很小' },
+        { value: '3', label: '中等程度' },
+        { value: '4', label: '压力较大' },
+        { value: '5', label: '压力非常大' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5
+      }),
+      sourceReference: '职业压力量表',
+      aiReviewStatus: 'approved',
+      sortOrder: 3
+    },
+    {
+      id: 'Q-CV-004',
+      questionId: 'Q-CV-004',
+      testTypeId: 'career',
+      questionType: 'scale',
+      questionText: '您对自己的职业发展有清晰的规划吗？',
+      options: JSON.stringify([
+        { value: '1', label: '完全没有规划' },
+        { value: '2', label: '规划很模糊' },
+        { value: '3', label: '有一些规划' },
+        { value: '4', label: '规划比较清晰' },
+        { value: '5', label: '规划非常清晰' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5
+      }),
+      sourceReference: '职业规划清晰度',
+      aiReviewStatus: 'approved',
+      sortOrder: 4
+    },
+    {
+      id: 'Q-CV-005',
+      questionId: 'Q-CV-005',
+      testTypeId: 'career',
+      questionType: 'multiple-choice',
+      questionText: '您认为自己在以下哪些方面有优势？（可多选）',
+      options: JSON.stringify([
+        { value: 'A', label: '沟通表达能力' },
+        { value: 'B', label: '数据分析能力' },
+        { value: 'C', label: '团队协作能力' },
+        { value: 'D', label: '创新思维能力' },
+        { value: 'E', label: '项目管理能力' }
+      ]),
+      scoreMapping: JSON.stringify({
+        'A': 1,
+        'B': 1,
+        'C': 1,
+        'D': 1,
+        'E': 1
+      }),
+      sourceReference: '职业技能评估',
+      aiReviewStatus: 'approved',
+      sortOrder: 5
+    }
+  ],
+  relationshipQuestions: [
+    {
+      id: 'Q-RL-001',
+      questionId: 'Q-RL-001',
+      testTypeId: 'relationship',
+      questionType: 'scale',
+      questionText: '在与他人发生分歧时，您通常能够理解对方的立场吗？',
+      options: JSON.stringify([
+        { value: '1', label: '完全不能理解' },
+        { value: '2', label: '很难理解' },
+        { value: '3', label: '有时能理解' },
+        { value: '4', label: '通常能理解' },
+        { value: '5', label: '总是能理解' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5
+      }),
+      sourceReference: '人际关系质量量表',
+      aiReviewStatus: 'approved',
+      sortOrder: 1
+    },
+    {
+      id: 'Q-RL-002',
+      questionId: 'Q-RL-002',
+      testTypeId: 'relationship',
+      questionType: 'scale',
+      questionText: '您在社交场合中感到自在吗？',
+      options: JSON.stringify([
+        { value: '1', label: '非常不自在' },
+        { value: '2', label: '不太自在' },
+        { value: '3', label: '一般' },
+        { value: '4', label: '比较自在' },
+        { value: '5', label: '非常自在' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5
+      }),
+      sourceReference: '社交舒适度量表',
+      aiReviewStatus: 'approved',
+      sortOrder: 2
+    },
+    {
+      id: 'Q-RL-003',
+      questionId: 'Q-RL-003',
+      testTypeId: 'relationship',
+      questionType: 'scale',
+      questionText: '您是否善于倾听他人的想法和感受？',
+      options: JSON.stringify([
+        { value: '1', label: '完全不善于' },
+        { value: '2', label: '不太善于' },
+        { value: '3', label: '一般' },
+        { value: '4', label: '比较善于' },
+        { value: '5', label: '非常善于' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5
+      }),
+      sourceReference: '倾听能力评估',
+      aiReviewStatus: 'approved',
+      sortOrder: 3
+    },
+    {
+      id: 'Q-RL-004',
+      questionId: 'Q-RL-004',
+      testTypeId: 'relationship',
+      questionType: 'scale',
+      questionText: '您在沟通中是否能够清晰地表达自己的想法？',
+      options: JSON.stringify([
+        { value: '1', label: '完全不能' },
+        { value: '2', label: '很难' },
+        { value: '3', label: '一般' },
+        { value: '4', label: '比较容易' },
+        { value: '5', label: '非常容易' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5
+      }),
+      sourceReference: '表达清晰度',
+      aiReviewStatus: 'approved',
+      sortOrder: 4
+    },
+    {
+      id: 'Q-RL-005',
+      questionId: 'Q-RL-005',
+      testTypeId: 'relationship',
+      questionType: 'scale',
+      questionText: '当与他人发生冲突时，您的第一反应是：',
+      options: JSON.stringify([
+        { value: '1', label: '逃避，避免面对' },
+        { value: '2', label: '防御，保护自己' },
+        { value: '3', label: '冷静，寻求理解' },
+        { value: '4', label: '攻击，反击对方' },
+        { value: '5', label: '合作，寻求解决' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 5,
+        '4': 1,
+        '5': 5
+      }),
+      sourceReference: '冲突反应模式',
+      aiReviewStatus: 'approved',
+      sortOrder: 5
+    }
+  ],
+  qualityOfLifeQuestions: [
+    {
+      id: 'Q-LQ-001',
+      questionId: 'Q-LQ-001',
+      testTypeId: 'quality-of-life',
+      questionType: 'scale',
+      questionText: '您对自己的睡眠质量满意吗？',
+      options: JSON.stringify([
+        { value: '1', label: '非常不满意' },
+        { value: '2', label: '不太满意' },
+        { value: '3', label: '一般' },
+        { value: '4', label: '比较满意' },
+        { value: '5', label: '非常满意' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5
+      }),
+      sourceReference: '匹兹堡睡眠质量指数',
+      aiReviewStatus: 'approved',
+      sortOrder: 1
+    },
+    {
+      id: 'Q-LQ-002',
+      questionId: 'Q-LQ-002',
+      testTypeId: 'quality-of-life',
+      questionType: 'scale',
+      questionText: '您的饮食习惯健康吗？',
+      options: JSON.stringify([
+        { value: '1', label: '非常不健康' },
+        { value: '2', label: '比较不健康' },
+        { value: '3', label: '一般' },
+        { value: '4', label: '比较健康' },
+        { value: '5', label: '非常健康' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5
+      }),
+      sourceReference: '饮食习惯评估',
+      aiReviewStatus: 'approved',
+      sortOrder: 2
+    },
+    {
+      id: 'Q-LQ-003',
+      questionId: 'Q-LQ-003',
+      testTypeId: 'quality-of-life',
+      questionType: 'scale',
+      questionText: '您是否有规律的运动习惯？',
+      options: JSON.stringify([
+        { value: '1', label: '完全没有' },
+        { value: '2', label: '很少运动' },
+        { value: '3', label: '偶尔运动' },
+        { value: '4', label: '经常运动' },
+        { value: '5', label: '每天运动' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5
+      }),
+      sourceReference: '运动习惯评估',
+      aiReviewStatus: 'approved',
+      sortOrder: 3
+    },
+    {
+      id: 'Q-LQ-004',
+      questionId: 'Q-LQ-004',
+      testTypeId: 'quality-of-life',
+      questionType: 'scale',
+      questionText: '您是否能够有效管理自己的情绪？',
+      options: JSON.stringify([
+        { value: '1', label: '完全不能' },
+        { value: '2', label: '很难' },
+        { value: '3', label: '一般' },
+        { value: '4', label: '比较容易' },
+        { value: '5', label: '非常容易' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5
+      }),
+      sourceReference: '情绪调节能力',
+      aiReviewStatus: 'approved',
+      sortOrder: 4
+    },
+    {
+      id: 'Q-LQ-005',
+      questionId: 'Q-LQ-005',
+      testTypeId: 'quality-of-life',
+      questionType: 'scale',
+      questionText: '您的工作与生活平衡吗？',
+      options: JSON.stringify([
+        { value: '1', label: '完全不平衡（工作占主导）' },
+        { value: '2', label: '比较不平衡' },
+        { value: '3', label: '一般' },
+        { value: '4', label: '比较平衡' },
+        { value: '5', label: '非常平衡' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5
+      }),
+      sourceReference: '工作生活平衡评估',
+      aiReviewStatus: 'approved',
+      sortOrder: 5
     }
   ]
 };
