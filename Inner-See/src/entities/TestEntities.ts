@@ -42,3 +42,31 @@ export interface TestType {
   category: string;
   icon: string;
 }
+
+export interface QuestionDetail {
+  id: string;
+  text: string;
+  type: 'single_choice' | 'scale';
+  options: Array<{
+    value: number | string;
+    text: string;
+  }>;
+}
+
+export interface TestResultWithDetails {
+  testName: string;
+  score: number;
+  level: string;
+  levelPercentage: number;
+  interpretation: string[];
+  suggestions: Array<{
+    title: string;
+    text: string;
+    icon: string;
+  }>;
+  questionResults: Array<{
+    question: QuestionDetail;
+    userAnswer: UserAnswer;
+    userChoiceText: string;
+  }>;
+}

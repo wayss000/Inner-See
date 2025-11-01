@@ -19,6 +19,26 @@ interface TestResult {
     text: string;
     icon: string;
   }>;
+  questionResults?: Array<{
+    question: {
+      id: string;
+      text: string;
+      type: 'single_choice' | 'scale';
+      options: Array<{
+        value: number | string;
+        text: string;
+      }>;
+    };
+    userAnswer: {
+      id: string;
+      recordId: string;
+      questionId: string;
+      userChoice: string;
+      scoreObtained: number;
+      createdAt: number;
+    };
+    userChoiceText: string;
+  }>;
 }
 
 const ResultDisplayScreen = () => {
@@ -139,7 +159,8 @@ const ResultDisplayScreen = () => {
                 text: '保持规律的作息时间，创造舒适的睡眠环境。',
                 icon: 'moon'
               }
-            ]
+            ],
+            questionResults: [] // 暂时为空，后续从本地数据源获取题目详情
           };
           
           setTestResult(result);
@@ -158,6 +179,57 @@ const ResultDisplayScreen = () => {
 
     loadTestResult();
   }, [params.record_id]);
+
+  // 从本地数据源获取题目详情并更新questionResults
+  const updateQuestionResults = async () => {
+    if (!testResult || (testResult.questionResults && testResult.questionResults.length > 0)) return;
+    
+    try {
+      // 这里需要从本地数据源获取题目详情
+      // 由于当前实现中测试时没有保存题目内容，我们需要从本地数据中查找
+      // 这里先实现一个占位符逻辑，后续可以根据实际的本地数据结构进行完善
+      
+      const { DatabaseManager } = await import('../../src/database/DatabaseManager');
+      const dbManager = DatabaseManager.getInstance();
+      await dbManager.initialize();
+      
+      const userAnswers = await dbManager.getUserAnswersByRecordId(params.record_id as string);
+      
+      // 从本地数据源获取题目详情（这里需要根据实际的本地数据结构实现）
+      // 暂时使用占位符数据
+      const questionResults = userAnswers.map((answer, index) => ({
+        question: {
+          id: answer.questionId,
+          text: `题目 ${answer.questionId}`, // 这里需要从本地数据源获取实际题目文本
+          type: 'scale' as const,
+          options: [
+            { value: 1, text: '选项1' },
+            { value: 2, text: '选项2' },
+            { value: 3, text: '选项3' },
+            { value: 4, text: '选项4' },
+            { value: 5, text: '选项5' }
+          ]
+        },
+        userAnswer: answer,
+        userChoiceText: answer.userChoice
+      }));
+      
+      setTestResult(prev => prev ? {
+        ...prev,
+        questionResults
+      } : null);
+      
+    } catch (error) {
+      console.error('更新题目详情失败:', error);
+    }
+  };
+
+  // 当测试结果加载完成后，更新题目详情
+  useEffect(() => {
+    if (testResult) {
+      updateQuestionResults();
+    }
+  }, [testResult]);
 
   const handleBackPress = () => {
     if (router.canGoBack()) {
@@ -356,6 +428,40 @@ const ResultDisplayScreen = () => {
               </View>
             </View>
           </View>
+
+          {/* 答题详情区 */}
+          {testResult.questionResults && testResult.questionResults.length > 0 && (
+            <View style={styles.questionDetailsSection}>
+              <View style={styles.questionDetailsCard}>
+                <View style={styles.sectionHeader}>
+                  <LinearGradient
+                    colors={['#f59e0b', '#eab308']}
+                    style={styles.sectionIcon}
+                  >
+                    <FontAwesome6 name="list-ol" size={18} color="#ffffff" />
+                  </LinearGradient>
+                  <Text style={styles.sectionTitle}>答题详情</Text>
+                </View>
+                
+                <View style={styles.questionDetailsList}>
+                  {testResult.questionResults.map((questionResult, index) => (
+                    <View key={index} style={styles.questionDetailItem}>
+                      <View style={styles.questionNumber}>
+                        <Text style={styles.questionNumberText}>第{index + 1}题</Text>
+                      </View>
+                      <View style={styles.questionContent}>
+                        <Text style={styles.questionText}>{questionResult.question.text}</Text>
+                        <View style={styles.userAnswerSection}>
+                          <Text style={styles.userAnswerLabel}>您的选择：</Text>
+                          <Text style={styles.userAnswerText}>{questionResult.userChoiceText}</Text>
+                        </View>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            </View>
+          )}
 
           {/* 底部间距 */}
           <View style={styles.bottomSpacing} />

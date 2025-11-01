@@ -412,5 +412,75 @@ export default StyleSheet.create({
     fontWeight: '600',
     color: '#ffffff',
   },
+
+  // 答题详情区域样式
+  questionDetailsSection: {
+    paddingHorizontal: 24,
+    marginBottom: 32,
+  },
+  questionDetailsCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    borderRadius: 16,
+    padding: 24,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.3,
+        shadowRadius: 16,
+      },
+      android: {
+        elevation: 8,
+      },
+    }),
+  },
+  questionDetailsList: {
+    gap: 16,
+  },
+  questionDetailItem: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+  },
+  questionNumber: {
+    backgroundColor: '#6366f1',
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    alignSelf: 'flex-start',
+    marginBottom: 8,
+  },
+  questionNumberText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#ffffff',
+  },
+  questionContent: {
+    flex: 1,
+  },
+  questionText: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: 'rgba(255, 255, 255, 0.9)',
+    marginBottom: 8,
+  },
+  userAnswerSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 8,
+    padding: 8,
+  },
+  userAnswerLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#f59e0b',
+  },
+  userAnswerText: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.8)',
+  },
 });
 

@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import { TestRecord, UserAnswer } from '../entities/TestEntities';
+import { TestRecord, UserAnswer, TestResultWithDetails } from '../entities/TestEntities';
 
 export class DatabaseManager {
   private static instance: DatabaseManager;
@@ -117,6 +117,68 @@ export class DatabaseManager {
       [recordId]
     );
     return results;
+  }
+
+  async getTestResultWithDetails(recordId: string): Promise<TestResultWithDetails | null> {
+    if (!this.db) throw new Error('数据库未初始化');
+
+    // 获取测试记录
+    const testRecord = await this.getTestRecordById(recordId);
+    if (!testRecord) return null;
+
+    // 获取用户答题记录
+    const userAnswers = await this.getUserAnswersByRecordId(recordId);
+
+    // 这里需要获取题目详情，由于题目数据在本地，我们需要从测试时保存的数据中获取
+    // 由于当前实现中没有保存题目详情，我们需要从本地数据源获取
+    // 这里先返回一个基础结构，具体的题目详情需要在结果页面从本地数据源获取
+    const questionResults = userAnswers.map(answer => ({
+      question: {
+        id: answer.questionId,
+        text: `题目 ${answer.questionId}`, // 临时占位符
+        type: 'scale' as const,
+        options: [
+          { value: 1, text: '选项1' },
+          { value: 2, text: '选项2' },
+          { value: 3, text: '选项3' },
+          { value: 4, text: '选项4' },
+          { value: 5, text: '选项5' }
+        ]
+      },
+      userAnswer: answer,
+      userChoiceText: answer.userChoice
+    }));
+
+    return {
+      testName: testRecord.testTypeId === 'mental-health' ? '抑郁症评估' : 'MBTI性格测试',
+      score: testRecord.totalScore || 0,
+      level: testRecord.resultSummary || '未知',
+      levelPercentage: Math.min((testRecord.totalScore || 0) * 10, 100),
+      interpretation: [
+        `根据您的测试结果，${testRecord.resultSummary || '测试完成'}。`,
+        '这是基于您答题情况生成的个性化结果。',
+        '建议定期进行心理状态评估，保持良好的生活习惯。'
+      ],
+      suggestions: testRecord.improvementSuggestions ? [
+        {
+          title: '改善建议',
+          text: testRecord.improvementSuggestions,
+          icon: 'lightbulb'
+        }
+      ] : [
+        {
+          title: '增加体育锻炼',
+          text: '每天进行30分钟的有氧运动，有助于改善情绪状态。',
+          icon: 'person-walking'
+        },
+        {
+          title: '改善睡眠质量',
+          text: '保持规律的作息时间，创造舒适的睡眠环境。',
+          icon: 'moon'
+        }
+      ],
+      questionResults
+    };
   }
 
   async getAllTestRecords(): Promise<TestRecord[]> {
