@@ -303,25 +303,124 @@ const TestQuestionScreen: React.FC = () => {
   };
 
   // 处理提交测试
-  const handleSubmitTest = () => {
-    const endTime = Date.now();
-    const duration = Math.round((endTime - startTime) / 1000);
-    const recordId = 'record_' + Date.now();
+  const handleSubmitTest = async () => {
+    try {
+      const endTime = Date.now();
+      const duration = Math.round((endTime - startTime) / 1000);
+      const recordId = 'record_' + Date.now();
+      
+      // 保存测试记录到数据库
+      const testRecord = {
+        id: recordId,
+        userId: 'user_1', // 默认用户ID
+        testTypeId,
+        startTime,
+        endTime,
+        totalScore: calculateScore(),
+        resultSummary: generateResultSummary(),
+        improvementSuggestions: generateSuggestions(),
+        referenceMaterials: 'PHQ-9, MBTI等专业量表',
+        createdAt: Date.now()
+      };
+      
+      // 保存测试记录
+      const databaseManager = await getDatabaseManager();
+      await databaseManager.saveTestRecord(testRecord);
+      
+      // 保存用户答题记录
+      const userAnswersData = userAnswers.map((answer, index) => ({
+        id: `answer_${recordId}_${index}`,
+        recordId,
+        questionId: currentTest.questions[index].id.toString(),
+        userChoice: answer.toString(),
+        scoreObtained: getScoreForAnswer(index, answer),
+        createdAt: Date.now()
+      }));
+      
+      for (const answer of userAnswersData) {
+        await databaseManager.saveUserAnswer(answer);
+      }
+      
+      console.log('测试记录保存成功:', testRecord);
+      setIsSubmitModalVisible(false);
+      router.push(`/p-result_display?record_id=${recordId}`);
+    } catch (error) {
+      console.error('保存测试记录失败:', error);
+      Alert.alert('错误', '保存测试记录失败，请重试');
+    }
+  };
+
+  // 计算测试得分
+  const calculateScore = (): number => {
+    let totalScore = 0;
+    userAnswers.forEach((answer, index) => {
+      const question = currentTest.questions[index];
+      if (question && question.type === 'scale') {
+        totalScore += Number(answer) || 0;
+      } else if (question && question.type === 'single_choice') {
+        // 单选题根据选项值计算分数
+        const selectedOption = question.options.find(opt => opt.value === answer);
+        if (selectedOption) {
+          totalScore += Number(selectedOption.value) || 0;
+        }
+      }
+    });
+    return totalScore;
+  };
+
+  // 生成结果摘要
+  const generateResultSummary = (): string => {
+    const score = calculateScore();
+    const maxPossibleScore = currentTest.questions.length * 5; // 假设每题最高5分
+    const percentage = (score / maxPossibleScore) * 100;
     
-    // 模拟保存测试记录
-    const testRecord = {
-      recordId,
-      testTypeId,
-      startTime,
-      endTime,
-      duration,
-      answers: userAnswers,
-      timestamp: new Date().toISOString()
-    };
+    if (percentage < 20) {
+      return '正常';
+    } else if (percentage < 40) {
+      return '轻度异常';
+    } else if (percentage < 60) {
+      return '中度异常';
+    } else {
+      return '重度异常';
+    }
+  };
+
+  // 生成改善建议
+  const generateSuggestions = (): string => {
+    const score = calculateScore();
+    const maxPossibleScore = currentTest.questions.length * 5;
+    const percentage = (score / maxPossibleScore) * 100;
     
-    console.log('测试记录:', testRecord);
-    setIsSubmitModalVisible(false);
-    router.push(`/p-result_display?record_id=${recordId}`);
+    if (percentage < 20) {
+      return '您的测试结果正常，继续保持良好的生活习惯。';
+    } else if (percentage < 40) {
+      return '您有轻度异常，建议适当调整生活方式，增加运动和社交活动。';
+    } else if (percentage < 60) {
+      return '您有中度异常，建议寻求专业心理咨询师的帮助。';
+    } else {
+      return '您有重度异常，强烈建议尽快联系专业心理医生进行评估。';
+    }
+  };
+
+  // 获取单个答案的得分
+  const getScoreForAnswer = (questionIndex: number, answer: number | string): number => {
+    const question = currentTest.questions[questionIndex];
+    if (!question) return 0;
+    
+    if (question.type === 'scale') {
+      return Number(answer) || 0;
+    } else {
+      const selectedOption = question.options.find(opt => opt.value === answer);
+      return Number(selectedOption?.value) || 0;
+    }
+  };
+
+  // 获取数据库管理器实例
+  const getDatabaseManager = async () => {
+    const { DatabaseManager } = await import('../../src/database/DatabaseManager');
+    const dbManager = DatabaseManager.getInstance();
+    await dbManager.initialize();
+    return dbManager;
   };
 
   // 处理检查答案

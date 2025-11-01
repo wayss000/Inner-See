@@ -96,16 +96,61 @@ const ResultDisplayScreen = () => {
     const loadTestResult = async () => {
       try {
         setIsLoading(true);
-        const recordId = (params.record_id as string) || 'record1';
-        const result = mockResults[recordId];
+        const recordId = (params.record_id as string);
         
-        if (result) {
+        if (!recordId) {
+          Alert.alert('错误', '缺少测试记录ID');
+          return;
+        }
+        
+        // 首先尝试从数据库加载真实数据
+        const { DatabaseManager } = await import('../../src/database/DatabaseManager');
+        const dbManager = DatabaseManager.getInstance();
+        await dbManager.initialize();
+        
+        const testRecord = await dbManager.getTestRecordById(recordId);
+        
+        if (testRecord) {
+          // 从数据库记录生成测试结果
+          const result: TestResult = {
+            testName: testRecord.testTypeId === 'mental-health' ? '抑郁症评估' : 'MBTI性格测试',
+            score: testRecord.totalScore || 0,
+            level: testRecord.resultSummary || '未知',
+            levelPercentage: Math.min((testRecord.totalScore || 0) * 10, 100), // 简单的百分比计算
+            interpretation: [
+              `根据您的测试结果，${testRecord.resultSummary || '测试完成'}。`,
+              '这是基于您答题情况生成的个性化结果。',
+              '建议定期进行心理状态评估，保持良好的生活习惯。'
+            ],
+            suggestions: testRecord.improvementSuggestions ? [
+              {
+                title: '改善建议',
+                text: testRecord.improvementSuggestions,
+                icon: 'lightbulb'
+              }
+            ] : [
+              {
+                title: '增加体育锻炼',
+                text: '每天进行30分钟的有氧运动，有助于改善情绪状态。',
+                icon: 'person-walking'
+              },
+              {
+                title: '改善睡眠质量',
+                text: '保持规律的作息时间，创造舒适的睡眠环境。',
+                icon: 'moon'
+              }
+            ]
+          };
+          
           setTestResult(result);
         } else {
-          Alert.alert('错误', '未找到测试记录');
+          // 如果数据库中没有找到，使用mock数据作为fallback
+          const mockResult = mockResults[recordId] || mockResults.record1;
+          setTestResult(mockResult);
         }
       } catch (error) {
-        Alert.alert('错误', '加载测试结果失败');
+        console.error('加载测试结果失败:', error);
+        Alert.alert('错误', '加载测试结果失败，请重试');
       } finally {
         setIsLoading(false);
       }
