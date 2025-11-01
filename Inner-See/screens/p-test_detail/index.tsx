@@ -164,7 +164,7 @@ const TestDetailScreen = () => {
     if (!currentTestData) return;
     
     // 添加点击反馈效果的逻辑可以通过动画库实现
-    router.push(`/p-test_question?testType=${testType || 'depression'}`);
+    router.push(`/p-test_question?test_type_id=${testType || 'depression'}`);
   };
 
   if (isLoading || !currentTestData) {

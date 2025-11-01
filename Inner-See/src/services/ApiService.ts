@@ -178,7 +178,81 @@ const FALLBACK_DATA = {
       sortOrder: 1
     }
   ],
-  // 新增的4个分类的兜底题目
+  // 按分类组织的完整兜底题目数据
+  mentalHealthQuestions: [
+    {
+      id: 'Q-MH-001',
+      questionId: 'Q-MH-001',
+      testTypeId: 'mental-health',
+      questionType: 'scale',
+      questionText: '最近一周，您感到情绪低落的频率如何？',
+      options: JSON.stringify([
+        { value: '1', label: '从不' },
+        { value: '2', label: '很少' },
+        { value: '3', label: '有时' },
+        { value: '4', label: '经常' },
+        { value: '5', label: '总是' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5
+      }),
+      sourceReference: 'PHQ-9',
+      aiReviewStatus: 'approved',
+      sortOrder: 1
+    },
+    {
+      id: 'Q-MH-002',
+      questionId: 'Q-MH-002',
+      testTypeId: 'mental-health',
+      questionType: 'scale',
+      questionText: '最近一周，您对事物失去兴趣或乐趣的频率如何？',
+      options: JSON.stringify([
+        { value: '1', label: '从不' },
+        { value: '2', label: '很少' },
+        { value: '3', label: '有时' },
+        { value: '4', label: '经常' },
+        { value: '5', label: '总是' }
+      ]),
+      scoreMapping: JSON.stringify({
+        '1': 1,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5
+      }),
+      sourceReference: 'PHQ-9',
+      aiReviewStatus: 'approved',
+      sortOrder: 2
+    }
+  ],
+  personalityQuestions: [
+    {
+      id: 'Q-P-001',
+      questionId: 'Q-P-001',
+      testTypeId: 'personality',
+      questionType: 'multiple-choice',
+      questionText: '在社交场合中，您通常感觉如何？',
+      options: JSON.stringify([
+        { value: 'A', label: '非常自在，喜欢与人交流' },
+        { value: 'B', label: '比较自在，但需要时间适应' },
+        { value: 'C', label: '有些紧张，更喜欢小团体' },
+        { value: 'D', label: '非常紧张，更喜欢独处' }
+      ]),
+      scoreMapping: JSON.stringify({
+        'A': 4,
+        'B': 3,
+        'C': 2,
+        'D': 1
+      }),
+      sourceReference: 'MBTI',
+      aiReviewStatus: 'approved',
+      sortOrder: 1
+    }
+  ],
   cognitiveQuestions: [
     {
       id: 'Q-C-001',
@@ -820,9 +894,35 @@ export class ApiService {
       const isOnline = await apiClient.checkNetworkStatus();
       
       if (!isOnline) {
-        return FALLBACK_DATA.questions
-          .filter(q => q.testTypeId === testTypeId)
-          .slice(0, count);
+        // 根据testTypeId返回对应的兜底题目
+        let questions: Question[] = [];
+        
+        switch (testTypeId) {
+          case 'mental-health':
+            questions = FALLBACK_DATA.mentalHealthQuestions;
+            break;
+          case 'personality':
+            questions = FALLBACK_DATA.personalityQuestions;
+            break;
+          case 'cognitive':
+            questions = FALLBACK_DATA.cognitiveQuestions;
+            break;
+          case 'career':
+            questions = FALLBACK_DATA.careerQuestions;
+            break;
+          case 'relationship':
+            questions = FALLBACK_DATA.relationshipQuestions;
+            break;
+          case 'quality-of-life':
+            questions = FALLBACK_DATA.qualityOfLifeQuestions;
+            break;
+          default:
+            // 默认返回心理健康题目
+            questions = FALLBACK_DATA.mentalHealthQuestions;
+            break;
+        }
+        
+        return questions.slice(0, count);
       }
 
       return await apiClient.get<Question[]>('/questions/recommended', {
