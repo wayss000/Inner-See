@@ -309,6 +309,20 @@ const TestQuestionScreen: React.FC = () => {
       const duration = Math.round((endTime - startTime) / 1000);
       const recordId = 'record_' + Date.now();
       
+      // 计算测试结果
+      const totalScore = calculateScore();
+      const resultSummary = generateResultSummary();
+      const improvementSuggestions = generateSuggestions();
+      
+      console.log('准备保存测试记录:', {
+        id: recordId,
+        userId: 'user_1',
+        testTypeId,
+        totalScore,
+        resultSummary,
+        improvementSuggestions
+      });
+      
       // 保存测试记录到数据库
       const testRecord = {
         id: recordId,
@@ -316,9 +330,9 @@ const TestQuestionScreen: React.FC = () => {
         testTypeId,
         startTime,
         endTime,
-        totalScore: calculateScore(),
-        resultSummary: generateResultSummary(),
-        improvementSuggestions: generateSuggestions(),
+        totalScore,
+        resultSummary,
+        improvementSuggestions,
         referenceMaterials: 'PHQ-9, MBTI等专业量表',
         createdAt: Date.now()
       };
@@ -341,7 +355,7 @@ const TestQuestionScreen: React.FC = () => {
         await databaseManager.saveUserAnswer(answer);
       }
       
-      console.log('测试记录保存成功:', testRecord);
+      console.log('测试记录保存完成，跳转到结果页面，recordId:', recordId);
       setIsSubmitModalVisible(false);
       router.push(`/p-result_display?record_id=${recordId}`);
     } catch (error) {

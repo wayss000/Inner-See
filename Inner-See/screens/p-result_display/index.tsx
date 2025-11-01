@@ -118,6 +118,8 @@ const ResultDisplayScreen = () => {
         setIsLoading(true);
         const recordId = (params.record_id as string);
         
+        console.log('开始加载测试结果，recordId:', recordId);
+        
         if (!recordId) {
           Alert.alert('错误', '缺少测试记录ID');
           return;
@@ -128,9 +130,17 @@ const ResultDisplayScreen = () => {
         const dbManager = DatabaseManager.getInstance();
         await dbManager.initialize();
         
+        console.log('数据库初始化完成，开始查询测试记录');
+        
         const testRecord = await dbManager.getTestRecordById(recordId);
         
+        console.log('从数据库获取到的testRecord:', testRecord);
+        
         if (testRecord) {
+          console.log('数据库中找到测试记录，开始生成测试结果');
+          console.log('testRecord.resultSummary:', testRecord.resultSummary);
+          console.log('testRecord.totalScore:', testRecord.totalScore);
+          
           // 从数据库记录生成测试结果
           const result: TestResult = {
             testName: testRecord.testTypeId === 'mental-health' ? '抑郁症评估' : 'MBTI性格测试',
@@ -163,8 +173,10 @@ const ResultDisplayScreen = () => {
             questionResults: [] // 暂时为空，后续从本地数据源获取题目详情
           };
           
+          console.log('生成的测试结果:', result);
           setTestResult(result);
         } else {
+          console.log('数据库中未找到测试记录，使用mock数据');
           // 如果数据库中没有找到，使用mock数据作为fallback
           const mockResult = mockResults[recordId] || mockResults.record1;
           setTestResult(mockResult);

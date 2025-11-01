@@ -61,9 +61,18 @@ export class DatabaseManager {
   async saveTestRecord(record: TestRecord): Promise<void> {
     if (!this.db) throw new Error('数据库未初始化');
 
+    console.log('保存测试记录:', {
+      id: record.id,
+      userId: record.userId,
+      testTypeId: record.testTypeId,
+      totalScore: record.totalScore,
+      resultSummary: record.resultSummary,
+      improvementSuggestions: record.improvementSuggestions
+    });
+
     await this.db.runAsync(
-      `INSERT OR REPLACE INTO test_records 
-       (id, user_id, test_type_id, start_time, end_time, total_score, 
+      `INSERT OR REPLACE INTO test_records
+       (id, user_id, test_type_id, start_time, end_time, total_score,
         result_summary, improvement_suggestions, reference_materials, created_at)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
@@ -79,6 +88,8 @@ export class DatabaseManager {
         record.createdAt
       ]
     );
+
+    console.log('测试记录保存成功，ID:', record.id);
   }
 
   async saveUserAnswer(answer: UserAnswer): Promise<void> {
@@ -102,11 +113,35 @@ export class DatabaseManager {
   async getTestRecordById(recordId: string): Promise<TestRecord | null> {
     if (!this.db) throw new Error('数据库未初始化');
 
-    const result = await this.db.getFirstAsync<TestRecord>(
+    console.log('开始查询测试记录，ID:', recordId);
+    
+    const result = await this.db.getFirstAsync<any>(
       'SELECT * FROM test_records WHERE id = ?',
       [recordId]
     );
-    return result;
+    
+    console.log('查询到的原始记录:', result);
+    
+    // 将数据库字段名（下划线命名）转换为 TypeScript 接口字段名（驼峰命名）
+    if (result) {
+      const convertedResult: TestRecord = {
+        id: result.id,
+        userId: result.user_id,
+        testTypeId: result.test_type_id,
+        startTime: result.start_time,
+        endTime: result.end_time,
+        totalScore: result.total_score,
+        resultSummary: result.result_summary,
+        improvementSuggestions: result.improvement_suggestions,
+        referenceMaterials: result.reference_materials,
+        createdAt: result.created_at
+      };
+      
+      console.log('转换后的测试记录:', convertedResult);
+      return convertedResult;
+    }
+    
+    return null;
   }
 
   async getUserAnswersByRecordId(recordId: string): Promise<UserAnswer[]> {
@@ -184,10 +219,23 @@ export class DatabaseManager {
   async getAllTestRecords(): Promise<TestRecord[]> {
     if (!this.db) throw new Error('数据库未初始化');
 
-    const results = await this.db.getAllAsync<TestRecord>(
+    const results = await this.db.getAllAsync<any>(
       'SELECT * FROM test_records ORDER BY created_at DESC'
     );
-    return results;
+    
+    // 将数据库字段名（下划线命名）转换为 TypeScript 接口字段名（驼峰命名）
+    return results.map(result => ({
+      id: result.id,
+      userId: result.user_id,
+      testTypeId: result.test_type_id,
+      startTime: result.start_time,
+      endTime: result.end_time,
+      totalScore: result.total_score,
+      resultSummary: result.result_summary,
+      improvementSuggestions: result.improvement_suggestions,
+      referenceMaterials: result.reference_materials,
+      createdAt: result.created_at
+    }));
   }
 
   async deleteTestRecord(recordId: string): Promise<void> {
