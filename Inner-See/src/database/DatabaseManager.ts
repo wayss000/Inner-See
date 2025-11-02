@@ -131,11 +131,11 @@ export class DatabaseManager {
         record.userId,
         record.testTypeId,
         record.startTime,
-        record.endTime,
-        record.totalScore,
-        record.resultSummary,
-        record.improvementSuggestions,
-        record.referenceMaterials,
+        record.endTime || null,
+        record.totalScore || null,
+        record.resultSummary || null,
+        record.improvementSuggestions || null,
+        record.referenceMaterials || null,
         record.createdAt
       ]
     );
