@@ -14,9 +14,14 @@ export class DatabaseManager {
 
   async initialize(): Promise<void> {
     try {
-      this.db = await SQLite.openDatabaseAsync('mental_health.db');
-      await this.createTables();
-      console.log('数据库初始化成功');
+      if (!this.db) {
+        this.db = await SQLite.openDatabaseAsync('mental_health.db');
+        await this.createTables();
+        await this.updateTableSchema(); // 确保表结构更新
+        console.log('数据库初始化成功');
+      } else {
+        console.log('数据库已初始化，跳过重复初始化');
+      }
     } catch (error) {
       console.error('数据库初始化失败:', error);
       throw error;
@@ -42,13 +47,19 @@ export class DatabaseManager {
       )
     `);
 
-    // 创建用户答题记录表
+    // 创建用户答题记录表（增强版，包含冗余数据）
     await this.db.execAsync(`
       CREATE TABLE IF NOT EXISTS user_answers (
         id TEXT PRIMARY KEY,
         record_id TEXT NOT NULL,
         question_id TEXT NOT NULL,
+        -- 冗余数据：完整的题目信息
+        question_text TEXT NOT NULL,
+        question_type TEXT NOT NULL,
+        options_json TEXT NOT NULL,
+        -- 冗余数据：用户选择的可读信息
         user_choice TEXT NOT NULL,
+        user_choice_text TEXT NOT NULL,
         score_obtained INTEGER NOT NULL,
         created_at INTEGER NOT NULL,
         FOREIGN KEY (record_id) REFERENCES test_records (id)
@@ -56,6 +67,46 @@ export class DatabaseManager {
     `);
 
     console.log('数据表创建成功');
+  }
+
+  /**
+   * 更新表结构以添加新字段
+   */
+  private async updateTableSchema(): Promise<void> {
+    if (!this.db) throw new Error('数据库未初始化');
+
+    try {
+      // 检查并添加user_answers表的新字段
+      const columns = await this.db.getAllAsync<{ name: string }>(
+        "PRAGMA table_info(user_answers)"
+      );
+      const columnNames = columns.map(col => col.name);
+
+      // 添加question_text字段（如果不存在）
+      if (!columnNames.includes('question_text')) {
+        await this.db.execAsync('ALTER TABLE user_answers ADD COLUMN question_text TEXT NOT NULL DEFAULT ""');
+      }
+
+      // 添加question_type字段（如果不存在）
+      if (!columnNames.includes('question_type')) {
+        await this.db.execAsync('ALTER TABLE user_answers ADD COLUMN question_type TEXT NOT NULL DEFAULT ""');
+      }
+
+      // 添加options_json字段（如果不存在）
+      if (!columnNames.includes('options_json')) {
+        await this.db.execAsync('ALTER TABLE user_answers ADD COLUMN options_json TEXT NOT NULL DEFAULT ""');
+      }
+
+      // 添加user_choice_text字段（如果不存在）
+      if (!columnNames.includes('user_choice_text')) {
+        await this.db.execAsync('ALTER TABLE user_answers ADD COLUMN user_choice_text TEXT NOT NULL DEFAULT ""');
+      }
+
+      console.log('表结构更新完成');
+    } catch (error) {
+      console.error('更新表结构失败:', error);
+      throw error;
+    }
   }
 
   async saveTestRecord(record: TestRecord): Promise<void> {
@@ -92,20 +143,43 @@ export class DatabaseManager {
     console.log('测试记录保存成功，ID:', record.id);
   }
 
+  /**
+   * 批量保存测试记录和用户答案
+   */
+  async saveTestRecordWithAnswers(record: TestRecord, answers: UserAnswer[]): Promise<void> {
+    if (!this.db) throw new Error('数据库未初始化');
+
+    await this.db.withTransactionAsync(async () => {
+      // 保存测试记录
+      await this.saveTestRecord(record);
+
+      // 批量保存用户答案
+      for (const answer of answers) {
+        await this.saveUserAnswer(answer);
+      }
+
+      console.log(`测试记录保存成功，ID: ${record.id}`);
+    });
+  }
+
   async saveUserAnswer(answer: UserAnswer): Promise<void> {
     if (!this.db) throw new Error('数据库未初始化');
 
     await this.db.runAsync(
-      `INSERT INTO user_answers 
-       (id, record_id, question_id, user_choice, score_obtained, created_at)
-       VALUES (?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO user_answers
+       (id, record_id, question_id, question_text, question_type, options_json, user_choice, user_choice_text, score_obtained, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        answer.id,
-        answer.recordId,
-        answer.questionId,
-        answer.userChoice,
-        answer.scoreObtained,
-        answer.createdAt
+        answer.id || '',
+        answer.recordId || '',
+        answer.questionId || '',
+        answer.questionText || '',           // 冗余字段：题目文本
+        answer.questionType || '',           // 冗余字段：题型
+        answer.optionsJson || '',            // 冗余字段：选项JSON
+        String(answer.userChoice || ''),     // 确保是字符串
+        answer.userChoiceText || '',        // 冗余字段：用户选择的可读文本
+        Number(answer.scoreObtained || 0),   // 确保是数字
+        Number(answer.createdAt || Date.now()) // 确保是数字
       ]
     );
   }
@@ -147,11 +221,24 @@ export class DatabaseManager {
   async getUserAnswersByRecordId(recordId: string): Promise<UserAnswer[]> {
     if (!this.db) throw new Error('数据库未初始化');
 
-    const results = await this.db.getAllAsync<UserAnswer>(
+    const results = await this.db.getAllAsync<any>(
       'SELECT * FROM user_answers WHERE record_id = ? ORDER BY created_at',
       [recordId]
     );
-    return results;
+    
+    // 将数据库字段名（下划线命名）转换为 TypeScript 接口字段名（驼峰命名）
+    return results.map(result => ({
+      id: result.id,
+      recordId: result.record_id,
+      questionId: result.question_id,
+      questionText: result.question_text,
+      questionType: result.question_type,
+      optionsJson: result.options_json,
+      userChoice: result.user_choice,
+      userChoiceText: result.user_choice_text,
+      scoreObtained: result.score_obtained,
+      createdAt: result.created_at
+    }));
   }
 
   async getTestResultWithDetails(recordId: string): Promise<TestResultWithDetails | null> {
@@ -212,7 +299,16 @@ export class DatabaseManager {
           icon: 'moon'
         }
       ],
-      questionResults
+      questionResults: questionResults.map(result => ({
+        question: {
+          id: result.question.id,
+          text: result.question.text,
+          type: result.question.type,
+          options: result.question.options
+        },
+        userAnswer: result.userAnswer,
+        userChoiceText: result.userChoiceText
+      }))
     };
   }
 

@@ -15,7 +15,13 @@ export interface UserAnswer {
   id: string;
   recordId: string;
   questionId: string;
+  // 冗余数据：完整的题目信息
+  questionText: string;        // 题目文本
+  questionType: string;        // 题型
+  optionsJson: string;         // 选项JSON
+  // 冗余数据：用户选择的可读信息
   userChoice: string;
+  userChoiceText: string;      // 用户选择的可读文本
   scoreObtained: number;
   createdAt: number;
 }

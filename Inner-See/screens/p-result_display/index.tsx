@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { DatabaseManager } from '../../src/database/DatabaseManager';
 import styles from './styles';
 
 interface TestResult {
@@ -126,7 +127,6 @@ const ResultDisplayScreen = () => {
         }
         
         // 首先尝试从数据库加载真实数据
-        const { DatabaseManager } = await import('../../src/database/DatabaseManager');
         const dbManager = DatabaseManager.getInstance();
         await dbManager.initialize();
         
@@ -192,39 +192,67 @@ const ResultDisplayScreen = () => {
     loadTestResult();
   }, [params.record_id]);
 
-  // 从本地数据源获取题目详情并更新questionResults
+  // 从数据库获取题目详情并更新questionResults
   const updateQuestionResults = async () => {
     if (!testResult || (testResult.questionResults && testResult.questionResults.length > 0)) return;
     
     try {
-      // 这里需要从本地数据源获取题目详情
-      // 由于当前实现中测试时没有保存题目内容，我们需要从本地数据中查找
-      // 这里先实现一个占位符逻辑，后续可以根据实际的本地数据结构进行完善
-      
-      const { DatabaseManager } = await import('../../src/database/DatabaseManager');
       const dbManager = DatabaseManager.getInstance();
       await dbManager.initialize();
       
       const userAnswers = await dbManager.getUserAnswersByRecordId(params.record_id as string);
       
-      // 从本地数据源获取题目详情（这里需要根据实际的本地数据结构实现）
-      // 暂时使用占位符数据
-      const questionResults = userAnswers.map((answer, index) => ({
-        question: {
-          id: answer.questionId,
-          text: `题目 ${answer.questionId}`, // 这里需要从本地数据源获取实际题目文本
-          type: 'scale' as const,
-          options: [
+      // 由于user_answers表中已经包含完整的冗余数据，直接使用
+      console.log('从数据库获取的用户答案数据:', userAnswers);
+      
+      const questionResults = userAnswers.map((answer, index) => {
+        console.log(`处理第${index}题答案:`, {
+          questionId: answer.questionId,
+          questionText: answer.questionText,
+          questionType: answer.questionType,
+          optionsJson: answer.optionsJson,
+          userChoice: answer.userChoice,
+          userChoiceText: answer.userChoiceText
+        });
+        
+        let parsedOptions = [];
+        try {
+          // 尝试解析optionsJson，如果失败则使用默认选项
+          if (answer.optionsJson) {
+            parsedOptions = JSON.parse(answer.optionsJson);
+          } else {
+            console.warn('optionsJson为空，使用默认选项');
+          }
+        } catch (error) {
+          console.warn('解析选项JSON失败，使用默认选项:', error, {
+            optionsJson: answer.optionsJson,
+            questionId: answer.questionId
+          });
+          // 如果解析失败，使用默认选项格式
+          parsedOptions = [
             { value: 1, text: '选项1' },
-            { value: 2, text: '选项2' },
-            { value: 3, text: '选项3' },
-            { value: 4, text: '选项4' },
-            { value: 5, text: '选项5' }
-          ]
-        },
-        userAnswer: answer,
-        userChoiceText: answer.userChoice
-      }));
+            { value: 2, text: '选项2' }
+          ];
+        }
+
+        return {
+          question: {
+            id: answer.questionId,
+            text: answer.questionText || '未知题目',        // 直接使用冗余数据：题目文本
+            type: answer.questionType as 'single_choice' | 'scale', // 直接使用冗余数据：题型
+            options: parsedOptions
+          },
+          userAnswer: {
+            id: answer.id,
+            recordId: answer.recordId,
+            questionId: answer.questionId,
+            userChoice: answer.userChoice || '',
+            scoreObtained: answer.scoreObtained || 0,
+            createdAt: answer.createdAt || Date.now()
+          },
+          userChoiceText: answer.userChoiceText || '未选择' // 直接使用冗余数据：用户选择的可读文本
+        };
+      });
       
       setTestResult(prev => prev ? {
         ...prev,

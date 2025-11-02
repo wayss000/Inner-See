@@ -7,6 +7,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ApiService } from '../../src/services/ApiService';
+import { DatabaseManager } from '../../src/database/DatabaseManager';
 import styles from './styles';
 
 interface QuestionOption {
@@ -337,23 +338,46 @@ const TestQuestionScreen: React.FC = () => {
         createdAt: Date.now()
       };
       
-      // 保存测试记录
+      // 保存测试记录和用户答题记录（包含冗余数据）
       const databaseManager = await getDatabaseManager();
-      await databaseManager.saveTestRecord(testRecord);
       
-      // 保存用户答题记录
-      const userAnswersData = userAnswers.map((answer, index) => ({
-        id: `answer_${recordId}_${index}`,
-        recordId,
-        questionId: currentTest.questions[index].id.toString(),
-        userChoice: answer.toString(),
-        scoreObtained: getScoreForAnswer(index, answer),
-        createdAt: Date.now()
-      }));
+      // 准备用户答题记录（包含冗余数据）
+      const userAnswersData = userAnswers.map((answer, index) => {
+        const question = currentTest.questions[index];
+        const selectedOption = question.options?.find(opt => opt.value === answer);
+        
+        console.log(`准备保存第${index}题数据:`, {
+          questionId: question.id,
+          questionText: question.text,
+          questionType: question.type,
+          optionsCount: question.options?.length,
+          userAnswer: answer,
+          selectedOptionText: selectedOption?.text
+        });
+        
+        return {
+          id: `answer_${recordId}_${index}`,
+          recordId,
+          questionId: question.id.toString(),
+          // 冗余数据：完整的题目信息
+          questionText: question.text || '',
+          questionType: question.type || 'single_choice',
+          optionsJson: JSON.stringify((question.options || []).map(opt => ({
+            value: opt.value,
+            text: opt.text
+          }))),
+          // 冗余数据：用户选择的可读信息
+          userChoice: answer?.toString() || '',
+          userChoiceText: selectedOption?.text || answer?.toString() || '未选择',
+          scoreObtained: getScoreForAnswer(index, answer),
+          createdAt: Date.now()
+        };
+      });
       
-      for (const answer of userAnswersData) {
-        await databaseManager.saveUserAnswer(answer);
-      }
+      console.log('准备保存的用户答案数据:', userAnswersData);
+      
+      // 使用批量保存方法
+      await databaseManager.saveTestRecordWithAnswers(testRecord, userAnswersData);
       
       console.log('测试记录保存完成，跳转到结果页面，recordId:', recordId);
       setIsSubmitModalVisible(false);
@@ -431,10 +455,22 @@ const TestQuestionScreen: React.FC = () => {
 
   // 获取数据库管理器实例
   const getDatabaseManager = async () => {
-    const { DatabaseManager } = await import('../../src/database/DatabaseManager');
     const dbManager = DatabaseManager.getInstance();
-    await dbManager.initialize();
-    return dbManager;
+    try {
+      await dbManager.initialize();
+      return dbManager;
+    } catch (error) {
+      console.error('数据库初始化失败，尝试重连:', error);
+      // 如果初始化失败，尝试关闭后重新初始化
+      try {
+        await dbManager.close();
+        await dbManager.initialize();
+        return dbManager;
+      } catch (retryError) {
+        console.error('数据库重连失败:', retryError);
+        throw retryError;
+      }
+    }
   };
 
   // 处理检查答案
