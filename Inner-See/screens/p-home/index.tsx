@@ -116,8 +116,26 @@ const HomeScreen: React.FC = () => {
     router.push('/p-test_category');
   };
 
+  // 分类到测试类型的映射关系
+  const categoryToTestMap: Record<string, string> = {
+    'mental-health': 'mental-health',      // 心理健康评估 -> 心理健康评估
+    'personality': 'personality',          // 人格特质分析 -> 人格特质分析
+    'cognitive': 'cognitive',              // 认知能力测试 -> 认知能力测试
+    'career': 'career',                    // 职业发展评估 -> 职业发展评估
+    'relationship': 'relationship',        // 人际关系测评 -> 人际关系测评
+    'quality-of-life': 'quality-of-life',  // 生活质量评估 -> 生活质量评估
+  };
+
   const handleCategoryPress = (categoryId: string) => {
-    router.push(`/p-test_category?category=${categoryId}`);
+    // 根据分类ID获取对应的测试类型ID
+    const testTypeId = categoryToTestMap[categoryId];
+    if (testTypeId) {
+      // 直接跳转到测试详情页
+      router.push(`/p-test_detail?test_type_id=${testTypeId}`);
+    } else {
+      // 如果没有找到对应的测试类型，则跳转到分类页面
+      router.push(`/p-test_category?category=${categoryId}`);
+    }
   };
 
   const handleViewAllActivity = () => {
