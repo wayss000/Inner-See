@@ -3,7 +3,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Stack, usePathname, useGlobalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { LogBox } from 'react-native';
-import { HttpAppInitializer } from '../src/HttpAppInitializer';
+import { AppInitializer } from '../src/AppInitializer';
 
 const { useEffect } = React;
 
@@ -30,7 +30,7 @@ export default function RootLayout() {
   const initializeApp = async () => {
     try {
       console.log('开始应用初始化...');
-      await HttpAppInitializer.getInstance().initialize();
+      await AppInitializer.getInstance().initializeApp();
       console.log('应用初始化完成');
     } catch (error) {
       console.error('应用初始化失败:', error);

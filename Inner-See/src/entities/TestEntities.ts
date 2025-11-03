@@ -76,3 +76,17 @@ export interface TestResultWithDetails {
     userChoiceText: string;
   }>;
 }
+
+export interface User {
+  id: string;
+  nickname: string;
+  avatarEmoji: string;
+  joinDate: number;
+  testCount?: number;
+  testDays?: number;
+  gender?: '男' | '女' | '其他';
+  age?: number;
+  occupation?: string;
+  created_at?: number;
+  updated_at?: number;
+}

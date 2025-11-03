@@ -1,6 +1,4 @@
 import { DatabaseManager } from './database/DatabaseManager';
-import { DatabaseInitializer } from './database/DatabaseInitializer';
-import { QuestionMigration } from './database/QuestionMigration';
 
 export class AppInitializer {
   private static instance: AppInitializer;
@@ -20,13 +18,9 @@ export class AppInitializer {
       await DatabaseManager.getInstance().initialize();
       console.log('数据库连接初始化完成');
       
-      // 初始化测试数据
-      await DatabaseInitializer.getInstance().initializeDatabase();
-      console.log('测试数据初始化完成');
-      
-      // 迁移题目库数据
-      await QuestionMigration.getInstance().migrateQuestionsFromLibrary();
-      console.log('题目数据迁移完成');
+      // 确保有默认用户
+      await DatabaseManager.getInstance().ensureDefaultUser();
+      console.log('默认用户初始化完成');
       
       console.log('应用初始化完成');
     } catch (error) {

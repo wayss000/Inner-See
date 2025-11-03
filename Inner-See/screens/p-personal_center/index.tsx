@@ -1,26 +1,102 @@
 
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { DatabaseManager } from '../../src/database/DatabaseManager';
+import { User } from '../../src/entities/TestEntities';
 import styles from './styles';
+
+// 导入事件发射器
+import ProfileEditScreen from '../p-profile_edit';
 
 const PersonalCenterScreen = () => {
   const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  // 监听用户数据更新事件
+  useEffect(() => {
+    const handleUserUpdated = () => {
+      console.log('收到用户数据更新通知，重新加载数据');
+      loadUserData();
+    };
+
+    // 监听用户数据更新事件
+    if ((ProfileEditScreen as any).eventEmitter) {
+      (ProfileEditScreen as any).eventEmitter.on('userUpdated', handleUserUpdated);
+    }
+
+    // 清理事件监听
+    return () => {
+      if ((ProfileEditScreen as any).eventEmitter) {
+        (ProfileEditScreen as any).eventEmitter.off('userUpdated', handleUserUpdated);
+      }
+    };
+  }, []);
+
+  // 监听用户数据变化，确保数据更新后能正确显示
+  useEffect(() => {
+    if (user) {
+      console.log('用户数据已更新:', {
+        nickname: user.nickname,
+        avatarEmoji: user.avatarEmoji,
+        gender: user.gender,
+        age: user.age
+      });
+    }
+  }, [user]);
+
+  const loadUserData = async () => {
+    try {
+      setLoading(true);
+      const userData = await DatabaseManager.getInstance().getCurrentUser();
+      if (userData) {
+        setUser(userData);
+      } else {
+        // 如果没有用户数据，创建默认用户
+        const defaultUser: User = {
+          id: `user-${Date.now()}`,
+          nickname: '小雨',
+          avatarEmoji: 'smiley',
+          joinDate: Date.now(),
+          gender: '女',
+          age: 25,
+        };
+        await DatabaseManager.getInstance().createUser(defaultUser);
+        const newUser = await DatabaseManager.getInstance().getCurrentUser();
+        setUser(newUser);
+      }
+    } catch (error) {
+      console.error('加载用户数据失败:', error);
+      // 创建默认用户作为回退
+      const defaultUser: User = {
+        id: `user-${Date.now()}`,
+        nickname: '小雨',
+        avatarEmoji: 'smiley',
+        joinDate: Date.now(),
+        gender: '女',
+        age: 25,
+      };
+      setUser(defaultUser as User);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSettingsPress = () => {
     console.log('设置功能待实现');
   };
 
-  const handleUserInfoPress = () => {
-    console.log('个人资料管理功能待实现');
-  };
-
   const handleProfileManagementPress = () => {
-    console.log('个人资料管理功能待实现');
+    router.push('/p-profile_edit');
   };
 
   const handleTestHistoryPress = () => {
@@ -68,40 +144,67 @@ const PersonalCenterScreen = () => {
 
           {/* 用户信息区 */}
           <View style={styles.userInfoSection}>
-            <TouchableOpacity 
-              style={styles.userInfoCard}
-              onPress={handleUserInfoPress}
-              activeOpacity={0.8}
-            >
-              <View style={styles.userInfoContent}>
-                <View style={styles.userAvatarContainer}>
-                  <Image 
-                    source={{ uri: 'https://s.coze.cn/image/kIO2djAu2Ck/' }}
-                    style={styles.userAvatar}
-                  />
-                  <View style={styles.avatarEditIndicator}>
-                    <FontAwesome6 name="pen" size={10} color="#ffffff" />
+            {loading ? (
+              <View style={styles.userInfoCard}>
+                <View style={styles.userInfoContent}>
+                  <View style={styles.userAvatarContainer}>
+                    <View style={[styles.userAvatar, { backgroundColor: 'rgba(255, 255, 255, 0.1)', borderRadius: 50 }]} />
                   </View>
-                </View>
-                <View style={styles.userDetails}>
-                  <Text style={styles.userNickname}>小雨</Text>
-                  <Text style={styles.userJoinDate}>加入心探 3 个月</Text>
-                  <View style={styles.userStats}>
-                    <View style={styles.statItem}>
-                      <Text style={styles.statCount}>12</Text>
-                      <Text style={styles.statLabel}>完成测试</Text>
-                    </View>
-                    <View style={styles.statItem}>
-                      <Text style={styles.statCount}>45</Text>
-                      <Text style={styles.statLabel}>测试天数</Text>
+                  <View style={styles.userDetails}>
+                    <View style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', height: 16, borderRadius: 8, marginBottom: 4 }} />
+                    <View style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', height: 16, borderRadius: 8, marginBottom: 8, width: '60%' }} />
+                    <View style={styles.userStats}>
+                      <View style={styles.statItem}>
+                        <View style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', height: 16, borderRadius: 8, marginBottom: 4 }} />
+                        <View style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', height: 16, borderRadius: 8, marginBottom: 4 }} />
+                      </View>
+                      <View style={styles.statItem}>
+                        <View style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', height: 16, borderRadius: 8, marginBottom: 4 }} />
+                        <View style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', height: 16, borderRadius: 8, marginBottom: 4 }} />
+                      </View>
                     </View>
                   </View>
-                </View>
-                <View style={styles.userArrow}>
-                  <FontAwesome6 name="chevron-right" size={18} color="rgba(255, 255, 255, 0.6)" />
+                  <View style={styles.userArrow}>
+                    <FontAwesome6 name="chevron-right" size={18} color="rgba(255, 255, 255, 0.6)" />
+                  </View>
                 </View>
               </View>
-            </TouchableOpacity>
+            ) : user ? (
+              <TouchableOpacity
+                style={styles.userInfoCard}
+                onPress={handleProfileManagementPress}
+                activeOpacity={0.8}
+              >
+                <View style={styles.userInfoContent}>
+                  <View style={styles.userAvatarContainer}>
+                    <Image
+                      source={{ uri: `https://s.coze.cn/image/kIO2djAu2Ck/` }}
+                      style={styles.userAvatar}
+                    />
+                    <View style={styles.avatarEditIndicator}>
+                      <FontAwesome6 name="pen" size={10} color="#ffffff" />
+                    </View>
+                  </View>
+                  <View style={styles.userDetails}>
+                    <Text style={styles.userNickname}>{user.nickname}</Text>
+                    <Text style={styles.userJoinDate}>加入心探 {user.joinDate ? `${Math.ceil((new Date().getTime() - new Date(user.joinDate).getTime()) / (1000 * 3600 * 24 * 30))} 个月` : '3 个月'}</Text>
+                    <View style={styles.userStats}>
+                      <View style={styles.statItem}>
+                        <Text style={styles.statCount}>12</Text>
+                        <Text style={styles.statLabel}>完成测试</Text>
+                      </View>
+                      <View style={styles.statItem}>
+                        <Text style={styles.statCount}>45</Text>
+                        <Text style={styles.statLabel}>测试天数</Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={styles.userArrow}>
+                    <FontAwesome6 name="chevron-right" size={18} color="rgba(255, 255, 255, 0.6)" />
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ) : null}
           </View>
 
           {/* 功能菜单区 */}

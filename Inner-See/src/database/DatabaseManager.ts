@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import { TestRecord, UserAnswer, TestResultWithDetails } from '../entities/TestEntities';
+import { TestRecord, UserAnswer, TestResultWithDetails, User } from '../entities/TestEntities';
 
 export class DatabaseManager {
   private static instance: DatabaseManager;
@@ -18,6 +18,7 @@ export class DatabaseManager {
         this.db = await SQLite.openDatabaseAsync('mental_health.db');
         await this.createTables();
         await this.updateTableSchema(); // 确保表结构更新
+        await this.ensureDefaultUser(); // 确保有默认用户
         console.log('数据库初始化成功');
       } else {
         console.log('数据库已初始化，跳过重复初始化');
@@ -31,6 +32,23 @@ export class DatabaseManager {
   private async createTables(): Promise<void> {
     if (!this.db) throw new Error('数据库未初始化');
 
+    // 创建用户表
+    await this.db.execAsync(`
+      CREATE TABLE IF NOT EXISTS users (
+        id TEXT PRIMARY KEY,
+        nickname TEXT NOT NULL,
+        avatar_emoji TEXT NOT NULL,
+        join_date INTEGER NOT NULL,
+        test_count INTEGER DEFAULT 0,
+        test_days INTEGER DEFAULT 0,
+        gender TEXT,
+        age INTEGER,
+        occupation TEXT,
+        created_at INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL
+      )
+    `);
+
     // 创建测试记录表
     await this.db.execAsync(`
       CREATE TABLE IF NOT EXISTS test_records (
@@ -43,7 +61,8 @@ export class DatabaseManager {
         result_summary TEXT,
         improvement_suggestions TEXT,
         reference_materials TEXT,
-        created_at INTEGER NOT NULL
+        created_at INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users (id)
       )
     `);
 
@@ -345,6 +364,113 @@ export class DatabaseManager {
       'DELETE FROM test_records WHERE id = ?',
       [recordId]
     );
+  }
+
+  /**
+   * 确保有默认用户
+   */
+  public async ensureDefaultUser(): Promise<void> {
+    if (!this.db) throw new Error('数据库未初始化');
+
+    try {
+      const user = await this.getCurrentUser();
+      if (!user) {
+        // 创建默认用户
+        const defaultUser: User = {
+          id: `user-${Date.now()}`,
+          nickname: '小雨',
+          avatarEmoji: this.getRandomDefaultAvatar(),
+          joinDate: Date.now(),
+          testCount: 0,
+          testDays: 0,
+          gender: undefined,
+          age: undefined,
+          occupation: undefined
+        };
+        await this.createUser(defaultUser);
+        console.log('默认用户创建成功');
+      }
+    } catch (error) {
+      console.error('确保默认用户失败:', error);
+    }
+  }
+
+  /**
+   * 获取随机默认头像
+   */
+  private getRandomDefaultAvatar(): string {
+    const avatars = ['smiley', 'heart', 'star', 'sun', 'moon', 'cat', 'dog', 'flower', 'tree', 'coffee', 'book', 'music', 'gamepad', 'rocket', 'gem', 'crown', 'gift', 'balloon', 'cookie', 'smile-beam'];
+    return avatars[Math.floor(Math.random() * avatars.length)];
+  }
+
+  async createUser(user: User): Promise<void> {
+    if (!this.db) throw new Error('数据库未初始化');
+
+    await this.db.runAsync(
+      `INSERT OR REPLACE INTO users
+       (id, nickname, avatar_emoji, join_date, test_count, test_days, gender, age, occupation, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        user.id,
+        user.nickname,
+        user.avatarEmoji,
+        user.joinDate,
+        user.testCount || 0,
+        user.testDays || 0,
+        user.gender || null,
+        user.age || null,
+        user.occupation || null,
+        Date.now(),
+        Date.now()
+      ]
+    );
+
+    console.log('用户创建成功，ID:', user.id);
+  }
+
+  async getCurrentUser(): Promise<User | null> {
+    if (!this.db) throw new Error('数据库未初始化');
+
+    const result = await this.db.getFirstAsync<any>(
+      'SELECT * FROM users ORDER BY join_date DESC LIMIT 1'
+    );
+
+    if (result) {
+      return {
+        id: result.id,
+        nickname: result.nickname,
+        avatarEmoji: result.avatar_emoji,
+        joinDate: result.join_date,
+        testCount: result.test_count,
+        testDays: result.test_days,
+        gender: result.gender,
+        age: result.age,
+        occupation: result.occupation
+      };
+    }
+
+    return null;
+  }
+
+  async updateUser(user: User): Promise<void> {
+    if (!this.db) throw new Error('数据库未初始化');
+
+    await this.db.runAsync(
+      `UPDATE users
+       SET nickname = ?, avatar_emoji = ?, gender = ?, age = ?, occupation = ?, updated_at = ?
+       WHERE id = ?`,
+      [
+        user.nickname,
+        user.avatarEmoji,
+        user.gender || null,
+        user.age || null,
+        user.occupation || null,
+        Date.now(),
+        user.id
+      ]
+    );
+
+    console.log('用户信息更新成功，ID:', user.id);
   }
 
   async close(): Promise<void> {
