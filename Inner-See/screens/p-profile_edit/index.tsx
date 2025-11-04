@@ -125,7 +125,11 @@ const ProfileEditScreen = () => {
       Alert.alert('成功', '个人信息保存成功', [
         {
           text: '确定',
-          onPress: () => router.back()
+          onPress: () => {
+            // 通知其他页面数据已更新
+            eventEmitter.emit('userUpdated');
+            router.back();
+          }
         }
       ]);
 
