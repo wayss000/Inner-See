@@ -83,6 +83,7 @@ export default function RootLayout() {
         <Stack.Screen name="p-test_question" options={{ title: "测试答题页" }} />
         <Stack.Screen name="p-result_display" options={{ title: "结果展示页" }} />
         <Stack.Screen name="p-feedback" options={{ title: "反馈建议页" }} />
+        <Stack.Screen name="p-privacy_policy" options={{ title: "隐私政策" }} />
       </Stack>
     </GestureHandlerRootView>
   );

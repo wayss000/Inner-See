@@ -108,7 +108,7 @@ const PersonalCenterScreen = () => {
   };
 
   const handlePrivacySettingsPress = () => {
-    console.log('隐私设置功能待实现');
+    router.push('/p-privacy_policy');
   };
 
   return (
@@ -294,7 +294,7 @@ const PersonalCenterScreen = () => {
               */}
 
               {/* 隐私设置 */}
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.menuItem}
                 onPress={handlePrivacySettingsPress}
                 activeOpacity={0.8}
@@ -311,7 +311,7 @@ const PersonalCenterScreen = () => {
                     </LinearGradient>
                     <View style={styles.menuItemInfo}>
                       <Text style={styles.menuItemTitle}>隐私设置</Text>
-                      <Text style={styles.menuItemDesc}>管理您的数据和隐私选项</Text>
+                      <Text style={styles.menuItemDesc}>了解我们如何保护您的数据安全</Text>
                     </View>
                   </View>
                   <View style={styles.menuItemArrow}>
