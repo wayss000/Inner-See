@@ -264,8 +264,9 @@ const PersonalCenterScreen = () => {
                 </View>
               </TouchableOpacity>
 
-              {/* 反馈建议 */}
-              <TouchableOpacity 
+              {/*
+              反馈建议 - 当前版本隐藏此功能
+              <TouchableOpacity
                 style={styles.menuItem}
                 onPress={handleFeedbackPress}
                 activeOpacity={0.8}
@@ -290,6 +291,7 @@ const PersonalCenterScreen = () => {
                   </View>
                 </View>
               </TouchableOpacity>
+              */}
 
               {/* 隐私设置 */}
               <TouchableOpacity 
