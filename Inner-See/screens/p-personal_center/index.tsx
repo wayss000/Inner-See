@@ -69,6 +69,7 @@ const PersonalCenterScreen = () => {
           joinDate: Date.now(),
           gender: '女',
           age: 25,
+          selectedModel: 'KwaiKAT',
         };
         await DatabaseManager.getInstance().createUser(defaultUser);
         const newUser = await DatabaseManager.getInstance().getCurrentUser();
@@ -84,6 +85,7 @@ const PersonalCenterScreen = () => {
         joinDate: Date.now(),
         gender: '女',
         age: 25,
+        selectedModel: 'KwaiKAT',
       };
       setUser(defaultUser as User);
     } finally {
@@ -282,6 +284,33 @@ const PersonalCenterScreen = () => {
                 </View>
               </TouchableOpacity>
               */}
+
+              {/* 模型选择 */}
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => router.push('/p-model-selection')}
+                activeOpacity={0.8}
+              >
+                <View style={styles.menuItemContent}>
+                  <View style={styles.menuItemLeft}>
+                    <LinearGradient
+                      colors={['#f59e0b', '#eab308']}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={styles.menuIcon}
+                    >
+                      <FontAwesome6 name="brain" size={18} color="#ffffff" />
+                    </LinearGradient>
+                    <View style={styles.menuItemInfo}>
+                      <Text style={styles.menuItemTitle}>模型选择</Text>
+                      <Text style={styles.menuItemDesc}>选择AI模型进行测试</Text>
+                    </View>
+                  </View>
+                  <View style={styles.menuItemArrow}>
+                    <FontAwesome6 name="chevron-right" size={18} color="rgba(255, 255, 255, 0.6)" />
+                  </View>
+                </View>
+              </TouchableOpacity>
 
               {/* 隐私设置 */}
               <TouchableOpacity

@@ -44,6 +44,7 @@ export class DatabaseManager {
         gender TEXT,
         age INTEGER,
         occupation TEXT,
+        selected_model TEXT DEFAULT 'KwaiKAT',
         created_at INTEGER NOT NULL,
         updated_at INTEGER NOT NULL
       )
@@ -95,6 +96,16 @@ export class DatabaseManager {
     if (!this.db) throw new Error('数据库未初始化');
 
     try {
+      // 检查并添加users表的selected_model字段
+      const userColumns = await this.db.getAllAsync<{ name: string }>(
+        "PRAGMA table_info(users)"
+      );
+      const userColumnNames = userColumns.map(col => col.name);
+
+      if (!userColumnNames.includes('selected_model')) {
+        await this.db.execAsync('ALTER TABLE users ADD COLUMN selected_model TEXT DEFAULT "KwaiKAT"');
+      }
+
       // 检查并添加user_answers表的新字段
       const columns = await this.db.getAllAsync<{ name: string }>(
         "PRAGMA table_info(user_answers)"
@@ -385,7 +396,8 @@ export class DatabaseManager {
           testDays: 0,
           gender: undefined,
           age: undefined,
-          occupation: undefined
+          occupation: undefined,
+          selectedModel: 'KwaiKAT'
         };
         await this.createUser(defaultUser);
         console.log('默认用户创建成功');
@@ -445,7 +457,8 @@ export class DatabaseManager {
         testDays: result.test_days,
         gender: result.gender,
         age: result.age,
-        occupation: result.occupation
+        occupation: result.occupation,
+        selectedModel: result.selected_model || 'KwaiKAT'
       };
     }
 
@@ -457,7 +470,7 @@ export class DatabaseManager {
 
     await this.db.runAsync(
       `UPDATE users
-       SET nickname = ?, avatar_emoji = ?, gender = ?, age = ?, occupation = ?, updated_at = ?
+       SET nickname = ?, avatar_emoji = ?, gender = ?, age = ?, occupation = ?, selected_model = ?, updated_at = ?
        WHERE id = ?`,
       [
         user.nickname,
@@ -465,6 +478,7 @@ export class DatabaseManager {
         user.gender || null,
         user.age || null,
         user.occupation || null,
+        user.selectedModel || 'KwaiKAT',
         Date.now(),
         user.id
       ]

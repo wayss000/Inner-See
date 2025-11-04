@@ -87,6 +87,7 @@ export interface User {
   gender?: '男' | '女' | '其他';
   age?: number;
   occupation?: string;
+  selectedModel: string;
   created_at?: number;
   updated_at?: number;
 }
