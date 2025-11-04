@@ -1,8 +1,13 @@
 
 
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
-export default StyleSheet.create({
+const { width } = Dimensions.get('window');
+
+export const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   container: {
     flex: 1,
   },
@@ -46,17 +51,6 @@ export default StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.2)',
     alignItems: 'center',
     justifyContent: 'center',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#1f2937',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.37,
-        shadowRadius: 32,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
   },
   userInfoSection: {
     paddingHorizontal: 24,
@@ -68,17 +62,6 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.2)',
     padding: 24,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#1f2937',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 32,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
   },
   userInfoContent: {
     flexDirection: 'row',
@@ -154,17 +137,6 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.2)',
     padding: 16,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#1f2937',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 32,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
   },
   menuItemContent: {
     flexDirection: 'row',
@@ -211,17 +183,6 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.2)',
     padding: 20,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#1f2937',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 32,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
   },
   appInfoContent: {
     alignItems: 'center',

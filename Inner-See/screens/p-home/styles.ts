@@ -13,6 +13,9 @@ export default StyleSheet.create({
       paddingTop: StatusBar.currentHeight,
     } : {}),
   },
+  safeArea: {
+    flex: 1,
+  },
   gradientBackground: {
     flex: 1,
     // 为Android平台添加额外的亮度调整

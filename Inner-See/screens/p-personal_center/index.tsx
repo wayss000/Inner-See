@@ -8,7 +8,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { DatabaseManager } from '../../src/database/DatabaseManager';
 import { User } from '../../src/entities/TestEntities';
-import styles from './styles';
+import { styles } from './styles';
 
 // 导入事件发射器
 import ProfileEditScreen from '../p-profile_edit';
@@ -112,14 +112,14 @@ const PersonalCenterScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <LinearGradient
-        colors={['#667eea', '#764ba2']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.gradientBackground}
-      >
-        <ScrollView 
+    <LinearGradient
+      colors={['#667eea', '#764ba2']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}
+    >
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
@@ -127,18 +127,8 @@ const PersonalCenterScreen = () => {
           {/* 顶部导航栏 */}
           <View style={styles.header}>
             <View style={styles.headerContent}>
-              <View style={styles.pageTitleSection}>
-                <Text style={styles.pageTitle}>我的</Text>
-              </View>
-              <View style={styles.headerActions}>
-                <TouchableOpacity 
-                  style={styles.settingsButton}
-                  onPress={handleSettingsPress}
-                  activeOpacity={0.7}
-                >
-                  <FontAwesome6 name="gear" size={18} color="#ffffff" />
-                </TouchableOpacity>
-              </View>
+              <View style={styles.pageTitleSection} />
+              <View style={styles.headerActions} />
             </View>
           </View>
 
@@ -341,8 +331,8 @@ const PersonalCenterScreen = () => {
             </View>
           </View>
         </ScrollView>
-      </LinearGradient>
-    </SafeAreaView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 

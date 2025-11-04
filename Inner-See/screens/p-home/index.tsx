@@ -195,15 +195,15 @@ const HomeScreen: React.FC = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <LinearGradient
-        colors={['#667eea', '#764ba2']}
-        style={styles.gradientBackground}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        // 为Android平台添加额外的亮度调整
-        {...(Platform.OS === 'android' ? { opacity: 0.95 } : {})}
-      >
+    <LinearGradient
+      colors={['#667eea', '#764ba2']}
+      style={styles.container}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      // 为Android平台添加额外的亮度调整
+      {...(Platform.OS === 'android' ? { opacity: 0.95 } : {})}
+    >
+      <SafeAreaView style={styles.safeArea}>
         <ScrollView
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
@@ -303,8 +303,8 @@ const HomeScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </LinearGradient>
-    </SafeAreaView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 
