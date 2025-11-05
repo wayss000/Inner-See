@@ -1,4 +1,24 @@
-import { KATCoderProRequest, KATCoderProResponse, AIRequestData } from '../types/AITypes';
+import Constants from 'expo-constants';
+import { WanQingRequest, WanQingResponse, AIRequestData } from '../types/AITypes';
+
+/**
+ * 获取环境变量配置（兼容 web 和原生平台）
+ */
+function getEnvConfig(key: string): string {
+  // 优先从 expo-constants 获取（适用于原生平台）
+  const extra = Constants.expoConfig?.extra;
+  if (extra && extra[key]) {
+    return extra[key];
+  }
+  
+  // 回退到 process.env（适用于 web 平台）
+  const envValue = process.env[key];
+  if (envValue) {
+    return envValue;
+  }
+  
+  return '';
+}
 
 /**
  * AI服务类，负责与KAT-Coder-Pro模型的交互
@@ -7,11 +27,22 @@ export class AIService {
   private static instance: AIService;
   private apiKey: string;
   private apiUrl: string;
+  private modelId: string;
 
   private constructor() {
-    // 从环境变量或配置文件获取API配置
-    this.apiKey = process.env.EXPO_PUBLIC_KAT_CODER_PRO_API_KEY || '';
-    this.apiUrl = process.env.EXPO_PUBLIC_KAT_CODER_PRO_API_URL || 'https://api.katcoder.com/v1/chat/completions';
+    // 使用万擎API配置（兼容 web 和原生平台）
+    this.apiKey = getEnvConfig('EXPO_PUBLIC_WANQING_API_KEY');
+    this.apiUrl = getEnvConfig('EXPO_PUBLIC_WANQING_API_URL');
+    this.modelId = getEnvConfig('EXPO_PUBLIC_WANQING_MODEL_ID');
+    
+    // 调试日志
+    console.log('AIService 初始化配置:', {
+      hasApiKey: !!this.apiKey,
+      hasApiUrl: !!this.apiUrl,
+      hasModelId: !!this.modelId,
+      apiUrl: this.apiUrl,
+      modelId: this.modelId
+    });
   }
 
   public static getInstance(): AIService {
@@ -22,32 +53,58 @@ export class AIService {
   }
 
   /**
-   * 调用KAT-Coder-Pro模型进行心理分析
+   * 调用万青API模型进行心理分析
    * @param requestData 测试数据和用户补充信息
    * @returns AI分析结果
    */
   async analyzeTestResult(requestData: AIRequestData): Promise<string> {
+    console.log('开始AI分析:', {
+      testType: requestData.testInfo.testType,
+      userScore: requestData.testInfo.userScore,
+      hasSupplement: !!requestData.userSupplement
+    });
+
+    // 检查API配置是否完整
+    if (!this.apiKey || !this.apiUrl || !this.modelId) {
+      console.error('AI配置检查失败:', {
+        apiKey: this.apiKey ? '已设置' : '未设置',
+        apiUrl: this.apiUrl || '未设置',
+        modelId: this.modelId || '未设置'
+      });
+      throw new Error('AI分析服务未配置，请联系管理员');
+    }
+
     try {
       const prompt = this.buildPrompt(requestData);
-      const request: KATCoderProRequest = {
-        model: "KAT-Coder-Pro",
+      const request: any = {
+        model: this.modelId, // 使用配置的模型ID
         messages: [
           {
             role: "system",
             content: "你是一位专业的心理健康分析师，请根据用户提供的测试数据和补充信息，生成详细的分析报告。"
           },
           {
-            role: "user", 
+            role: "user",
             content: prompt
           }
         ],
         temperature: 0.7
       };
 
-      const response = await this.callKATCoderPro(request);
-      return this.parseResponse(response);
+      console.log('AI分析请求已构建，准备调用API');
+
+      const response = await this.callWanQingAPI(request);
+      const result = this.parseResponse(response);
+      
+      console.log('AI分析完成，结果已解析');
+      return result;
     } catch (error) {
       console.error('AI分析失败:', error);
+      console.error('API配置:', {
+        apiUrl: this.apiUrl,
+        apiKeySet: !!this.apiKey,
+        hasApiKey: !!this.apiKey
+      });
       throw new Error('AI分析服务暂时不可用，请稍后重试');
     }
   }
@@ -87,29 +144,61 @@ ${questionsDetail}
   }
 
   /**
-   * 调用KAT-Coder-Pro API
+   * 调用万青API
    */
-  private async callKATCoderPro(request: KATCoderProRequest): Promise<KATCoderProResponse> {
-    const response = await fetch(this.apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.apiKey}`
-      },
-      body: JSON.stringify(request)
+  private async callWanQingAPI(request: WanQingRequest): Promise<WanQingResponse> {
+    console.log('AI分析请求开始:', {
+      apiUrl: this.apiUrl,
+      model: request.model,
+      messageCount: request.messages.length,
+      hasSupplement: !!request.messages[1]?.content && request.messages[1].content !== '无'
     });
 
-    if (!response.ok) {
-      throw new Error(`API请求失败: ${response.status}`);
-    }
+    try {
+      const response = await fetch(this.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.apiKey}`
+        },
+        body: JSON.stringify(request)
+      });
 
-    return response.json();
+      console.log('AI分析HTTP响应状态:', response.status, response.statusText);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('AI分析HTTP错误响应:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorText: errorText
+        });
+        throw new Error(`API请求失败: ${response.status} - ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log('AI分析成功响应:', {
+        id: result.id,
+        model: result.model,
+        object: result.object,
+        created: result.created,
+        usage: result.usage,
+        finish_reason: result.choices[0]?.finish_reason,
+        responseTime: new Date().toISOString()
+      });
+
+      return result;
+    } catch (error) {
+      console.error('AI分析服务暂时不可用:', error);
+      throw new Error('AI分析服务暂时不可用，请稍后重试');
+    }
   }
+
 
   /**
    * 解析AI响应
    */
-  private parseResponse(response: KATCoderProResponse): string {
+  private parseResponse(response: WanQingResponse): string {
     const content = response.choices[0]?.message?.content;
     if (!content) {
       throw new Error('AI响应内容为空');

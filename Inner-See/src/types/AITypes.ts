@@ -2,9 +2,9 @@
  * AI相关类型定义
  */
 
-// KAT-Coder-Pro API 请求接口
-export interface KATCoderProRequest {
-  model: "KAT-Coder-Pro";
+// 万青API 请求接口
+export interface WanQingRequest {
+  model: string;
   messages: Array<{
     role: "system" | "user" | "assistant";
     content: string;
@@ -12,13 +12,25 @@ export interface KATCoderProRequest {
   temperature: number;
 }
 
-// KAT-Coder-Pro API 响应接口
-export interface KATCoderProResponse {
+// 万青API 响应接口
+export interface WanQingResponse {
+  id: string;
+  object: string;
+  created: number;
+  model: string;
   choices: Array<{
+    index: number;
     message: {
+      role: "assistant";
       content: string;
     };
+    finish_reason: string;
   }>;
+  usage: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
 }
 
 // AI分析请求数据
