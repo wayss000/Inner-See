@@ -7,6 +7,11 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { DatabaseManager } from '../../src/database/DatabaseManager';
+import { AIService } from '../../src/services/AIService';
+import { AIAnalysisResult, AIButtonState, AIAnalysisState } from '../../src/types/AITypes';
+import AIAskButton from './components/AIAskButton';
+import AISupplementInput from './components/AISupplementInput';
+import AIAnalysisResultComponent from './components/AIAnalysisResult';
 import styles from './styles';
 
 interface TestResult {
@@ -47,6 +52,16 @@ const ResultDisplayScreen = () => {
   const params = useLocalSearchParams();
   const [testResult, setTestResult] = useState<TestResult | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // AI分析相关状态
+  const [aiButtonState, setAiButtonState] = useState<AIButtonState>('idle');
+  const [aiAnalysisState, setAiAnalysisState] = useState<AIAnalysisState>({
+    status: 'idle',
+    result: null,
+    error: null,
+  });
+  const [showSupplementInput, setShowSupplementInput] = useState(false);
+  const [aiSupplement, setAiSupplement] = useState('');
 
   // 模拟测试结果数据
   const mockResults: Record<string, TestResult> = {
@@ -142,7 +157,7 @@ const ResultDisplayScreen = () => {
           console.log('testRecord.totalScore:', testRecord.totalScore);
           
           // 从数据库记录生成测试结果
-                     const result: TestResult = {
+          const result: TestResult = {
                        testName: testRecord.testTypeId === 'mental-health' ? '抑郁症评估' : 'MBTI性格测试',
                        score: testRecord.totalScore || 0,
                        level: testRecord.resultSummary || '未知',
@@ -507,24 +522,154 @@ const ResultDisplayScreen = () => {
           <View style={styles.bottomSpacing} />
         </ScrollView>
 
-        {/* 底部操作区 */}
-        <View style={styles.bottomActions}>
-          <View style={styles.actionsContainer}>
-            <TouchableOpacity style={styles.shareButton} onPress={handleSharePress}>
-              <LinearGradient
-                colors={['#6366f1', '#8b5cf6']}
-                style={styles.shareButtonGradient}
-              >
-                <FontAwesome6 name="share-nodes" size={16} color="#ffffff" />
-                <Text style={styles.shareButtonText}>分享结果</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.homeButton} onPress={handleHomePress}>
-              <FontAwesome6 name="house" size={16} color="#ffffff" />
-              <Text style={styles.homeButtonText}>返回首页</Text>
-            </TouchableOpacity>
+        {/* AI分析按钮区 */}
+      <View style={styles.aiSection}>
+        <View style={styles.aiCard}>
+          <View style={styles.sectionHeader}>
+            <LinearGradient
+              colors={['#6366f1', '#8b5cf6']}
+              style={styles.sectionIcon}
+            >
+              <FontAwesome6 name="brain" size={18} color="#ffffff" />
+            </LinearGradient>
+            <Text style={styles.sectionTitle}>AI深度分析</Text>
+          </View>
+          
+          <View style={styles.aiContent}>
+            <Text style={styles.aiDescription}>
+              基于您的测试结果，获取个性化的心理健康分析和建议
+            </Text>
+            <AIAskButton
+              onPress={() => setShowSupplementInput(true)}
+              loading={aiButtonState === 'loading'}
+              completed={aiButtonState === 'completed'}
+              error={aiButtonState === 'error'}
+            />
           </View>
         </View>
+      </View>
+
+      {/* 底部操作区 */}
+      <View style={styles.bottomActions}>
+        <View style={styles.actionsContainer}>
+          <TouchableOpacity style={styles.shareButton} onPress={handleSharePress}>
+            <LinearGradient
+              colors={['#6366f1', '#8b5cf6']}
+              style={styles.shareButtonGradient}
+            >
+              <FontAwesome6 name="share-nodes" size={16} color="#ffffff" />
+              <Text style={styles.shareButtonText}>分享结果</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.homeButton} onPress={handleHomePress}>
+            <FontAwesome6 name="house" size={16} color="#ffffff" />
+            <Text style={styles.homeButtonText}>返回首页</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+        {/* AI分析结果弹窗 */}
+        {aiAnalysisState.status === 'completed' && aiAnalysisState.result && (
+          <View style={styles.aiModalOverlay}>
+            <AIAnalysisResultComponent
+              result={aiAnalysisState.result}
+              onClose={() => {
+                setAiAnalysisState({
+                  status: 'idle',
+                  result: null,
+                  error: null,
+                });
+                setAiButtonState('idle');
+              }}
+            />
+          </View>
+        )}
+
+        {/* AI补充信息输入弹窗 */}
+        <AISupplementInput
+          visible={showSupplementInput}
+          onClose={() => setShowSupplementInput(false)}
+          onSubmit={async (supplement) => {
+            setShowSupplementInput(false);
+            setAiSupplement(supplement);
+            
+            try {
+              setAiButtonState('loading');
+              setAiAnalysisState({
+                status: 'analyzing',
+                result: null,
+                error: null,
+              });
+
+              // 构建AI请求数据
+              const aiRequestData = {
+                testInfo: {
+                  testType: testResult.testName,
+                  testQuestions: testResult.questionResults?.map(qr => ({
+                    id: qr.question.id,
+                    content: qr.question.text,
+                    options: qr.question.options.map(opt => opt.text),
+                    userAnswer: qr.userChoiceText,
+                    correctAnswer: qr.userChoiceText, // 对于心理测试，用户答案就是"正确"答案
+                  })) || [],
+                  userScore: testResult.score,
+                  testResult: testResult.level,
+                },
+                userSupplement: supplement,
+              };
+
+              // 调用AI服务
+              const aiService = AIService.getInstance();
+              const analysisResult = await aiService.analyzeTestResult(aiRequestData);
+
+              // 解析AI响应并更新状态
+              const parseAIResponse = (response: string): AIAnalysisResult => {
+                const sections = {
+                  currentSituation: '',
+                  adjustmentSuggestions: '',
+                  注意事项: '',
+                  disclaimer: '本回答由 AI 生成，内容仅供参考，请仔细甄别。',
+                  fullResponse: response,
+                };
+
+                // 使用正则表达式提取分章节内容
+                const currentSituationMatch = response.match(/1\.\s*当前情况分析[^2]*/i);
+                const suggestionsMatch = response.match(/2\.\s*具体调整建议[^3]*/i);
+                const notesMatch = response.match(/3\.\s*注意事项[^4]*/i);
+
+                if (currentSituationMatch) {
+                  sections.currentSituation = currentSituationMatch[0].replace('1. 当前情况分析', '').trim();
+                }
+                if (suggestionsMatch) {
+                  sections.adjustmentSuggestions = suggestionsMatch[0].replace('2. 具体调整建议', '').trim();
+                }
+                if (notesMatch) {
+                  sections.注意事项 = notesMatch[0].replace('3. 注意事项', '').trim();
+                }
+
+                return sections;
+              };
+
+              const parsedResult = parseAIResponse(analysisResult);
+              setAiAnalysisState({
+                status: 'completed',
+                result: parsedResult,
+                error: null,
+              });
+              setAiButtonState('completed');
+
+            } catch (error) {
+              console.error('AI分析失败:', error);
+              setAiAnalysisState({
+                status: 'error',
+                result: null,
+                error: error instanceof Error ? error.message : 'AI分析服务暂时不可用',
+              });
+              setAiButtonState('error');
+            }
+          }}
+          loading={aiButtonState === 'loading'}
+        />
       </SafeAreaView>
     </LinearGradient>
   );

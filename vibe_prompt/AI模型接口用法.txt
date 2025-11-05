@@ -1,0 +1,20 @@
+api key为：
+WQ_API_KEY = pTO_E_dMH_RMdTx80zFLx4M8KmRhsPqCxqy5Nwt6tJM
+
+单轮对话接口：
+curl 'https://wanqing.streamlakeapi.com/api/gateway/v1/endpoints/chat/completions' \
+-H "Authorization: Bearer $WQ_API_KEY"  \
+-H 'Content-Type: application/json' \
+-d '{
+    "model": "ep-9ih9ro-1762321002200293641", 
+    "messages": [ 
+        {
+            "role": "system",
+            "content": "你是一个 AI 人工智能助手。"
+        },
+        {
+            "role": "user",
+            "content": "请介绍一下太阳系的八大行星"
+        }
+    ]
+}'
