@@ -58,5 +58,18 @@ export default StyleSheet.create({
   testTypesList: {
     gap: 16,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingBottom: 32,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: '#ffffff',
+    textAlign: 'center',
+  },
 });
 

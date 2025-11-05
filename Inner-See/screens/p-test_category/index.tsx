@@ -32,6 +32,24 @@ interface ApiTestType {
   icon: string;
 }
 
+/**
+ * 根据测试类型分类获取对应的渐变色
+ * @param category 测试类型分类
+ * @returns 渐变色数组
+ */
+function getTestTypeGradient(category: string): [string, string] {
+  const gradients: Record<string, [string, string]> = {
+    '心理健康': ['#f472b6', '#a855f7'],
+    '人格': ['#60a5fa', '#06b6d4'],
+    '认知': ['#fb923c', '#ef4444'],
+    '职业': ['#2dd4bf', '#06b6d4'],
+    '人际': ['#818cf8', '#a855f7'],
+    '生活': ['#4ade80', '#3b82f6'],
+  };
+  
+  return gradients[category] || ['#f59e0b', '#ea580c'];
+}
+
 const TestCategoryScreen = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -53,22 +71,23 @@ const TestCategoryScreen = () => {
       
       setTestTypesData(testTypesFromAPI);
       
-      // 转换为UI组件需要的格式
-      const uiTestTypes: TestType[] = testTypesFromAPI.map(testType => ({
+      // 转换所有API数据为UI格式，不进行随机选择
+      const allTestTypes = testTypesFromAPI.map(testType => ({
         id: testType.id,
         title: testType.name,
         description: testType.description,
         duration: `${testType.estimatedDuration}分钟`,
         questions: `${testType.questionCount}题`,
         icon: testType.icon,
-        gradientColors: ['#f59e0b', '#ea580c']
+        gradientColors: getTestTypeGradient(testType.category)
       }));
       
-      setDisplayTestTypes(uiTestTypes);
+      setDisplayTestTypes(allTestTypes);
       console.log(`成功加载 ${testTypesFromAPI.length} 个测试类型`);
     } catch (error) {
       console.error('加载测试类型失败:', error);
-      // 回退到模拟数据
+      
+      // 回退到模拟数据，展示全部6个测试类型
       const fallbackTestTypes: ApiTestType[] = [
         {
           id: 'mental-health',
@@ -87,20 +106,59 @@ const TestCategoryScreen = () => {
           questionCount: 25,
           category: '人格',
           icon: 'person'
+        },
+        {
+          id: 'cognitive',
+          name: '认知能力测试',
+          description: '测试您的逻辑思维、空间想象和语言理解能力',
+          estimatedDuration: 12,
+          questionCount: 15,
+          category: '认知',
+          icon: 'brain'
+        },
+        {
+          id: 'career',
+          name: '职业发展评估',
+          description: '评估您的职业兴趣、工作满意度和职业规划',
+          estimatedDuration: 10,
+          questionCount: 18,
+          category: '职业',
+          icon: 'briefcase'
+        },
+        {
+          id: 'relationship',
+          name: '人际关系测评',
+          description: '评估您的亲密关系、社交能力和沟通风格',
+          estimatedDuration: 8,
+          questionCount: 16,
+          category: '人际',
+          icon: 'users'
+        },
+        {
+          id: 'quality-of-life',
+          name: '生活质量评估',
+          description: '评估您的睡眠质量、生活习惯和情绪管理能力',
+          estimatedDuration: 10,
+          questionCount: 14,
+          category: '生活',
+          icon: 'leaf'
         }
       ];
       
       setTestTypesData(fallbackTestTypes);
-      const uiTestTypes: TestType[] = fallbackTestTypes.map(testType => ({
+      
+      // 将所有fallback数据转换为UI格式
+      const allFallbackTestTypes = fallbackTestTypes.map(testType => ({
         id: testType.id,
         title: testType.name,
         description: testType.description,
         duration: `${testType.estimatedDuration}分钟`,
         questions: `${testType.questionCount}题`,
         icon: testType.icon,
-        gradientColors: ['#f59e0b', '#ea580c']
+        gradientColors: getTestTypeGradient(testType.category)
       }));
-      setDisplayTestTypes(uiTestTypes);
+      
+      setDisplayTestTypes(allFallbackTestTypes);
     } finally {
       setLoading(false);
     }
@@ -114,7 +172,7 @@ const TestCategoryScreen = () => {
       duration: '10分钟',
       questions: '20题',
       icon: 'heart',
-      gradientColors: ['#f59e0b', '#ea580c']
+      gradientColors: ['#f472b6', '#a855f7']
     },
     {
       id: 'personality',
@@ -122,8 +180,8 @@ const TestCategoryScreen = () => {
       description: '分析您的性格类型、行为倾向和价值观',
       duration: '15分钟',
       questions: '25题',
-      icon: 'person',
-      gradientColors: ['#ec4899', '#8b5cf6']
+      icon: 'user',
+      gradientColors: ['#60a5fa', '#06b6d4']
     },
     {
       id: 'cognitive',
@@ -132,7 +190,7 @@ const TestCategoryScreen = () => {
       duration: '12分钟',
       questions: '15题',
       icon: 'brain',
-      gradientColors: ['#8b5cf6', '#06b6d4']
+      gradientColors: ['#fb923c', '#ef4444']
     },
     {
       id: 'career',
@@ -141,7 +199,7 @@ const TestCategoryScreen = () => {
       duration: '10分钟',
       questions: '18题',
       icon: 'briefcase',
-      gradientColors: ['#fb923c', '#ef4444']
+      gradientColors: ['#2dd4bf', '#06b6d4']
     },
     {
       id: 'relationship',
@@ -150,7 +208,7 @@ const TestCategoryScreen = () => {
       duration: '8分钟',
       questions: '16题',
       icon: 'users',
-      gradientColors: ['#4ade80', '#3b82f6']
+      gradientColors: ['#818cf8', '#a855f7']
     },
     {
       id: 'quality-of-life',
@@ -159,7 +217,7 @@ const TestCategoryScreen = () => {
       duration: '10分钟',
       questions: '14题',
       icon: 'leaf',
-      gradientColors: ['#10b981', '#f59e0b']
+      gradientColors: ['#4ade80', '#3b82f6']
     }
   ];
 
@@ -182,9 +240,9 @@ const TestCategoryScreen = () => {
         end={{ x: 1, y: 1 }}
       >
         <SafeAreaView style={styles.safeArea}>
-          <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, paddingHorizontal: 24 }}>
+          <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#ffffff" />
-            <Text style={{ color: '#ffffff', marginTop: 16, fontSize: 16 }}>正在加载测试类型...</Text>
+            <Text style={styles.loadingText}>正在加载测试类型...</Text>
           </View>
         </SafeAreaView>
       </LinearGradient>

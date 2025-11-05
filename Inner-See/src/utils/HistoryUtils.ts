@@ -117,8 +117,8 @@ export function convertDbRecordToUI(dbRecord: DbTestRecord): UITestRecord {
     time: formatTestTime(dbRecord.createdAt),
     score: dbRecord.totalScore,
     level: dbRecord.resultSummary,
-    type: dbRecord.testTypeId === 'personality' ? 'INFP' : undefined, // 示例类型
-    description: dbRecord.testTypeId === 'personality' ? '调停者' : undefined, // 示例描述
+    type: dbRecord.testTypeId === 'personality' && dbRecord.resultSummary ? dbRecord.resultSummary : undefined,
+    description: dbRecord.testTypeId === 'personality' && dbRecord.resultSummary ? `${dbRecord.resultSummary}类型` : undefined,
     icon: config.icon,
     gradientColors: config.gradientColors,
     levelColor: config.levelColor

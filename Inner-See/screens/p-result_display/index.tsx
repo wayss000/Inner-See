@@ -142,36 +142,36 @@ const ResultDisplayScreen = () => {
           console.log('testRecord.totalScore:', testRecord.totalScore);
           
           // 从数据库记录生成测试结果
-          const result: TestResult = {
-            testName: testRecord.testTypeId === 'mental-health' ? '抑郁症评估' : 'MBTI性格测试',
-            score: testRecord.totalScore || 0,
-            level: testRecord.resultSummary || '未知',
-            levelPercentage: Math.min((testRecord.totalScore || 0) * 10, 100), // 简单的百分比计算
-            interpretation: [
-              `根据您的测试结果，${testRecord.resultSummary || '测试完成'}。`,
-              '这是基于您答题情况生成的个性化结果。',
-              '建议定期进行心理状态评估，保持良好的生活习惯。'
-            ],
-            suggestions: testRecord.improvementSuggestions ? [
-              {
-                title: '改善建议',
-                text: testRecord.improvementSuggestions,
-                icon: 'lightbulb'
-              }
-            ] : [
-              {
-                title: '增加体育锻炼',
-                text: '每天进行30分钟的有氧运动，有助于改善情绪状态。',
-                icon: 'person-walking'
-              },
-              {
-                title: '改善睡眠质量',
-                text: '保持规律的作息时间，创造舒适的睡眠环境。',
-                icon: 'moon'
-              }
-            ],
-            questionResults: [] // 暂时为空，后续从本地数据源获取题目详情
-          };
+                     const result: TestResult = {
+                       testName: testRecord.testTypeId === 'mental-health' ? '抑郁症评估' : 'MBTI性格测试',
+                       score: testRecord.totalScore || 0,
+                       level: testRecord.resultSummary || '未知',
+                       levelPercentage: Math.min((testRecord.totalScore || 0) * 10, 100), // 简单的百分比计算
+                       interpretation: [
+                         `根据您的测试结果，${testRecord.resultSummary || '测试完成'}。`,
+                         '这是基于您答题情况生成的个性化结果。',
+                         '建议定期进行心理状态评估，保持良好的生活习惯。'
+                       ],
+                       suggestions: testRecord.improvementSuggestions ? [
+                         {
+                           title: '改善建议',
+                           text: testRecord.improvementSuggestions,
+                           icon: 'lightbulb'
+                         }
+                       ] : [
+                         {
+                           title: '增加体育锻炼',
+                           text: '每天进行30分钟的有氧运动，有助于改善情绪状态。',
+                           icon: 'person-walking'
+                         },
+                         {
+                           title: '改善睡眠质量',
+                           text: '保持规律的作息时间，创造舒适的睡眠环境。',
+                           icon: 'moon'
+                         }
+                       ],
+                       questionResults: [] // 将通过updateQuestionResults函数从user_answers表获取
+                     };
           
           console.log('生成的测试结果:', result);
           setTestResult(result);

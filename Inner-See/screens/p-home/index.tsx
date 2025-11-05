@@ -7,6 +7,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import styles from './styles';
+import { getRandomItems, generateRandomHotTests, generateRandomCategories } from '../../src/utils/RandomUtils';
+import { ApiService } from '../../src/services/ApiService';
 
 interface HotTestItem {
   id: string;
@@ -28,81 +30,77 @@ interface CategoryItem {
 
 const HomeScreen: React.FC = () => {
   const router = useRouter();
+  const [hotTests, setHotTests] = useState<HotTestItem[]>([]);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const [hotTests] = useState<HotTestItem[]>([
-    {
-      id: 'depression',
-      title: '抑郁症评估',
-      description: '专业的抑郁症状筛查，帮助您了解心理状态',
-      duration: '5-8分钟',
-      difficulty: '简单',
-      icon: 'heart',
-      gradientColors: ['#f472b6', '#a855f7'],
-    },
-    {
-      id: 'personality',
-      title: 'MBTI性格测试',
-      description: '经典的16型人格测试，深入了解性格特质',
-      duration: '10-15分钟',
-      difficulty: '中等',
-      icon: 'user',
-      gradientColors: ['#60a5fa', '#06b6d4'],
-    },
-    {
-      id: 'stress',
-      title: '压力水平评估',
-      description: '科学评估当前压力状态，提供缓解建议',
-      duration: '3-5分钟',
-      difficulty: '简单',
-      icon: 'brain',
-      gradientColors: ['#fb923c', '#ef4444'],
-    },
-  ]);
+  // 加载随机测试数据
+  const loadRandomTestData = async () => {
+    try {
+      setLoading(true);
+      
+      // 从API获取测试类型数据
+      const apiService = ApiService.getInstance();
+      const testTypes = await apiService.getTestTypes();
+      
+      if (testTypes && testTypes.length > 0) {
+        // 从API数据中随机选择3个作为热门测试
+        const hotTestOptions = testTypes.map(testType => ({
+          id: testType.id,
+          title: testType.name,
+          description: testType.description,
+          duration: `${testType.estimatedDuration}分钟`,
+          difficulty: testType.estimatedDuration <= 5 ? '简单' : testType.estimatedDuration <= 10 ? '中等' : '困难',
+          icon: testType.icon,
+          gradientColors: getTestTypeGradient(testType.category)
+        }));
+        
+        const selectedHotTests = getRandomItems(hotTestOptions, 3);
+        setHotTests(selectedHotTests);
+        
+        // 从API数据中随机选择4个作为首页展示的分类
+        const categoryOptions = testTypes.map(testType => ({
+          id: testType.id,
+          title: testType.name,
+          count: `${testType.questionCount}题`,
+          icon: testType.icon,
+          gradientColors: getTestTypeGradient(testType.category)
+        }));
+        
+        const selectedCategories = getRandomItems(categoryOptions, 4);
+        setCategories(selectedCategories);
+      } else {
+        // API数据不可用时，使用备用的随机数据
+        setHotTests(generateRandomHotTests(3));
+        setCategories(generateRandomCategories(4));
+      }
+    } catch (error) {
+      console.error('加载测试数据失败:', error);
+      // 出错时使用备用的随机数据
+      setHotTests(generateRandomHotTests(3));
+      setCategories(generateRandomCategories(4));
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const [categories] = useState<CategoryItem[]>([
-    {
-      id: 'mental-health',
-      title: '心理健康评估',
-      count: '20题',
-      icon: 'heart',
-      gradientColors: ['#f472b6', '#a855f7'],
-    },
-    {
-      id: 'personality',
-      title: '人格特质分析',
-      count: '25题',
-      icon: 'user',
-      gradientColors: ['#60a5fa', '#06b6d4'],
-    },
-    {
-      id: 'cognitive',
-      title: '认知能力测试',
-      count: '15题',
-      icon: 'brain',
-      gradientColors: ['#8b5cf6', '#06b6d4'],
-    },
-    {
-      id: 'career',
-      title: '职业发展评估',
-      count: '18题',
-      icon: 'briefcase',
-      gradientColors: ['#fb923c', '#ef4444'],
-    },
-    {
-      id: 'relationship',
-      title: '人际关系测评',
-      count: '16题',
-      icon: 'users',
-      gradientColors: ['#4ade80', '#3b82f6'],
-    },
-    {
-      id: 'quality-of-life',
-      title: '生活质量评估',
-      count: '14题',
-      icon: 'leaf',
-      gradientColors: ['#10b981', '#f59e0b'],
-    },
-  ]);
+  // 获取测试类型对应的渐变色
+  const getTestTypeGradient = (category: string): [string, string, ...string[]] => {
+    const gradients: Record<string, [string, string, ...string[]]> = {
+      '心理健康': ['#f472b6', '#a855f7'],
+      '人格': ['#60a5fa', '#06b6d4'],
+      '认知': ['#fb923c', '#ef4444'],
+      '职业': ['#2dd4bf', '#06b6d4'],
+      '人际': ['#818cf8', '#a855f7'],
+      '生活': ['#4ade80', '#3b82f6'],
+    };
+    
+    return gradients[category] || ['#f59e0b', '#ea580c'];
+  };
+
+  useEffect(() => {
+    loadRandomTestData();
+  }, []);
 
   const handleNotificationPress = () => {
     console.log('通知功能暂未实现');
@@ -194,21 +192,40 @@ const HomeScreen: React.FC = () => {
     </TouchableOpacity>
   );
 
-  return (
-    <LinearGradient
-      colors={['#667eea', '#764ba2']}
-      style={styles.container}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      // 为Android平台添加额外的亮度调整
-      {...(Platform.OS === 'android' ? { opacity: 0.95 } : {})}
-    >
-      <SafeAreaView style={styles.safeArea}>
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
+  if (loading) {
+      return (
+        <LinearGradient
+          colors={['#667eea', '#764ba2']}
+          style={styles.container}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          // 为Android平台添加额外的亮度调整
+          {...(Platform.OS === 'android' ? { opacity: 0.95 } : {})}
         >
+          <SafeAreaView style={styles.safeArea}>
+            <View style={styles.loadingContainer}>
+              <Text style={styles.loadingText}>正在加载测试数据...</Text>
+            </View>
+          </SafeAreaView>
+        </LinearGradient>
+      );
+    }
+  
+    return (
+      <LinearGradient
+        colors={['#667eea', '#764ba2']}
+        style={styles.container}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        // 为Android平台添加额外的亮度调整
+        {...(Platform.OS === 'android' ? { opacity: 0.95 } : {})}
+      >
+        <SafeAreaView style={styles.safeArea}>
+          <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+          >
           {/* 顶部导航栏 */}
           <View style={styles.header}>
             <View style={styles.headerContent}>

@@ -267,5 +267,16 @@ export default StyleSheet.create({
     fontSize: 12,
     color: 'rgba(255, 255, 255, 0.6)',
   },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#ffffff',
+    marginTop: 16,
+  },
 });
 
