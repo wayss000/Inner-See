@@ -8,6 +8,7 @@ export interface TestRecord {
   resultSummary?: string;
   improvementSuggestions?: string;
   referenceMaterials?: string;
+  aiAnalysisResult?: string; // AI分析结果JSON字符串
   createdAt: number;
 }
 
@@ -59,6 +60,14 @@ export interface QuestionDetail {
   }>;
 }
 
+export interface AIAnalysisResult {
+  currentSituation: string;
+  adjustmentSuggestions: string;
+  注意事项: string;
+  disclaimer: string;
+  fullResponse: string;
+}
+
 export interface TestResultWithDetails {
   testName: string;
   score: number;
@@ -70,6 +79,7 @@ export interface TestResultWithDetails {
     text: string;
     icon: string;
   }>;
+  aiAnalysisResult?: AIAnalysisResult | null;
   questionResults: Array<{
     question: QuestionDetail;
     userAnswer: UserAnswer;

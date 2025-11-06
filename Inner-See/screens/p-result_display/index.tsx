@@ -15,6 +15,7 @@ import AIAnalysisResultComponent from './components/AIAnalysisResult';
 import styles from './styles';
 
 interface TestResult {
+  id?: string;
   testName: string;
   score: number;
   level: string;
@@ -25,6 +26,7 @@ interface TestResult {
     text: string;
     icon: string;
   }>;
+  aiAnalysisResult?: AIAnalysisResult | null;
   questionResults?: Array<{
     question: {
       id: string;
@@ -155,9 +157,11 @@ const ResultDisplayScreen = () => {
           console.log('数据库中找到测试记录，开始生成测试结果');
           console.log('testRecord.resultSummary:', testRecord.resultSummary);
           console.log('testRecord.totalScore:', testRecord.totalScore);
+          console.log('testRecord.aiAnalysisResult:', testRecord.aiAnalysisResult);
           
           // 从数据库记录生成测试结果
           const result: TestResult = {
+                       id: testRecord.id,
                        testName: testRecord.testTypeId === 'mental-health' ? '抑郁症评估' : 'MBTI性格测试',
                        score: testRecord.totalScore || 0,
                        level: testRecord.resultSummary || '未知',
@@ -185,11 +189,19 @@ const ResultDisplayScreen = () => {
                            icon: 'moon'
                          }
                        ],
+                       aiAnalysisResult: testRecord.aiAnalysisResult ? JSON.parse(testRecord.aiAnalysisResult) : null,
                        questionResults: [] // 将通过updateQuestionResults函数从user_answers表获取
                      };
           
+          // 检查是否有AI分析结果
+          // setHasAiAnalysis(!!testRecord.aiAnalysisResult);
+          
           console.log('生成的测试结果:', result);
           setTestResult(result);
+          // 如果已有AI分析结果，设置按钮状态
+          if (testRecord.aiAnalysisResult) {
+            setAiButtonState('completed');
+          }
         } else {
           console.log('数据库中未找到测试记录，使用mock数据');
           // 如果数据库中没有找到，使用mock数据作为fallback
@@ -522,67 +534,109 @@ const ResultDisplayScreen = () => {
           <View style={styles.bottomSpacing} />
         </ScrollView>
 
-        {/* AI分析按钮区 */}
-      <View style={styles.aiSection}>
-        <View style={styles.aiCard}>
-          <View style={styles.sectionHeader}>
-            <LinearGradient
-              colors={['#6366f1', '#8b5cf6']}
-              style={styles.sectionIcon}
-            >
-              <FontAwesome6 name="brain" size={18} color="#ffffff" />
-            </LinearGradient>
-            <Text style={styles.sectionTitle}>AI深度分析</Text>
-          </View>
-          
-          <View style={styles.aiContent}>
-            <Text style={styles.aiDescription}>
-              基于您的测试结果，获取个性化的心理健康分析和建议
-            </Text>
-            <AIAskButton
-              onPress={() => setShowSupplementInput(true)}
-              loading={aiButtonState === 'loading'}
-              completed={aiButtonState === 'completed'}
-              error={aiButtonState === 'error'}
-            />
+        {/* 底部操作区 */}
+        <View style={styles.bottomActions}>
+          <View style={styles.actionsContainer}>
+            <TouchableOpacity style={styles.shareButton} onPress={handleSharePress}>
+              <LinearGradient
+                colors={['#6366f1', '#8b5cf6']}
+                style={styles.shareButtonGradient}
+              >
+                <FontAwesome6 name="share-nodes" size={16} color="#ffffff" />
+                <Text style={styles.shareButtonText}>分享结果</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.homeButton} onPress={handleHomePress}>
+              <FontAwesome6 name="house" size={16} color="#ffffff" />
+              <Text style={styles.homeButtonText}>返回首页</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </View>
 
-      {/* 底部操作区 */}
-      <View style={styles.bottomActions}>
-        <View style={styles.actionsContainer}>
-          <TouchableOpacity style={styles.shareButton} onPress={handleSharePress}>
-            <LinearGradient
-              colors={['#6366f1', '#8b5cf6']}
-              style={styles.shareButtonGradient}
-            >
-              <FontAwesome6 name="share-nodes" size={16} color="#ffffff" />
-              <Text style={styles.shareButtonText}>分享结果</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.homeButton} onPress={handleHomePress}>
-            <FontAwesome6 name="house" size={16} color="#ffffff" />
-            <Text style={styles.homeButtonText}>返回首页</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+        {/* AI悬浮按钮 */}
+        <TouchableOpacity
+          style={styles.aiFloatingButton}
+          onPress={() => setShowSupplementInput(true)}
+          disabled={aiButtonState === 'completed'}
+        >
+          <LinearGradient
+            colors={['#6366f1', '#8b5cf6']}
+            style={styles.aiFloatingIcon}
+          >
+            <FontAwesome6
+              name={aiButtonState === 'completed' ? "check" : "brain"}
+              size={18}
+              color="#ffffff"
+            />
+          </LinearGradient>
+        </TouchableOpacity>
 
         {/* AI分析结果弹窗 */}
         {aiAnalysisState.status === 'completed' && aiAnalysisState.result && (
-          <View style={styles.aiModalOverlay}>
-            <AIAnalysisResultComponent
-              result={aiAnalysisState.result}
-              onClose={() => {
+          <TouchableOpacity
+            style={styles.aiModalOverlay}
+            activeOpacity={1}
+            onPress={(event) => {
+              // 如果点击的是内容区域，则不关闭
+              if (event.target === event.currentTarget) {
                 setAiAnalysisState({
                   status: 'idle',
                   result: null,
                   error: null,
                 });
                 setAiButtonState('idle');
+              }
+            }}
+          >
+            <View
+              style={styles.aiModalContent}
+              onStartShouldSetResponder={() => true}
+              onMoveShouldSetResponder={() => true}
+              onResponderMove={(event) => {
+                // 监听滑动手势
+                const { locationY } = event.nativeEvent;
+                if (locationY < 50) {
+                  // 从顶部向下滑动，关闭模态框
+                  setAiAnalysisState({
+                    status: 'idle',
+                    result: null,
+                    error: null,
+                  });
+                  setAiButtonState('idle');
+                }
               }}
-            />
-          </View>
+            >
+              <View style={styles.aiModalHeader}>
+                <Text style={styles.aiModalTitle}>AI深度分析</Text>
+                <TouchableOpacity
+                  style={styles.aiModalCloseButton}
+                  onPress={() => {
+                    setAiAnalysisState({
+                      status: 'idle',
+                      result: null,
+                      error: null,
+                    });
+                    setAiButtonState('idle');
+                  }}
+                >
+                  <FontAwesome6 name="times" size={16} color="#6b7280" />
+                </TouchableOpacity>
+              </View>
+              <ScrollView style={styles.aiModalScrollView}>
+                <AIAnalysisResultComponent
+                  result={aiAnalysisState.result}
+                  onClose={() => {
+                    setAiAnalysisState({
+                      status: 'idle',
+                      result: null,
+                      error: null,
+                    });
+                    setAiButtonState('idle');
+                  }}
+                />
+              </ScrollView>
+            </View>
+          </TouchableOpacity>
         )}
 
         {/* AI补充信息输入弹窗 */}
@@ -657,6 +711,42 @@ const ResultDisplayScreen = () => {
                 error: null,
               });
               setAiButtonState('completed');
+
+              // 保存AI分析结果到数据库
+              if (testResult && parsedResult) {
+                try {
+                  const dbManager = DatabaseManager.getInstance();
+                  await dbManager.initialize();
+                  
+                  // 从当前测试记录获取必要的字段
+                  const currentUser = await dbManager.getCurrentUser();
+                  
+                  // 更新测试记录，保存AI分析结果
+                  await dbManager.saveTestRecord({
+                    id: testResult.id || params.record_id as string,
+                    userId: currentUser?.id || 'default-user',
+                    testTypeId: testResult.testName === '抑郁症评估' ? 'mental-health' : 'mbti',
+                    startTime: Date.now(),
+                    endTime: Date.now(),
+                    totalScore: testResult.score,
+                    resultSummary: testResult.level,
+                    aiAnalysisResult: JSON.stringify(parsedResult),
+                    createdAt: Date.now(),
+                  } as any);
+                  
+                  console.log('AI分析结果已保存到数据库');
+                  
+                  // 更新本地状态，显示AI分析结果
+                  setTestResult(prev => prev ? {
+                    ...prev,
+                    aiAnalysisResult: parsedResult
+                  } : null);
+                  
+                } catch (dbError) {
+                  console.error('保存AI分析结果到数据库失败:', dbError);
+                  // 不阻止AI分析的完成，只是记录错误
+                }
+              }
 
             } catch (error) {
               console.error('AI分析失败:', error);

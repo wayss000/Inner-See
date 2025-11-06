@@ -3,7 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, Dimensions,
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
 
-const { width } = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
+const MODAL_WIDTH = Math.min(screenWidth * 0.9, 360);
 
 interface AISupplementInputProps {
   visible: boolean;
@@ -133,12 +134,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
   modalContainer: {
-    width: '100%',
-    maxWidth: 500,
+    width: MODAL_WIDTH,
     borderRadius: 16,
     overflow: 'hidden',
+    backgroundColor: '#ffffff',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -176,6 +178,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginBottom: 16,
     position: 'relative',
+    width: '100%',
   },
   textInput: {
     height: 120,
@@ -191,6 +194,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
+    width: '100%',
+    minWidth: 0, // 防止宽度收缩
   },
   characterCountContainer: {
     position: 'absolute',

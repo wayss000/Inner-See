@@ -62,6 +62,7 @@ export class DatabaseManager {
         result_summary TEXT,
         improvement_suggestions TEXT,
         reference_materials TEXT,
+        ai_analysis_result TEXT, -- AI分析结果JSON字符串
         created_at INTEGER NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users (id)
       )
@@ -238,6 +239,7 @@ export class DatabaseManager {
         resultSummary: result.result_summary,
         improvementSuggestions: result.improvement_suggestions,
         referenceMaterials: result.reference_materials,
+        aiAnalysisResult: result.ai_analysis_result,
         createdAt: result.created_at
       };
       
@@ -329,6 +331,7 @@ export class DatabaseManager {
           icon: 'moon'
         }
       ],
+      aiAnalysisResult: testRecord.aiAnalysisResult ? JSON.parse(testRecord.aiAnalysisResult) : null,
       questionResults: questionResults.map(result => ({
         question: {
           id: result.question.id,
@@ -360,6 +363,7 @@ export class DatabaseManager {
       resultSummary: result.result_summary,
       improvementSuggestions: result.improvement_suggestions,
       referenceMaterials: result.reference_materials,
+      aiAnalysisResult: result.ai_analysis_result,
       createdAt: result.created_at
     }));
   }
