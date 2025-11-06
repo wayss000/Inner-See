@@ -133,6 +133,17 @@ export class DatabaseManager {
         await this.db.execAsync('ALTER TABLE user_answers ADD COLUMN user_choice_text TEXT NOT NULL DEFAULT ""');
       }
 
+      // 检查并添加test_records表的ai_analysis_result字段
+      const testRecordColumns = await this.db.getAllAsync<{ name: string }>(
+        "PRAGMA table_info(test_records)"
+      );
+      const testRecordColumnNames = testRecordColumns.map(col => col.name);
+
+      if (!testRecordColumnNames.includes('ai_analysis_result')) {
+        await this.db.execAsync('ALTER TABLE test_records ADD COLUMN ai_analysis_result TEXT');
+        console.log('已添加test_records表的ai_analysis_result字段');
+      }
+
       console.log('表结构更新完成');
     } catch (error) {
       console.error('更新表结构失败:', error);
@@ -155,8 +166,8 @@ export class DatabaseManager {
     await this.db.runAsync(
       `INSERT OR REPLACE INTO test_records
        (id, user_id, test_type_id, start_time, end_time, total_score,
-        result_summary, improvement_suggestions, reference_materials, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        result_summary, improvement_suggestions, reference_materials, ai_analysis_result, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         record.id,
         record.userId,
@@ -167,6 +178,7 @@ export class DatabaseManager {
         record.resultSummary || null,
         record.improvementSuggestions || null,
         record.referenceMaterials || null,
+        record.aiAnalysisResult || null, // 添加AI分析结果字段
         record.createdAt
       ]
     );

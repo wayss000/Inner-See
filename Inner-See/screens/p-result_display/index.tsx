@@ -194,6 +194,7 @@ const ResultDisplayScreen = () => {
           console.log('testRecord.resultSummary:', testRecord.resultSummary);
           console.log('testRecord.totalScore:', testRecord.totalScore);
           console.log('testRecord.aiAnalysisResult:', testRecord.aiAnalysisResult);
+          console.log('testRecord.aiAnalysisResult是否为空:', !testRecord.aiAnalysisResult);
           
           // 从数据库记录生成测试结果
           const result: TestResult = {
@@ -232,19 +233,28 @@ const ResultDisplayScreen = () => {
           // 检查是否有AI分析结果
           const hasAiResult = !!testRecord.aiAnalysisResult;
           
+          console.log('hasAiResult:', hasAiResult);
           console.log('生成的测试结果:', result);
           setTestResult(result);
           
           // 如果已有AI分析结果，设置按钮状态和分析状态
           if (hasAiResult) {
+            console.log('设置按钮状态为viewable，AI分析结果:', testRecord.aiAnalysisResult);
             setAiButtonState('viewable');
-            setAiAnalysisState(prev => ({
-              ...prev,
-              hasSavedResult: true,
-              status: 'completed',
-              result: JSON.parse(testRecord.aiAnalysisResult!),
-            }));
+            try {
+              const parsedResult = JSON.parse(testRecord.aiAnalysisResult!);
+              setAiAnalysisState(prev => ({
+                ...prev,
+                hasSavedResult: true,
+                status: 'completed',
+                result: parsedResult,
+              }));
+            } catch (error) {
+              console.error('解析AI分析结果失败:', error);
+              setAiButtonState('idle');
+            }
           } else {
+            console.log('没有AI分析结果，设置按钮状态为idle');
             setAiButtonState('idle');
           }
         } else {
@@ -252,6 +262,8 @@ const ResultDisplayScreen = () => {
           // 如果数据库中没有找到，使用mock数据作为fallback
           const mockResult = mockResults[recordId] || mockResults.record1;
           setTestResult(mockResult);
+          // 对于mock数据，设置按钮为初始状态
+          setAiButtonState('idle');
         }
       } catch (error) {
         console.error('加载测试结果失败:', error);
@@ -602,11 +614,19 @@ const ResultDisplayScreen = () => {
         <TouchableOpacity
           style={styles.aiFloatingButton}
           onPress={() => {
+            console.log('悬浮按钮点击，当前状态:', {
+              aiButtonState,
+              hasSavedResult: aiAnalysisState.hasSavedResult,
+              aiAnalysisResult: testResult?.aiAnalysisResult
+            });
+            
             if (aiButtonState === 'viewable' || aiButtonState === 'completed') {
               // 如果有保存的结果，直接显示结果
+              console.log('显示保存的AI分析结果');
               setShowAiResult(true);
             } else {
               // 否则进入补充信息输入
+              console.log('进入补充信息输入');
               setShowSupplementInput(true);
             }
           }}
@@ -644,6 +664,10 @@ const ResultDisplayScreen = () => {
                   result={aiAnalysisState.result}
                   onClose={() => {
                     setShowAiResult(false);
+                    // 确保关闭弹窗后，按钮状态保持为可查看状态
+                    if (aiAnalysisState.hasSavedResult && aiAnalysisState.result) {
+                      setAiButtonState('viewable');
+                    }
                   }}
                   onRegenerate={async () => {
                     try {
@@ -786,6 +810,8 @@ const ResultDisplayScreen = () => {
                     endTime: Date.now(),
                     totalScore: testResult.score,
                     resultSummary: testResult.level,
+                    improvementSuggestions: testResult.suggestions.map(s => s.text).join('; '),
+                    referenceMaterials: null,
                     aiAnalysisResult: JSON.stringify(parsedResult),
                     createdAt: Date.now(),
                   } as any);
