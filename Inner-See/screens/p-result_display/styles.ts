@@ -522,7 +522,7 @@ export default StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
     zIndex: 1000,
@@ -531,7 +531,7 @@ export default StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 24,
     width: '100%',
-    maxHeight: '60%',
+    maxHeight: '80%',
     overflow: 'hidden',
   },
   aiModalHeader: {

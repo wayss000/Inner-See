@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { AIAnalysisResult as AIResultType } from '../../../src/types/AITypes';
@@ -9,9 +9,10 @@ const { width } = Dimensions.get('window');
 interface AIAnalysisResultProps {
   result: AIResultType;
   onClose: () => void;
+  onRegenerate?: () => void;
 }
 
-const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result }) => {
+const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, onClose, onRegenerate }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -68,6 +69,24 @@ const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result }) 
           <Text style={styles.disclaimerText}>{result.disclaimer}</Text>
         </View>
       </ScrollView>
+      
+      {/* 操作按钮区域 */}
+      <View style={styles.actionButtons}>
+        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+          <Text style={styles.closeButtonText}>关闭</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.regenerateButton}
+          onPress={() => {
+            // 触发重新生成逻辑
+            if (onRegenerate) {
+              onRegenerate();
+            }
+          }}
+        >
+          <Text style={styles.regenerateButtonText}>重新生成</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -138,6 +157,41 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     flex: 1,
     textAlign: 'left',
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  closeButton: {
+    flex: 1,
+    backgroundColor: '#6b7280',
+    borderRadius: 8,
+    paddingVertical: 12,
+    marginRight: 8,
+    alignItems: 'center',
+  },
+  closeButtonText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  regenerateButton: {
+    flex: 1,
+    backgroundColor: '#3b82f6',
+    borderRadius: 8,
+    paddingVertical: 12,
+    marginLeft: 8,
+    alignItems: 'center',
+  },
+  regenerateButtonText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#ffffff',
   },
 });
 

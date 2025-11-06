@@ -61,9 +61,45 @@ const ResultDisplayScreen = () => {
     status: 'idle',
     result: null,
     error: null,
+    hasSavedResult: false,
   });
   const [showSupplementInput, setShowSupplementInput] = useState(false);
   const [aiSupplement, setAiSupplement] = useState('');
+  const [showAiResult, setShowAiResult] = useState(false);
+
+  // 获取按钮图标名称
+  const getButtonIconName = () => {
+    switch (aiButtonState) {
+      case 'idle':
+        return 'brain';
+      case 'loading':
+      case 'regenerating':
+        return 'spinner';
+      case 'completed':
+      case 'viewable':
+        return 'eye';
+      case 'error':
+        return 'refresh';
+      default:
+        return 'brain';
+    }
+  };
+
+  // 获取按钮颜色
+  const getButtonColors = (): [string, string] => {
+    switch (aiButtonState) {
+      case 'error':
+        return ['#ef4444', '#dc2626'];
+      case 'completed':
+      case 'viewable':
+        return ['#10b981', '#059669'];
+      case 'loading':
+      case 'regenerating':
+        return ['#f59e0b', '#d97706'];
+      default:
+        return ['#6366f1', '#8b5cf6'];
+    }
+  };
 
   // 模拟测试结果数据
   const mockResults: Record<string, TestResult> = {
@@ -194,13 +230,22 @@ const ResultDisplayScreen = () => {
                      };
           
           // 检查是否有AI分析结果
-          // setHasAiAnalysis(!!testRecord.aiAnalysisResult);
+          const hasAiResult = !!testRecord.aiAnalysisResult;
           
           console.log('生成的测试结果:', result);
           setTestResult(result);
-          // 如果已有AI分析结果，设置按钮状态
-          if (testRecord.aiAnalysisResult) {
-            setAiButtonState('completed');
+          
+          // 如果已有AI分析结果，设置按钮状态和分析状态
+          if (hasAiResult) {
+            setAiButtonState('viewable');
+            setAiAnalysisState(prev => ({
+              ...prev,
+              hasSavedResult: true,
+              status: 'completed',
+              result: JSON.parse(testRecord.aiAnalysisResult!),
+            }));
+          } else {
+            setAiButtonState('idle');
           }
         } else {
           console.log('数据库中未找到测试记录，使用mock数据');
@@ -556,15 +601,23 @@ const ResultDisplayScreen = () => {
         {/* AI悬浮按钮 */}
         <TouchableOpacity
           style={styles.aiFloatingButton}
-          onPress={() => setShowSupplementInput(true)}
-          disabled={aiButtonState === 'completed'}
+          onPress={() => {
+            if (aiButtonState === 'viewable' || aiButtonState === 'completed') {
+              // 如果有保存的结果，直接显示结果
+              setShowAiResult(true);
+            } else {
+              // 否则进入补充信息输入
+              setShowSupplementInput(true);
+            }
+          }}
+          disabled={aiButtonState === 'loading' || aiButtonState === 'regenerating'}
         >
           <LinearGradient
-            colors={['#6366f1', '#8b5cf6']}
+            colors={getButtonColors()}
             style={styles.aiFloatingIcon}
           >
             <FontAwesome6
-              name={aiButtonState === 'completed' ? "check" : "brain"}
+              name={getButtonIconName()}
               size={18}
               color="#ffffff"
             />
@@ -572,51 +625,15 @@ const ResultDisplayScreen = () => {
         </TouchableOpacity>
 
         {/* AI分析结果弹窗 */}
-        {aiAnalysisState.status === 'completed' && aiAnalysisState.result && (
-          <TouchableOpacity
-            style={styles.aiModalOverlay}
-            activeOpacity={1}
-            onPress={(event) => {
-              // 如果点击的是内容区域，则不关闭
-              if (event.target === event.currentTarget) {
-                setAiAnalysisState({
-                  status: 'idle',
-                  result: null,
-                  error: null,
-                });
-                setAiButtonState('idle');
-              }
-            }}
-          >
-            <View
-              style={styles.aiModalContent}
-              onStartShouldSetResponder={() => true}
-              onMoveShouldSetResponder={() => true}
-              onResponderMove={(event) => {
-                // 监听滑动手势
-                const { locationY } = event.nativeEvent;
-                if (locationY < 50) {
-                  // 从顶部向下滑动，关闭模态框
-                  setAiAnalysisState({
-                    status: 'idle',
-                    result: null,
-                    error: null,
-                  });
-                  setAiButtonState('idle');
-                }
-              }}
-            >
+        {showAiResult && aiAnalysisState.result && (
+          <View style={styles.aiModalOverlay}>
+            <View style={styles.aiModalContent}>
               <View style={styles.aiModalHeader}>
                 <Text style={styles.aiModalTitle}>AI深度分析</Text>
                 <TouchableOpacity
                   style={styles.aiModalCloseButton}
                   onPress={() => {
-                    setAiAnalysisState({
-                      status: 'idle',
-                      result: null,
-                      error: null,
-                    });
-                    setAiButtonState('idle');
+                    setShowAiResult(false);
                   }}
                 >
                   <FontAwesome6 name="times" size={16} color="#6b7280" />
@@ -626,17 +643,34 @@ const ResultDisplayScreen = () => {
                 <AIAnalysisResultComponent
                   result={aiAnalysisState.result}
                   onClose={() => {
-                    setAiAnalysisState({
-                      status: 'idle',
-                      result: null,
-                      error: null,
-                    });
-                    setAiButtonState('idle');
+                    setShowAiResult(false);
+                  }}
+                  onRegenerate={async () => {
+                    try {
+                      setAiButtonState('loading');
+                      setAiAnalysisState({
+                        status: 'analyzing',
+                        result: null,
+                        error: null,
+                        hasSavedResult: false,
+                      });
+                      setShowAiResult(false);
+                      setShowSupplementInput(true);
+                    } catch (error) {
+                      console.error('重新生成AI分析失败:', error);
+                      setAiAnalysisState({
+                        status: 'error',
+                        result: null,
+                        error: error instanceof Error ? error.message : '重新生成失败',
+                        hasSavedResult: false,
+                      });
+                      setAiButtonState('error');
+                    }
                   }}
                 />
               </ScrollView>
             </View>
-          </TouchableOpacity>
+          </View>
         )}
 
         {/* AI补充信息输入弹窗 */}
@@ -648,12 +682,26 @@ const ResultDisplayScreen = () => {
             setAiSupplement(supplement);
             
             try {
-              setAiButtonState('loading');
-              setAiAnalysisState({
-                status: 'analyzing',
-                result: null,
-                error: null,
-              });
+              // 判断是首次分析还是重新生成
+              const isRegenerating = aiButtonState === 'viewable' || aiButtonState === 'completed';
+              
+              if (isRegenerating) {
+                setAiButtonState('regenerating');
+                setAiAnalysisState({
+                  status: 'regenerating',
+                  result: aiAnalysisState.result, // 保持当前结果可见
+                  error: null,
+                  hasSavedResult: true,
+                });
+              } else {
+                setAiButtonState('loading');
+                setAiAnalysisState({
+                  status: 'analyzing',
+                  result: null,
+                  error: null,
+                  hasSavedResult: false,
+                });
+              }
 
               // 构建AI请求数据
               const aiRequestData = {
@@ -705,12 +753,20 @@ const ResultDisplayScreen = () => {
               };
 
               const parsedResult = parseAIResponse(analysisResult);
+              
+              // 更新状态
               setAiAnalysisState({
                 status: 'completed',
                 result: parsedResult,
                 error: null,
+                hasSavedResult: true,
               });
-              setAiButtonState('completed');
+              
+              if (isRegenerating) {
+                setAiButtonState('viewable');
+              } else {
+                setAiButtonState('completed');
+              }
 
               // 保存AI分析结果到数据库
               if (testResult && parsedResult) {
@@ -754,6 +810,7 @@ const ResultDisplayScreen = () => {
                 status: 'error',
                 result: null,
                 error: error instanceof Error ? error.message : 'AI分析服务暂时不可用',
+                hasSavedResult: false,
               });
               setAiButtonState('error');
             }

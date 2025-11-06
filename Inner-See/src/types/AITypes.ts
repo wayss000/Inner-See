@@ -60,11 +60,12 @@ export interface AIAnalysisResult {
 }
 
 // 问AI按钮状态
-export type AIButtonState = 'idle' | 'loading' | 'completed' | 'error';
+export type AIButtonState = 'idle' | 'loading' | 'completed' | 'error' | 'viewable' | 'regenerating';
 
 // AI分析状态
 export interface AIAnalysisState {
-  status: 'idle' | 'analyzing' | 'completed' | 'error';
+  status: 'idle' | 'analyzing' | 'completed' | 'error' | 'viewing' | 'regenerating';
   result: AIAnalysisResult | null;
   error: string | null;
+  hasSavedResult: boolean;
 }
