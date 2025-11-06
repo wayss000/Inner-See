@@ -645,7 +645,7 @@ const ResultDisplayScreen = () => {
         </TouchableOpacity>
 
         {/* AI分析结果弹窗 */}
-        {showAiResult && aiAnalysisState.result && (
+        {showAiResult && (aiAnalysisState.result || aiAnalysisState.status === 'analyzing') && (
           <View style={styles.aiModalOverlay}>
             <View style={styles.aiModalContent}>
               <View style={styles.aiModalHeader}>
@@ -661,7 +661,13 @@ const ResultDisplayScreen = () => {
               </View>
               <ScrollView style={styles.aiModalScrollView}>
                 <AIAnalysisResultComponent
-                  result={aiAnalysisState.result}
+                  result={aiAnalysisState.result || {
+                    currentSituation: 'AI正在分析您的测试结果...',
+                    adjustmentSuggestions: '请稍候，正在生成个性化建议...',
+                    注意事项: '分析完成后将显示注意事项...',
+                    disclaimer: '本回答由 AI 生成，内容仅供参考，请仔细甄别。',
+                    fullResponse: 'AI正在分析中...'
+                  }}
                   onClose={() => {
                     setShowAiResult(false);
                     // 确保关闭弹窗后，按钮状态保持为可查看状态
@@ -671,12 +677,13 @@ const ResultDisplayScreen = () => {
                   }}
                   onRegenerate={async () => {
                     try {
-                      setAiButtonState('loading');
+                      // 设置为重新生成状态，这样AISupplementInput会正确显示loading
+                      setAiButtonState('regenerating');
                       setAiAnalysisState({
-                        status: 'analyzing',
-                        result: null,
+                        status: 'regenerating',
+                        result: aiAnalysisState.result, // 保持当前结果可见
                         error: null,
-                        hasSavedResult: false,
+                        hasSavedResult: true,
                       });
                       setShowAiResult(false);
                       setShowSupplementInput(true);

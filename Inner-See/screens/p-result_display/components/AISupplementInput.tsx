@@ -34,11 +34,9 @@ const AISupplementInput: React.FC<AISupplementInputProps> = ({
   };
 
   const handleClose = () => {
-    if (!loading) {
-      setSupplement('');
-      setCharacterCount(0);
-      onClose();
-    }
+    setSupplement('');
+    setCharacterCount(0);
+    onClose();
   };
 
   return (
