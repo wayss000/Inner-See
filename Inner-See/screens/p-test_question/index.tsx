@@ -38,6 +38,8 @@ const TestQuestionScreen: React.FC = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
   const testTypeId = (params.test_type_id as string) || 'depression';
+  const testDataFromParams = params.testData ? JSON.parse(params.testData as string) : null;
+  const customConfig = params.config ? JSON.parse(params.config as string) : null;
 
   // 状态管理
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -56,6 +58,25 @@ const TestQuestionScreen: React.FC = () => {
   const loadTestData = async () => {
     try {
       setIsLoading(true);
+      
+      // 如果是自定义测试，直接使用传入的数据
+      if (testDataFromParams) {
+        const convertedQuestions = testDataFromParams.questions.map((question: any, index: number) => ({
+          id: index + 1,
+          text: question.content,
+          type: 'single_choice' as const,
+          options: question.options.map((opt: string, optIndex: number) => ({
+            value: optIndex,
+            text: opt
+          }))
+        }));
+
+        setTestData({
+          title: testDataFromParams.title || '自定义测试',
+          questions: convertedQuestions
+        });
+        return;
+      }
       
       // 使用ApiService获取测试题目
       const apiService = ApiService.getInstance();
@@ -328,13 +349,13 @@ const TestQuestionScreen: React.FC = () => {
       const testRecord = {
         id: recordId,
         userId: 'user_1', // 默认用户ID
-        testTypeId,
+        testTypeId: testTypeId === 'custom' ? 'custom' : testTypeId,
         startTime,
         endTime,
         totalScore,
         resultSummary,
         improvementSuggestions,
-        referenceMaterials: 'PHQ-9, MBTI等专业量表',
+        referenceMaterials: testTypeId === 'custom' ? 'AI生成的自定义测试' : 'PHQ-9, MBTI等专业量表',
         createdAt: Date.now()
       };
       

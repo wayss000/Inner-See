@@ -51,6 +51,13 @@ export const TEST_TYPE_CONFIGS: Record<string, TestTypeConfig> = {
     icon: 'leaf',
     gradientColors: ['#4ade80', '#3b82f6'],
     levelColor: '#4ade80'
+  },
+  'custom': {
+    id: 'custom',
+    name: '自定义测试',
+    icon: 'magic',
+    gradientColors: ['#f59e0b', '#d97706'],
+    levelColor: '#f59e0b'
   }
 };
 

@@ -1,5 +1,5 @@
 import Constants from 'expo-constants';
-import { WanQingRequest, WanQingResponse, AIRequestData } from '../types/AITypes';
+import { WanQingRequest, WanQingResponse, AIRequestData, CustomTestConfig, GeneratedTest } from '../types/AITypes';
 
 /**
  * 获取环境变量配置（兼容 web 和原生平台）
@@ -106,6 +106,130 @@ export class AIService {
         hasApiKey: !!this.apiKey
       });
       throw new Error('AI分析服务暂时不可用，请稍后重试');
+    }
+  }
+
+  /**
+   * 生成自定义测试
+   * @param config 自定义测试配置
+   * @returns 生成的测试
+   */
+  async generateCustomTest(config: CustomTestConfig): Promise<GeneratedTest> {
+    console.log('开始生成自定义测试:', {
+      mode: config.mode,
+      hasCategories: !!config.selectedCategories,
+      hasDescription: !!config.userDescription
+    });
+
+    if (!this.apiKey || !this.apiUrl || !this.modelId) {
+      throw new Error('AI分析服务未配置，请联系管理员');
+    }
+
+    try {
+      const prompt = this.buildCustomTestPrompt(config);
+      const request: any = {
+        model: this.modelId,
+        messages: [
+          {
+            role: "system",
+            content: "你是一位专业的心理健康测试生成专家，请根据用户的需求生成个性化的心理测试题目。"
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        temperature: 0.8
+      };
+
+      const response = await this.callWanQingAPI(request);
+      const result = this.parseCustomTestResponse(response);
+      
+      console.log('自定义测试生成完成');
+      return result;
+    } catch (error) {
+      console.error('自定义测试生成失败:', error);
+      throw new Error('自定义测试生成服务暂时不可用，请稍后重试');
+    }
+  }
+
+  /**
+   * 构建自定义测试生成的提示词
+   */
+  private buildCustomTestPrompt(config: CustomTestConfig): string {
+    const { mode, selectedCategories, userDescription } = config;
+    
+    let prompt = '请根据以下需求生成一个个性化的心理健康测试：\n\n';
+    
+    if (mode === 'interactive' && selectedCategories) {
+      prompt += `用户选择了以下测试分类：${selectedCategories.join('、')}\n`;
+      prompt += '请结合这些分类的特点，生成一个综合性的测试。\n';
+    }
+    
+    if (mode === 'direct' && userDescription) {
+      prompt += `用户描述的问题：${userDescription}\n`;
+      prompt += '请根据这个描述，生成针对性的测试题目。\n';
+    }
+    
+    prompt += `
+请按以下JSON格式生成测试：
+
+{
+  "id": "custom_test_{timestamp}",
+  "title": "根据用户需求生成的个性化测试标题",
+  "description": "测试的简要说明",
+  "category": "测试的主要分类",
+  "difficulty": "简单/中等/困难",
+  "estimatedDuration": 测试预计时长（分钟）,
+  "questions": [
+    {
+      "id": "q1",
+      "content": "问题内容",
+      "options": ["选项A", "选项B", "选项C", "选项D"],
+      "correctAnswer": "正确答案",
+      "category": "问题所属分类",
+      "difficulty": "简单/中等/困难"
+    }
+  ]
+}
+
+要求：
+1. 生成8-12个问题，覆盖不同的心理健康维度
+2. 问题要贴近用户的需求或描述
+3. 选项要合理，避免明显的错误选项
+4. 确保JSON格式正确，可以直接解析
+    `.trim();
+
+    return prompt;
+  }
+
+  /**
+   * 解析自定义测试生成的响应
+   */
+  private parseCustomTestResponse(response: WanQingResponse): GeneratedTest {
+    const content = response.choices[0]?.message?.content;
+    if (!content) {
+      throw new Error('AI响应内容为空');
+    }
+
+    try {
+      // 提取JSON部分
+      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        throw new Error('响应中未找到有效的JSON格式');
+      }
+
+      const testData = JSON.parse(jsonMatch[0]);
+      
+      // 验证必要字段
+      if (!testData.id || !testData.title || !testData.questions) {
+        throw new Error('生成的测试数据不完整');
+      }
+
+      return testData;
+    } catch (error) {
+      console.error('解析自定义测试响应失败:', error);
+      throw new Error('无法解析生成的测试数据，请重试');
     }
   }
 

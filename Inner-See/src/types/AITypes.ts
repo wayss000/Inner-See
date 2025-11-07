@@ -62,6 +62,34 @@ export interface AIAnalysisResult {
 // 问AI按钮状态
 export type AIButtonState = 'idle' | 'loading' | 'completed' | 'error' | 'viewable' | 'regenerating';
 
+// 自定义测试配置
+export interface CustomTestConfig {
+  mode: 'interactive' | 'direct';
+  selectedCategories?: string[];
+  userDescription?: string;
+}
+
+// AI生成的测试题目
+export interface GeneratedTestQuestion {
+  id: string;
+  content: string;
+  options: string[];
+  correctAnswer: string;
+  category: string;
+  difficulty: string;
+}
+
+// AI生成的测试
+export interface GeneratedTest {
+  id: string;
+  title: string;
+  description: string;
+  questions: GeneratedTestQuestion[];
+  estimatedDuration: number;
+  category: string;
+  difficulty: string;
+}
+
 // AI分析状态
 export interface AIAnalysisState {
   status: 'idle' | 'analyzing' | 'completed' | 'error' | 'viewing' | 'regenerating';
