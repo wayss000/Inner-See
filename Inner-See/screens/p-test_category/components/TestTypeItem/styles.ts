@@ -1,14 +1,15 @@
 
 
 import { StyleSheet, Platform } from 'react-native';
+import { CardColors, TextColors } from '../../../../src/constants/Colors';
 
 export default StyleSheet.create({
   testItem: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -39,12 +40,12 @@ export default StyleSheet.create({
   testTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 4,
   },
   testDescription: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
     marginBottom: 8,
     lineHeight: 20,
   },
@@ -59,7 +60,7 @@ export default StyleSheet.create({
   },
   metaText: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
   },
   arrowContainer: {
     marginLeft: 8,

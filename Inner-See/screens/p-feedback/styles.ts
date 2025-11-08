@@ -1,6 +1,7 @@
 
 
 import { StyleSheet, Platform } from 'react-native';
+import { CardColors } from '../../src/constants/Colors';
 
 export default StyleSheet.create({
   container: {
@@ -30,7 +31,7 @@ export default StyleSheet.create({
     borderRadius: 20,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
@@ -67,10 +68,10 @@ export default StyleSheet.create({
     paddingHorizontal: 24,
   },
   feedbackFormCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     padding: 24,
     ...Platform.select({
       ios: {
@@ -105,7 +106,7 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     paddingVertical: 12,
     paddingHorizontal: 16,
   },
@@ -145,7 +146,7 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     padding: 16,
     fontSize: 16,
     color: '#ffffff',
@@ -183,7 +184,7 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     padding: 16,
     fontSize: 16,
     color: '#ffffff',
@@ -235,10 +236,10 @@ export default StyleSheet.create({
     marginTop: 24,
   },
   thankYouCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     padding: 20,
     alignItems: 'center',
     ...Platform.select({

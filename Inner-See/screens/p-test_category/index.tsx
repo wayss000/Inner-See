@@ -9,6 +9,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import TestTypeItem from './components/TestTypeItem';
 import styles from './styles';
 import { ApiService } from '../../src/services/ApiService';
+import { BackgroundGradient } from '../../src/constants/Colors';
 
 const { useEffect, useState } = React;
 
@@ -250,7 +251,7 @@ const TestCategoryScreen = () => {
   if (loading) {
     return (
       <LinearGradient
-        colors={['#667eea', '#764ba2']}
+        colors={BackgroundGradient.primary}
         style={styles.container}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -267,7 +268,7 @@ const TestCategoryScreen = () => {
 
   return (
     <LinearGradient
-      colors={['#667eea', '#764ba2']}
+      colors={BackgroundGradient.primary}
       style={styles.container}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}

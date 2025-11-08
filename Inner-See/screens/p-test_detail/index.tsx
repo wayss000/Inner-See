@@ -7,6 +7,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from './styles';
+import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
 
 interface TestData {
   title: string;
@@ -171,7 +172,7 @@ const TestDetailScreen = () => {
     return (
       <SafeAreaView style={styles.container}>
         <LinearGradient
-          colors={['#667eea', '#764ba2']}
+          colors={BackgroundGradient.primary}
           style={styles.gradientBackground}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
@@ -340,7 +341,7 @@ const TestDetailScreen = () => {
             activeOpacity={0.8}
           >
             <LinearGradient
-              colors={['#6366f1', '#8b5cf6']}
+              colors={[PrimaryColors.main, PrimaryColors.secondary]}
               style={styles.startButtonGradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}

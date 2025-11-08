@@ -1,6 +1,7 @@
 
 
 import { StyleSheet, Platform, StatusBar } from 'react-native';
+import { CardColors, TextColors } from '../../src/constants/Colors';
 
 export default StyleSheet.create({
   container: {
@@ -66,11 +67,11 @@ export default StyleSheet.create({
   appTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   appSubtitle: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
     marginTop: 4,
   },
   notificationButton: {
@@ -81,7 +82,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -107,23 +108,23 @@ export default StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   viewAllButton: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
   },
   hotTestsContainer: {
     paddingRight: 24,
   },
   hotTestCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 20,
     marginRight: 16,
     minWidth: 280,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -147,12 +148,12 @@ export default StyleSheet.create({
   hotTestTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 8,
   },
   hotTestDescription: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
     marginBottom: 12,
     lineHeight: 20,
   },
@@ -167,7 +168,7 @@ export default StyleSheet.create({
   },
   hotTestMetaText: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
     marginLeft: 4,
   },
   categoryRow: {
@@ -175,12 +176,12 @@ export default StyleSheet.create({
     marginBottom: 16,
   },
   categoryCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 16,
     width: '48%',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -205,19 +206,19 @@ export default StyleSheet.create({
   categoryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 4,
   },
   categoryCount: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
   },
   recentActivityCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -248,12 +249,12 @@ export default StyleSheet.create({
   activityTitle: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 4,
   },
   activityTime: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
   },
   activityScore: {
     alignItems: 'flex-end',
@@ -261,11 +262,11 @@ export default StyleSheet.create({
   scoreValue: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   scoreLabel: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
   },
   loadingContainer: {
     flex: 1,
@@ -275,7 +276,7 @@ export default StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#ffffff',
+    color: TextColors.primary,
     marginTop: 16,
   },
 });

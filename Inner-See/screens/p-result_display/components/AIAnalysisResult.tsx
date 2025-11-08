@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { AIAnalysisResult as AIResultType } from '../../../src/types/AITypes';
+import { PrimaryColors } from '../../../src/constants/Colors';
 
 const { width } = Dimensions.get('window');
 
@@ -16,7 +17,7 @@ const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, on
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <FontAwesome6 name="brain" size={24} color="#6366f1" />
+        <FontAwesome6 name="brain" size={24} color={PrimaryColors.main} />
         <Text style={styles.title}>AI心理分析报告</Text>
       </View>
 
@@ -101,13 +102,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     padding: 16,
-    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    backgroundColor: 'rgba(217, 119, 87, 0.1)', // PrimaryColors.main with 0.1 opacity
     borderRadius: 12,
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#6366f1',
+    color: PrimaryColors.main,
     marginLeft: 12,
   },
   content: {

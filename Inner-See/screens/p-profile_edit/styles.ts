@@ -1,4 +1,5 @@
 import { StyleSheet, Platform } from 'react-native';
+import { PrimaryColors, CardColors } from '../../src/constants/Colors';
 
 export default StyleSheet.create({
   container: {
@@ -100,15 +101,15 @@ export default StyleSheet.create({
     }),
   },
   selectedGenderButton: {
-    backgroundColor: 'rgba(102, 126, 234, 0.3)',
-    borderColor: '#667eea',
+    backgroundColor: 'rgba(217, 119, 87, 0.3)', // PrimaryColors.main with 0.3 opacity
+    borderColor: PrimaryColors.main,
   },
   genderText: {
     fontSize: 16,
     color: '#ffffff',
   },
   selectedGenderText: {
-    color: '#667eea',
+    color: PrimaryColors.main,
     fontWeight: '600',
   },
   buttonContainer: {

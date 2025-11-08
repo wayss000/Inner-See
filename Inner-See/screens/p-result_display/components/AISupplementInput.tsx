@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, Dimensions, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
+import { PrimaryColors } from '../../../src/constants/Colors';
 
 const { width: screenWidth } = Dimensions.get('window');
 const MODAL_WIDTH = Math.min(screenWidth * 0.9, 360);
@@ -107,7 +108,7 @@ const AISupplementInput: React.FC<AISupplementInputProps> = ({
                   disabled={loading || !supplement.trim()}
                 >
                   <LinearGradient
-                    colors={supplement.trim() && !loading ? ['#6366f1', '#8b5cf6'] : ['#9ca3af', '#d1d5db']}
+                    colors={supplement.trim() && !loading ? [PrimaryColors.main, PrimaryColors.secondary] : ['#9ca3af', '#d1d5db']}
                     style={styles.submitButton}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}

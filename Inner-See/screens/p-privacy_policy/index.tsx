@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import styles from './styles';
+import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
 
 const PrivacyPolicyScreen = () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const PrivacyPolicyScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#667eea', '#764ba2']}
+        colors={BackgroundGradient.primary}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradientBackground}
@@ -48,7 +49,7 @@ const PrivacyPolicyScreen = () => {
             {/* 隐私保护图标 */}
             <View style={styles.illustrationContainer}>
               <View style={styles.shieldIcon}>
-                <FontAwesome6 name="handshake-angle" size={48} color="#6366f1" />
+                <FontAwesome6 name="handshake-angle" size={48} color={PrimaryColors.main} />
               </View>
               <Text style={styles.illustrationTitle}>您的隐私，我们最重视</Text>
             </View>

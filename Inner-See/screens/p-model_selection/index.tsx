@@ -6,6 +6,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { DatabaseManager } from '../../src/database/DatabaseManager';
 import { styles } from './styles';
+import { BackgroundGradient } from '../../src/constants/Colors';
 
 interface ModelOption {
   label: string;
@@ -61,7 +62,7 @@ const ModelSelectionScreen = () => {
 
   return (
     <LinearGradient
-      colors={['#667eea', '#764ba2']}
+      colors={BackgroundGradient.primary}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.container}

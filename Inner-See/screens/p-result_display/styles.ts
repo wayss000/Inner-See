@@ -1,6 +1,7 @@
 
 
 import { StyleSheet, Platform } from 'react-native';
+import { PrimaryColors, CardColors } from '../../src/constants/Colors';
 
 export default StyleSheet.create({
   container: {
@@ -93,7 +94,7 @@ export default StyleSheet.create({
     marginBottom: 32,
   },
   scoreCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 24,
     padding: 32,
     alignItems: 'center',
@@ -117,7 +118,7 @@ export default StyleSheet.create({
     height: 128,
     borderRadius: 64,
     padding: 4,
-    backgroundColor: '#6366f1',
+    backgroundColor: PrimaryColors.main,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -188,7 +189,7 @@ export default StyleSheet.create({
     marginBottom: 32,
   },
   interpretationCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 24,
     ...Platform.select({
@@ -234,7 +235,7 @@ export default StyleSheet.create({
     marginBottom: 32,
   },
   suggestionsCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 24,
     ...Platform.select({
@@ -285,7 +286,7 @@ export default StyleSheet.create({
     marginBottom: 32,
   },
   referencesCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 24,
     ...Platform.select({
@@ -419,7 +420,7 @@ export default StyleSheet.create({
     marginBottom: 32,
   },
   questionDetailsCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 24,
     ...Platform.select({
@@ -444,7 +445,7 @@ export default StyleSheet.create({
     marginBottom: 12,
   },
   questionNumber: {
-    backgroundColor: '#6366f1',
+    backgroundColor: PrimaryColors.main,
     borderRadius: 6,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -489,7 +490,7 @@ export default StyleSheet.create({
     marginBottom: 32,
   },
   aiCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 24,
     ...Platform.select({
@@ -562,7 +563,7 @@ export default StyleSheet.create({
     position: 'absolute',
     right: 24,
     bottom: 80,
-    backgroundColor: '#6366f1',
+    backgroundColor: PrimaryColors.main,
     borderRadius: 30,
     padding: 16,
     elevation: 8,

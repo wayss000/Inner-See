@@ -3,6 +3,7 @@ import { StyleSheet, View, Dimensions, Platform, StatusBar } from 'react-native'
 import { Tabs } from "expo-router";
 import { FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { PrimaryColors } from '../../src/constants/Colors';
 
 
 export default function Layout() {
@@ -16,7 +17,7 @@ export default function Layout() {
     <Tabs 
       backBehavior="order"
       screenOptions={{ 
-          tabBarActiveTintColor: "#6366f1",
+          tabBarActiveTintColor: PrimaryColors.main,
           tabBarInactiveTintColor: "#6b7280",
           tabBarStyle: {
             backgroundColor: "#ffffffcc"

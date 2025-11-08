@@ -1,6 +1,7 @@
 
 
 import { StyleSheet, Platform } from 'react-native';
+import { TextColors } from '../../src/constants/Colors';
 
 export default StyleSheet.create({
   container: {
@@ -41,12 +42,12 @@ export default StyleSheet.create({
   pageTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 4,
   },
   pageSubtitle: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
   },
   scrollView: {
     flex: 1,
@@ -68,7 +69,7 @@ export default StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: '#ffffff',
+    color: TextColors.primary,
     textAlign: 'center',
   },
 });

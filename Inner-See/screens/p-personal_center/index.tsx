@@ -9,6 +9,7 @@ import { useRouter } from 'expo-router';
 import { DatabaseManager } from '../../src/database/DatabaseManager';
 import { User } from '../../src/entities/TestEntities';
 import { styles } from './styles';
+import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
 
 // 导入事件发射器
 import ProfileEditScreen from '../p-profile_edit';
@@ -115,7 +116,7 @@ const PersonalCenterScreen = () => {
 
   return (
     <LinearGradient
-      colors={['#667eea', '#764ba2']}
+      colors={BackgroundGradient.primary}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.container}
@@ -346,7 +347,7 @@ const PersonalCenterScreen = () => {
             <View style={styles.appInfoCard}>
               <View style={styles.appInfoContent}>
                 <LinearGradient
-                  colors={['#6366f1', '#8b5cf6']}
+                  colors={[PrimaryColors.main, PrimaryColors.secondary]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.appLogo}

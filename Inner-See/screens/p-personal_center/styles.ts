@@ -1,6 +1,7 @@
 
 
 import { StyleSheet, Dimensions } from 'react-native';
+import { PrimaryColors, CardColors } from '../../src/constants/Colors';
 
 const { width } = Dimensions.get('window');
 
@@ -48,7 +49,7 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -57,10 +58,10 @@ export const styles = StyleSheet.create({
     marginBottom: 32,
   },
   userInfoCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     padding: 24,
   },
   userInfoContent: {
@@ -84,7 +85,7 @@ export const styles = StyleSheet.create({
     right: -4,
     width: 20,
     height: 20,
-    backgroundColor: '#6366f1',
+    backgroundColor: PrimaryColors.main,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -132,10 +133,10 @@ export const styles = StyleSheet.create({
     gap: 12,
   },
   menuItem: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     padding: 16,
   },
   menuItemContent: {
@@ -178,10 +179,10 @@ export const styles = StyleSheet.create({
     marginBottom: 32,
   },
   appInfoCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     padding: 20,
   },
   appInfoContent: {

@@ -9,6 +9,7 @@ import { useRouter } from 'expo-router';
 import styles from './styles';
 import { getRandomItems, generateRandomHotTests, generateRandomCategories } from '../../src/utils/RandomUtils';
 import { ApiService } from '../../src/services/ApiService';
+import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
 
 interface HotTestItem {
   id: string;
@@ -195,7 +196,7 @@ const HomeScreen: React.FC = () => {
   if (loading) {
       return (
         <LinearGradient
-          colors={['#667eea', '#764ba2']}
+          colors={BackgroundGradient.primary}
           style={styles.container}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
@@ -213,7 +214,7 @@ const HomeScreen: React.FC = () => {
   
     return (
       <LinearGradient
-        colors={['#667eea', '#764ba2']}
+        colors={BackgroundGradient.primary}
         style={styles.container}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -236,7 +237,7 @@ const HomeScreen: React.FC = () => {
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                 >
-                  <FontAwesome6 name="brain" size={24} color="#6366f1" />
+                  <FontAwesome6 name="brain" size={24} color={PrimaryColors.main} />
                 </LinearGradient>
               </View>
               <View style={styles.appTitleSection}>

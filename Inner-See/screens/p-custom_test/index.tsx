@@ -7,6 +7,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import styles from './styles';
 import { CustomTestConfig, GeneratedTest } from '../../src/types/AITypes';
 import { AIService } from '../../src/services/AIService';
+import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
 
 const CustomTestScreen = () => {
   console.log('CustomTestScreen 组件开始渲染');
@@ -215,7 +216,7 @@ const CustomTestScreen = () => {
 
   return (
     <LinearGradient
-      colors={['#667eea', '#764ba2']}
+      colors={BackgroundGradient.primary}
       style={styles.container}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
@@ -257,7 +258,7 @@ const CustomTestScreen = () => {
               activeOpacity={0.8}
             >
               <LinearGradient
-                colors={loading ? ['#9ca3af', '#6b7280'] : ['#6366f1', '#8b5cf6']}
+                colors={loading ? ['#9ca3af', '#6b7280'] : [PrimaryColors.main, PrimaryColors.secondary]}
                 style={styles.generateButtonGradient}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}

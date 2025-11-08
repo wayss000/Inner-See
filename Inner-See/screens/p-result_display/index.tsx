@@ -13,6 +13,7 @@ import AIAskButton from './components/AIAskButton';
 import AISupplementInput from './components/AISupplementInput';
 import AIAnalysisResultComponent from './components/AIAnalysisResult';
 import styles from './styles';
+import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
 
 interface TestResult {
   id?: string;
@@ -97,7 +98,7 @@ const ResultDisplayScreen = () => {
       case 'regenerating':
         return ['#f59e0b', '#d97706'];
       default:
-        return ['#6366f1', '#8b5cf6'];
+        return [PrimaryColors.main, PrimaryColors.secondary];
     }
   };
 
@@ -384,7 +385,7 @@ const ResultDisplayScreen = () => {
 
   if (isLoading || !testResult) {
     return (
-      <LinearGradient colors={['#667eea', '#764ba2']} style={styles.container}>
+      <LinearGradient colors={BackgroundGradient.primary} style={styles.container}>
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.loadingContainer}>
             <Text style={styles.loadingText}>加载中...</Text>
@@ -596,7 +597,7 @@ const ResultDisplayScreen = () => {
           <View style={styles.actionsContainer}>
             <TouchableOpacity style={styles.shareButton} onPress={handleSharePress}>
               <LinearGradient
-                colors={['#6366f1', '#8b5cf6']}
+                colors={[PrimaryColors.main, PrimaryColors.secondary]}
                 style={styles.shareButtonGradient}
               >
                 <FontAwesome6 name="share-nodes" size={16} color="#ffffff" />

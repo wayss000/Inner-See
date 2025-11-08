@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ApiService } from '../../src/services/ApiService';
 import { DatabaseManager } from '../../src/database/DatabaseManager';
 import styles from './styles';
+import { BackgroundGradient } from '../../src/constants/Colors';
 
 interface QuestionOption {
   value: number | string;
@@ -269,7 +270,7 @@ const TestQuestionScreen: React.FC = () => {
   // 等待数据加载完成
   if (isLoading || !testData) {
     return (
-      <LinearGradient colors={['#667eea', '#764ba2']} style={styles.container}>
+      <LinearGradient colors={BackgroundGradient.primary} style={styles.container}>
         <SafeAreaView style={styles.safeArea}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, paddingHorizontal: 24 }}>
             <Text style={{ color: '#ffffff', marginTop: 16, fontSize: 16 }}>加载测试题目中...</Text>

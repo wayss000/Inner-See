@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from './styles';
+import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
 
 type FeedbackType = '建议' | '问题' | '其他';
 
@@ -145,7 +146,7 @@ const FeedbackScreen: React.FC = () => {
   };
 
   return (
-    <LinearGradient colors={['#667eea', '#764ba2']} style={styles.container}>
+    <LinearGradient colors={BackgroundGradient.primary} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <KeyboardAvoidingView
           style={styles.keyboardAvoidingView}
@@ -240,7 +241,7 @@ const FeedbackScreen: React.FC = () => {
                     activeOpacity={0.8}
                   >
                     <LinearGradient
-                      colors={isSubmitting ? ['rgba(255, 255, 255, 0.2)', 'rgba(255, 255, 255, 0.2)'] : ['#6366f1', '#8b5cf6']}
+                      colors={isSubmitting ? ['rgba(255, 255, 255, 0.2)', 'rgba(255, 255, 255, 0.2)'] : [PrimaryColors.main, PrimaryColors.secondary]}
                       style={styles.submitButtonGradient}
                     >
                       <Text style={styles.submitButtonText}>

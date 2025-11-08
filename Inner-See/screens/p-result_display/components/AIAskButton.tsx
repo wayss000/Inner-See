@@ -2,6 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ActivityIndicator, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
+import { PrimaryColors } from '../../../src/constants/Colors';
 
 interface AIAskButtonProps {
   onPress: () => void;
@@ -46,7 +47,7 @@ const AIAskButton: React.FC<AIAskButtonProps> = ({
     if (completed) {
       return ['#10b981', '#059669'];
     }
-    return ['#6366f1', '#8b5cf6'];
+    return [PrimaryColors.main, PrimaryColors.secondary];
   };
 
   return (
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   buttonIdle: {
-    backgroundColor: '#6366f1',
+    backgroundColor: PrimaryColors.main,
   },
   buttonCompleted: {
     backgroundColor: '#10b981',

@@ -2,15 +2,48 @@ import * as React from "react";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Stack, usePathname, useGlobalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { LogBox } from 'react-native';
+import { LogBox, ErrorUtils } from 'react-native';
 import { AppInitializer } from '../src/AppInitializer';
 
 const { useEffect } = React;
 
+// 配置 LogBox 显示所有错误和警告
 LogBox.ignoreLogs([
   "TurboModuleRegistry.getEnforcing(...): 'RNMapsAirModule' could not be found",
   // 添加其它想暂时忽略的错误或警告信息
 ]);
+
+// 全局错误处理 - 捕获所有未处理的错误并在控制台显示
+if (ErrorUtils && typeof ErrorUtils.getGlobalHandler === 'function') {
+  const originalErrorHandler = ErrorUtils.getGlobalHandler();
+  ErrorUtils.setGlobalHandler((error, isFatal) => {
+    console.error('========== 全局错误捕获 ==========');
+    console.error('错误类型:', isFatal ? '致命错误' : '非致命错误');
+    console.error('错误信息:', error);
+    console.error('错误堆栈:', error?.stack || '无堆栈信息');
+    console.error('==================================');
+    
+    // 调用原始错误处理器
+    if (originalErrorHandler) {
+      originalErrorHandler(error, isFatal);
+    }
+  });
+}
+
+// 捕获 Promise 未处理的拒绝
+if (typeof global !== 'undefined' && typeof window !== 'undefined') {
+  const originalUnhandledRejection = (window as any).onunhandledrejection;
+  (window as any).onunhandledrejection = (event: any) => {
+    console.error('========== Promise 未处理拒绝 ==========');
+    console.error('错误信息:', event?.reason);
+    console.error('错误堆栈:', event?.reason?.stack || '无堆栈信息');
+    console.error('========================================');
+    
+    if (originalUnhandledRejection) {
+      originalUnhandledRejection.call(window, event);
+    }
+  };
+}
 
 // 全局应用初始化
 let appInitialized = false;

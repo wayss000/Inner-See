@@ -1,14 +1,15 @@
 
 
 import { StyleSheet, Platform } from 'react-native';
+import { CardColors } from '../../../../src/constants/Colors';
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     ...Platform.select({
       ios: {
         shadowColor: '#1f2937',

@@ -12,6 +12,7 @@ import TestRecordItem from './components/TestRecordItem';
 import EmptyState from './components/EmptyState';
 import { DatabaseManager } from '../../src/database/DatabaseManager';
 import { convertDbRecordToUI, PAGINATION_CONFIG } from '../../src/utils/HistoryUtils';
+import { BackgroundGradient } from '../../src/constants/Colors';
 
 interface TestRecord {
   id: string;
@@ -236,7 +237,7 @@ const HistoryScreen: React.FC = () => {
 
   return (
     <LinearGradient
-      colors={['#667eea', '#764ba2']}
+      colors={BackgroundGradient.primary}
       style={styles.container}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}

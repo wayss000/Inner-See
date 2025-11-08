@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, ScrollView } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
+import { PrimaryColors } from '../constants/Colors';
 
 interface AvatarSelectorProps {
   selectedAvatar: string;
@@ -40,7 +41,7 @@ const AvatarSelector: React.FC<AvatarSelectorProps> = ({
           <FontAwesome6 
             name={avatar as any}
             size={32}
-            color={selectedAvatar === avatar ? '#667eea' : '#6b7280'}
+            color={selectedAvatar === avatar ? PrimaryColors.main : '#6b7280'}
           />
         </TouchableOpacity>
       ))}
@@ -66,8 +67,8 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   selectedAvatarItem: {
-    borderColor: '#667eea',
-    backgroundColor: 'rgba(102, 126, 234, 0.2)',
+    borderColor: PrimaryColors.main,
+    backgroundColor: 'rgba(217, 119, 87, 0.2)', // PrimaryColors.main with 0.2 opacity
   },
   disabledAvatarItem: {
     opacity: 0.5,

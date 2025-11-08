@@ -1,6 +1,7 @@
 
 
 import { StyleSheet, Platform } from 'react-native';
+import { PrimaryColors, CardColors } from '../../src/constants/Colors';
 
 export default StyleSheet.create({
   container: {
@@ -64,12 +65,12 @@ export default StyleSheet.create({
     marginBottom: 32,
   },
   testHeaderCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 24,
     padding: 24,
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     ...Platform.select({
       ios: {
         shadowColor: '#1f2937',
@@ -120,7 +121,7 @@ export default StyleSheet.create({
     padding: 16,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     ...Platform.select({
       ios: {
         shadowColor: '#1f2937',
@@ -152,12 +153,12 @@ export default StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.6)',
   },
   testDescriptionCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 24,
     padding: 24,
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     ...Platform.select({
       ios: {
         shadowColor: '#1f2937',
@@ -206,11 +207,11 @@ export default StyleSheet.create({
     lineHeight: 20,
   },
   testNoticeCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 24,
     padding: 24,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     ...Platform.select({
       ios: {
         shadowColor: '#1f2937',
@@ -269,7 +270,7 @@ export default StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#6366f1',
+        shadowColor: PrimaryColors.main,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.37,
         shadowRadius: 16,

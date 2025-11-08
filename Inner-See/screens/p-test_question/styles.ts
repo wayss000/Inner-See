@@ -1,6 +1,7 @@
 
 
 import { StyleSheet, Platform } from 'react-native';
+import { PrimaryColors, CardColors } from '../../src/constants/Colors';
 
 export default StyleSheet.create({
   container: {
@@ -89,7 +90,7 @@ export default StyleSheet.create({
   },
   progressFill: {
     height: '100%',
-    backgroundColor: 'rgba(99, 102, 241, 0.8)',
+    backgroundColor: 'rgba(217, 119, 87, 0.8)', // PrimaryColors.main with 0.8 opacity
     borderRadius: 4,
   },
   progressText: {
@@ -106,11 +107,11 @@ export default StyleSheet.create({
     marginBottom: 32,
   },
   questionCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 24,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -138,14 +139,14 @@ export default StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
   },
   optionCardSelected: {
-    backgroundColor: 'rgba(99, 102, 241, 0.3)',
-    borderColor: 'rgba(99, 102, 241, 0.5)',
+    backgroundColor: 'rgba(217, 119, 87, 0.3)', // PrimaryColors.main with 0.3 opacity
+    borderColor: 'rgba(217, 119, 87, 0.5)', // PrimaryColors.main with 0.5 opacity
     ...Platform.select({
       ios: {
-        shadowColor: '#6366f1',
+        shadowColor: PrimaryColors.main,
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.3,
         shadowRadius: 10,
@@ -173,7 +174,7 @@ export default StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#6366f1',
+    backgroundColor: PrimaryColors.main,
   },
   optionText: {
     fontSize: 16,
@@ -215,12 +216,12 @@ export default StyleSheet.create({
     gap: 8,
   },
   prevButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
   },
   nextButton: {
-    backgroundColor: '#6366f1',
+    backgroundColor: PrimaryColors.main,
   },
   actionButtonText: {
     fontSize: 16,
@@ -238,13 +239,13 @@ export default StyleSheet.create({
     paddingHorizontal: 24,
   },
   modalContent: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 24,
     width: '100%',
     maxWidth: 320,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -304,9 +305,9 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   modalCancelButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: CardColors.background,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: CardColors.border,
   },
   modalConfirmButton: {
     backgroundColor: '#f59e0b',

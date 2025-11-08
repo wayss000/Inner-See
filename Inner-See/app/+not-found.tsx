@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View, Text, Pressable, Platform } from 'react-native';
+import { PrimaryColors } from '../src/constants/Colors';
 
 export default function NotFoundScreen() {
   const router = useRouter();
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 12,
     paddingHorizontal: 24,
-    backgroundColor: '#6366f1',
+    backgroundColor: PrimaryColors.main,
     borderRadius: 9999,
     ...Platform.select({
       ios: {
