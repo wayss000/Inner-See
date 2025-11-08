@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { TextColors, PrimaryColors } from '../../src/constants/Colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
   pageTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     textAlign: 'center',
   },
   headerActions: {
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
   illustrationTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     textAlign: 'center',
   },
   policySection: {
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
   policyItem: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -102,16 +103,16 @@ const styles = StyleSheet.create({
   policyTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 4,
   },
   policyDescription: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
     lineHeight: 16,
   },
   detailedSection: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 12,
     padding: 16,
     marginBottom: 32,
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 16,
     textAlign: 'center',
   },
@@ -129,18 +130,18 @@ const styles = StyleSheet.create({
   detailTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 8,
   },
   detailDescription: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
     lineHeight: 16,
   },
   tipSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 12,
     padding: 12,
   },
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
   tipText: {
     flex: 1,
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
     lineHeight: 16,
   },
 });

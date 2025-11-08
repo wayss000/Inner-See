@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import styles from './styles';
-import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, TextColors } from '../../src/constants/Colors';
 
 const PrivacyPolicyScreen = () => {
   const router = useRouter();
@@ -35,7 +35,7 @@ const PrivacyPolicyScreen = () => {
                 onPress={handleBack}
                 activeOpacity={0.7}
               >
-                <FontAwesome6 name="arrow-left" size={18} color="#ffffff" />
+                <FontAwesome6 name="arrow-left" size={18} color={TextColors.white} />
               </TouchableOpacity>
               <View style={styles.pageTitleSection}>
                 <Text style={styles.pageTitle}>隐私政策</Text>
@@ -58,7 +58,7 @@ const PrivacyPolicyScreen = () => {
             <View style={styles.policySection}>
               <View style={styles.policyItem}>
                 <View style={styles.policyIcon}>
-                  <FontAwesome6 name="user-secret" size={24} color="#3b82f6" />
+                  <FontAwesome6 name="user-secret" size={24} color={PrimaryColors.main} />
                 </View>
                 <View style={styles.policyContent}>
                   <Text style={styles.policyTitle}>无需注册，保护身份</Text>
@@ -70,7 +70,7 @@ const PrivacyPolicyScreen = () => {
 
               <View style={styles.policyItem}>
                 <View style={styles.policyIcon}>
-                  <FontAwesome6 name="database" size={24} color="#10b981" />
+                  <FontAwesome6 name="database" size={24} color={PrimaryColors.secondary} />
                 </View>
                 <View style={styles.policyContent}>
                   <Text style={styles.policyTitle}>数据本地存储</Text>
@@ -82,7 +82,7 @@ const PrivacyPolicyScreen = () => {
 
               <View style={styles.policyItem}>
                 <View style={styles.policyIcon}>
-                  <FontAwesome6 name="brain" size={24} color="#f59e0b" />
+                  <FontAwesome6 name="brain" size={24} color={PrimaryColors.accent} />
                 </View>
                 <View style={styles.policyContent}>
                   <Text style={styles.policyTitle}>AI分析，匿名处理</Text>
@@ -94,7 +94,7 @@ const PrivacyPolicyScreen = () => {
 
               <View style={styles.policyItem}>
                 <View style={styles.policyIcon}>
-                  <FontAwesome6 name="lock" size={24} color="#ef4444" />
+                  <FontAwesome6 name="lock" size={24} color={PrimaryColors.main} />
                 </View>
                 <View style={styles.policyContent}>
                   <Text style={styles.policyTitle}>多重安全保障</Text>
@@ -155,7 +155,7 @@ const PrivacyPolicyScreen = () => {
             {/* 安全提示 */}
             <View style={styles.tipSection}>
               <View style={styles.tipIcon}>
-                <FontAwesome6 name="lightbulb" size={20} color="#fbbf24" />
+                <FontAwesome6 name="lightbulb" size={20} color={PrimaryColors.secondary} />
               </View>
               <Text style={styles.tipText}>
                 温馨提示：为了更好地保护您的隐私，建议您定期备份重要数据，并确保设备的安全性。
