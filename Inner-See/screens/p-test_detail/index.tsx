@@ -7,7 +7,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from './styles';
-import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, TextColors } from '../../src/constants/Colors';
 
 interface TestData {
   title: string;
@@ -188,7 +188,7 @@ const TestDetailScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#667eea', '#764ba2']}
+        colors={BackgroundGradient.primary}
         style={styles.gradientBackground}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -205,7 +205,7 @@ const TestDetailScreen = () => {
               onPress={handleBackPress}
               activeOpacity={0.7}
             >
-              <FontAwesome6 name="arrow-left" size={18} color="#ffffff" />
+              <FontAwesome6 name="arrow-left" size={18} color={PrimaryColors.main} />
             </TouchableOpacity>
             <View style={styles.headerTitleSection}>
               <Text style={styles.pageTitle}>测试详情</Text>
@@ -226,7 +226,7 @@ const TestDetailScreen = () => {
                   <FontAwesome6 
                     name={currentTestData.icon as any} 
                     size={30} 
-                    color="#ffffff" 
+                    color={TextColors.white} 
                   />
                 </LinearGradient>
                 <View style={styles.testTitleSection}>
@@ -245,7 +245,7 @@ const TestDetailScreen = () => {
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                 >
-                  <FontAwesome6 name="clock" size={14} color="#ffffff" />
+                  <FontAwesome6 name="clock" size={14} color={TextColors.white} />
                 </LinearGradient>
                 <Text style={styles.metaValue}>{currentTestData.duration}</Text>
                 <Text style={styles.metaLabel}>预计时长</Text>
@@ -258,7 +258,7 @@ const TestDetailScreen = () => {
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                 >
-                  <FontAwesome6 name="circle-question" size={14} color="#ffffff" />
+                  <FontAwesome6 name="circle-question" size={14} color={PrimaryColors.main} />
                 </LinearGradient>
                 <Text style={styles.metaValue}>{currentTestData.questions}</Text>
                 <Text style={styles.metaLabel}>题目数量</Text>
@@ -271,7 +271,7 @@ const TestDetailScreen = () => {
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                 >
-                  <FontAwesome6 name="star" size={14} color="#ffffff" />
+                  <FontAwesome6 name="star" size={14} color={PrimaryColors.main} />
                 </LinearGradient>
                 <Text style={styles.metaValue}>{currentTestData.difficulty}</Text>
                 <Text style={styles.metaLabel}>难度等级</Text>
@@ -294,7 +294,7 @@ const TestDetailScreen = () => {
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
                       >
-                        <FontAwesome6 name="check" size={10} color="#ffffff" />
+                        <FontAwesome6 name="check" size={10} color={TextColors.white} />
                       </LinearGradient>
                       <Text style={styles.featureText}>{feature}</Text>
                     </View>
@@ -346,7 +346,7 @@ const TestDetailScreen = () => {
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
-              <FontAwesome6 name="play" size={20} color="#ffffff" />
+              <FontAwesome6 name="play" size={20} color={TextColors.white} />
               <Text style={styles.startButtonText}>开始测试</Text>
             </LinearGradient>
           </TouchableOpacity>

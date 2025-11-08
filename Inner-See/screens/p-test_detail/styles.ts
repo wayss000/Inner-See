@@ -1,7 +1,7 @@
 
 
 import { StyleSheet, Platform } from 'react-native';
-import { PrimaryColors, CardColors } from '../../src/constants/Colors';
+import { PrimaryColors, CardColors, TextColors } from '../../src/constants/Colors';
 
 export default StyleSheet.create({
   container: {
@@ -22,7 +22,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    color: '#ffffff',
+    color: TextColors.primary,
     fontSize: 16,
     fontWeight: '500',
   },
@@ -58,7 +58,7 @@ export default StyleSheet.create({
   pageTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   testInfoSection: {
     paddingHorizontal: 24,
@@ -69,19 +69,8 @@ export default StyleSheet.create({
     borderRadius: 24,
     padding: 24,
     marginBottom: 24,
-    borderWidth: 1,
-    borderColor: CardColors.border,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#1f2937',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   testHeaderContent: {
     flexDirection: 'row',
@@ -101,12 +90,12 @@ export default StyleSheet.create({
   testTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 8,
   },
   testCategory: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
   },
   testMetaSection: {
     flexDirection: 'row',
@@ -120,19 +109,8 @@ export default StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: CardColors.border,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#1f2937',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   metaIcon: {
     width: 32,
@@ -145,36 +123,25 @@ export default StyleSheet.create({
   metaValue: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 4,
   },
   metaLabel: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
   },
   testDescriptionCard: {
     backgroundColor: CardColors.background,
     borderRadius: 24,
     padding: 24,
     marginBottom: 24,
-    borderWidth: 1,
-    borderColor: CardColors.border,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#1f2937',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   descriptionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 16,
   },
   testDescription: {
@@ -183,7 +150,7 @@ export default StyleSheet.create({
   descriptionText: {
     fontSize: 16,
     lineHeight: 24,
-    color: 'rgba(255, 255, 255, 0.9)',
+    color: TextColors.primary,
   },
   descriptionFeatures: {
     gap: 12,
@@ -203,26 +170,15 @@ export default StyleSheet.create({
   featureText: {
     flex: 1,
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
     lineHeight: 20,
   },
   testNoticeCard: {
     backgroundColor: CardColors.background,
     borderRadius: 24,
     padding: 24,
-    borderWidth: 1,
-    borderColor: CardColors.border,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#1f2937',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   noticeTitleContainer: {
     flexDirection: 'row',
@@ -233,7 +189,7 @@ export default StyleSheet.create({
   noticeTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   testNotice: {
     gap: 12,
@@ -254,7 +210,7 @@ export default StyleSheet.create({
   noticeText: {
     flex: 1,
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
     lineHeight: 20,
   },
   bottomAction: {

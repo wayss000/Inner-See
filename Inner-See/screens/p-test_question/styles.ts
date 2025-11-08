@@ -1,7 +1,7 @@
 
 
 import { StyleSheet, Platform } from 'react-native';
-import { PrimaryColors, CardColors } from '../../src/constants/Colors';
+import { PrimaryColors, CardColors, TextColors } from '../../src/constants/Colors';
 
 export default StyleSheet.create({
   container: {
@@ -52,12 +52,12 @@ export default StyleSheet.create({
   testTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 2,
   },
   questionProgress: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
   },
   timerButton: {
     width: 40,
@@ -100,7 +100,7 @@ export default StyleSheet.create({
   },
   progressTextItem: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
   },
   questionSection: {
     paddingHorizontal: 24,
@@ -110,24 +110,13 @@ export default StyleSheet.create({
     backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 24,
-    borderWidth: 1,
-    borderColor: CardColors.border,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   questionText: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     lineHeight: 28,
     marginBottom: 16,
   },
@@ -138,8 +127,8 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 12,
     padding: 16,
-    borderWidth: 1,
-    borderColor: CardColors.border,
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   optionCardSelected: {
     backgroundColor: 'rgba(217, 119, 87, 0.3)', // PrimaryColors.main with 0.3 opacity
@@ -164,8 +153,8 @@ export default StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.5)',
+    borderWidth: 2.5, // 增加边框宽度，更明显
+    borderColor: 'rgba(0, 0, 0, 0.3)', // 加深颜色，提高对比度
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -178,7 +167,7 @@ export default StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
-    color: '#ffffff',
+    color: TextColors.primary,
     flex: 1,
   },
   bottomActions: {
@@ -217,8 +206,13 @@ export default StyleSheet.create({
   },
   prevButton: {
     backgroundColor: CardColors.background,
-    borderWidth: 1,
-    borderColor: CardColors.border,
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
+  },
+  prevButtonText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: TextColors.primary,
   },
   nextButton: {
     backgroundColor: PrimaryColors.main,
@@ -226,7 +220,7 @@ export default StyleSheet.create({
   actionButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#ffffff',
+    color: TextColors.white,
   },
   disabledButton: {
     opacity: 0.5,
@@ -244,19 +238,8 @@ export default StyleSheet.create({
     padding: 24,
     width: '100%',
     maxWidth: 320,
-    borderWidth: 1,
-    borderColor: CardColors.border,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   modalHeader: {
     alignItems: 'center',
@@ -283,13 +266,13 @@ export default StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 8,
     textAlign: 'center',
   },
   modalDescription: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -306,8 +289,8 @@ export default StyleSheet.create({
   },
   modalCancelButton: {
     backgroundColor: CardColors.background,
-    borderWidth: 1,
-    borderColor: CardColors.border,
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   modalConfirmButton: {
     backgroundColor: '#f59e0b',
@@ -318,7 +301,7 @@ export default StyleSheet.create({
   modalButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#ffffff',
+    color: TextColors.white,
   },
 });
 

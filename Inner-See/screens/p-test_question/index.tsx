@@ -9,7 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ApiService } from '../../src/services/ApiService';
 import { DatabaseManager } from '../../src/database/DatabaseManager';
 import styles from './styles';
-import { BackgroundGradient } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, TextColors } from '../../src/constants/Colors';
 
 interface QuestionOption {
   value: number | string;
@@ -273,7 +273,7 @@ const TestQuestionScreen: React.FC = () => {
       <LinearGradient colors={BackgroundGradient.primary} style={styles.container}>
         <SafeAreaView style={styles.safeArea}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, paddingHorizontal: 24 }}>
-            <Text style={{ color: '#ffffff', marginTop: 16, fontSize: 16 }}>加载测试题目中...</Text>
+            <Text style={{ color: TextColors.primary, marginTop: 16, fontSize: 16 }}>加载测试题目中...</Text>
           </View>
         </SafeAreaView>
       </LinearGradient>
@@ -524,7 +524,7 @@ const TestQuestionScreen: React.FC = () => {
   };
 
   return (
-    <LinearGradient colors={['#667eea', '#764ba2']} style={styles.container}>
+    <LinearGradient colors={BackgroundGradient.primary} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
           {/* 顶部导航栏 */}
@@ -535,7 +535,7 @@ const TestQuestionScreen: React.FC = () => {
                 onPress={handleBackPress}
                 activeOpacity={0.8}
               >
-                <FontAwesome6 name="arrow-left" size={18} color="#ffffff" />
+                <FontAwesome6 name="arrow-left" size={18} color={PrimaryColors.main} />
               </TouchableOpacity>
               <View style={styles.testTitleSection}>
                 <Text style={styles.testTitle}>{currentTest.title}</Text>
@@ -545,7 +545,7 @@ const TestQuestionScreen: React.FC = () => {
               </View>
             </View>
             <TouchableOpacity style={styles.timerButton} activeOpacity={0.8}>
-              <FontAwesome6 name="clock" size={18} color="#ffffff" />
+              <FontAwesome6 name="clock" size={18} color={PrimaryColors.main} />
             </TouchableOpacity>
           </View>
 
@@ -579,8 +579,8 @@ const TestQuestionScreen: React.FC = () => {
             disabled={currentQuestionIndex === 0}
             activeOpacity={0.8}
           >
-            <FontAwesome6 name="arrow-left" size={16} color="#ffffff" />
-            <Text style={styles.actionButtonText}>上一题</Text>
+            <FontAwesome6 name="arrow-left" size={16} color={PrimaryColors.main} />
+            <Text style={styles.prevButtonText}>上一题</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.actionButton, styles.nextButton, !hasAnswered && styles.disabledButton]}
@@ -594,7 +594,7 @@ const TestQuestionScreen: React.FC = () => {
             <FontAwesome6 
               name={isLastQuestion ? "check" : "arrow-right"} 
               size={16} 
-              color="#ffffff" 
+              color={PrimaryColors.main} 
             />
           </TouchableOpacity>
         </View>
@@ -610,7 +610,7 @@ const TestQuestionScreen: React.FC = () => {
             <View style={styles.modalContent}>
               <View style={styles.modalHeader}>
                 <View style={styles.abandonModalIcon}>
-                  <FontAwesome6 name="triangle-exclamation" size={24} color="#ffffff" />
+                  <FontAwesome6 name="triangle-exclamation" size={24} color={TextColors.white} />
                 </View>
                 <Text style={styles.modalTitle}>确认放弃测试？</Text>
                 <Text style={styles.modalDescription}>
@@ -648,7 +648,7 @@ const TestQuestionScreen: React.FC = () => {
             <View style={styles.modalContent}>
               <View style={styles.modalHeader}>
                 <View style={styles.submitModalIcon}>
-                  <FontAwesome6 name="check" size={24} color="#ffffff" />
+                  <FontAwesome6 name="check" size={24} color={TextColors.white} />
                 </View>
                 <Text style={styles.modalTitle}>完成测试</Text>
                 <Text style={styles.modalDescription}>
