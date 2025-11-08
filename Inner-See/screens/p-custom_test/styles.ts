@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { TextColors } from '../../src/constants/Colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,12 +30,12 @@ const styles = StyleSheet.create({
   pageTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 4,
   },
   pageSubtitle: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
   },
   scrollView: {
     flex: 1,
@@ -50,13 +51,13 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 8,
     textAlign: 'center',
   },
   sectionSubtitle: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.7)',
+    color: TextColors.secondary,
     textAlign: 'center',
     marginBottom: 32,
   },
@@ -80,12 +81,12 @@ const styles = StyleSheet.create({
   modeTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 8,
   },
   modeDescription: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.7)',
+    color: TextColors.secondary,
     textAlign: 'center',
   },
   categoryNameSelected: {
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
   },
   hintText: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
     textAlign: 'center',
   },
   textInputContainer: {
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: 120,
-    color: '#ffffff',
+    color: TextColors.primary,
     fontSize: 16,
     textAlignVertical: 'top',
     padding: 16,
