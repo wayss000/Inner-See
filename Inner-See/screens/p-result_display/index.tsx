@@ -673,8 +673,7 @@ const ResultDisplayScreen = () => {
                 style={styles.aiModalScrollView}
                 contentContainerStyle={{ 
                   padding: 16, 
-                  paddingBottom: 150, // 增加底部内边距，确保所有内容可见且不被遮挡
-                  // 移除 flexGrow: 1，让内容自然展开
+                  paddingBottom: 20, // 减少底部内边距，按钮区域已经有自己的间距
                 }}
                 showsVerticalScrollIndicator={true}
                 nestedScrollEnabled={true}

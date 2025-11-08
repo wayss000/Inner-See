@@ -1,7 +1,9 @@
 
 
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform, Dimensions } from 'react-native';
 import { PrimaryColors, CardColors, TextColors } from '../../src/constants/Colors';
+
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export default StyleSheet.create({
   container: {
@@ -325,8 +327,10 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    padding: 24,
-    paddingBottom: 34,
+    paddingHorizontal: 24, // 只保留水平内边距
+    paddingVertical: 16, // 减少垂直内边距
+    paddingTop: 12, // 进一步减少顶部内边距
+    paddingBottom: 20, // 减少底部内边距
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -341,39 +345,39 @@ export default StyleSheet.create({
   },
   actionsContainer: {
     flexDirection: 'row',
-    gap: 16,
+    gap: 12, // 减少按钮间距
   },
   shareButton: {
     flex: 1,
-    borderRadius: 16,
+    borderRadius: 12, // 减少圆角
     overflow: 'hidden',
   },
   shareButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    gap: 8,
+    paddingVertical: 14, // 减少垂直内边距
+    paddingHorizontal: 20, // 减少水平内边距
+    gap: 6, // 减少图标和文字间距
   },
   shareButtonText: {
-    fontSize: 16,
+    fontSize: 15, // 稍微减小字体
     fontWeight: '600',
     color: TextColors.white,
   },
   homeButton: {
     flex: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 16,
+    borderRadius: 12, // 减少圆角
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    gap: 8,
+    paddingVertical: 14, // 减少垂直内边距
+    paddingHorizontal: 20, // 减少水平内边距
+    gap: 6, // 减少图标和文字间距
   },
   homeButtonText: {
-    fontSize: 16,
+    fontSize: 15, // 稍微减小字体
     fontWeight: '600',
     color: TextColors.primary,
   },
@@ -471,7 +475,7 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
+    padding: 8, // 进一步减少padding，让弹窗占据更多屏幕空间
     zIndex: 1000,
     // 确保overlay可见
     minHeight: 400,
@@ -481,8 +485,8 @@ export default StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 24,
     width: '100%',
-    maxHeight: '92%', // 增加最大高度到92%，占据更多屏幕空间
-    minHeight: 500, // 增加最小高度
+    maxHeight: SCREEN_HEIGHT * 0.92, // 使用屏幕高度的92%，在安卓设备上占据更多空间
+    minHeight: Math.min(SCREEN_HEIGHT * 0.7, 600), // 最小高度为屏幕的70%或600px，取较小值
     // 移除 overflow: 'hidden'，允许内容完全显示
     flexDirection: 'column', // 确保垂直布局
     // 确保内容可见
@@ -496,7 +500,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 16,
+    padding: 12, // 减少头部内边距，从16减少到12
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 0, 0, 0.1)',
   },

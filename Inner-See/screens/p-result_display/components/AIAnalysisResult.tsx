@@ -93,11 +93,9 @@ const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, on
         </View>
       </View>
       
-      {/* 底部间距，确保内容不被按钮遮挡 */}
-      <View style={{ height: 20 }} />
-      
       {/* 操作按钮区域 */}
-      <View style={styles.actionButtons}>
+      <View style={styles.actionButtonsContainer}>
+        <View style={styles.actionButtons}>
         <TouchableOpacity style={styles.closeButton} onPress={onClose}>
           <Text style={styles.closeButtonText}>关闭</Text>
         </TouchableOpacity>
@@ -112,6 +110,7 @@ const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, on
         >
           <Text style={styles.regenerateButtonText}>重新生成</Text>
         </TouchableOpacity>
+      </View>
       </View>
     </View>
   );
@@ -139,7 +138,7 @@ const styles = StyleSheet.create({
   },
   content: {
     width: '100%',
-    paddingBottom: 100, // 增加底部内边距，确保所有内容可见
+    paddingBottom: 20, // 减少底部内边距，只保留必要的间距
     // 移除 minHeight，让内容根据实际内容自适应高度
     backgroundColor: 'transparent', // 确保背景透明，内容可见
   },
@@ -189,20 +188,24 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'left',
   },
+  actionButtonsContainer: {
+    marginTop: 16, // 在按钮上方添加间距
+    paddingBottom: 8, // 减少底部间距
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0, 0, 0, 0.1)',
+  },
   actionButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0, 0, 0, 0.1)',
+    paddingVertical: 12, // 增加按钮内边距，让按钮更易点击
   },
   closeButton: {
     flex: 1,
     backgroundColor: '#6b7280',
     borderRadius: 8,
-    paddingVertical: 12,
+    paddingVertical: 10, // 减少按钮内边距，从12减少到10
     marginRight: 8,
     alignItems: 'center',
   },
@@ -215,7 +218,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#3b82f6',
     borderRadius: 8,
-    paddingVertical: 12,
+    paddingVertical: 10, // 减少按钮内边距，从12减少到10
     marginLeft: 8,
     alignItems: 'center',
   },
