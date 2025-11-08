@@ -434,14 +434,63 @@ const TestQuestionScreen: React.FC = () => {
     const maxPossibleScore = currentTest.questions.length * 5; // 假设每题最高5分
     const percentage = (score / maxPossibleScore) * 100;
     
-    if (percentage < 20) {
-      return '正常';
-    } else if (percentage < 40) {
-      return '轻度异常';
-    } else if (percentage < 60) {
-      return '中度异常';
+    // 根据测试类型生成不同的结果摘要
+    if (testTypeId === 'mental-health' || testTypeId === 'stress' || testTypeId === 'anxiety') {
+      // 心理健康相关测试
+      if (percentage < 20) {
+        return '正常';
+      } else if (percentage < 40) {
+        return '轻度异常';
+      } else if (percentage < 60) {
+        return '中度异常';
+      } else {
+        return '重度异常';
+      }
+    } else if (testTypeId === 'personality') {
+      // 人格测试
+      return '已完成人格评估';
+    } else if (testTypeId === 'cognitive') {
+      // 认知能力测试
+      if (percentage < 30) {
+        return '认知能力偏低';
+      } else if (percentage < 60) {
+        return '认知能力中等';
+      } else {
+        return '认知能力优秀';
+      }
+    } else if (testTypeId === 'career') {
+      // 职业发展测试
+      if (percentage < 30) {
+        return '职业发展意识不足';
+      } else if (percentage < 60) {
+        return '职业发展意识良好';
+      } else {
+        return '职业发展意识优秀';
+      }
+    } else if (testTypeId === 'relationship') {
+      // 人际关系测试
+      if (percentage < 30) {
+        return '人际关系能力较弱';
+      } else if (percentage < 60) {
+        return '人际关系能力良好';
+      } else {
+        return '人际关系能力优秀';
+      }
+    } else if (testTypeId === 'quality-of-life') {
+      // 生活质量测试
+      if (percentage < 30) {
+        return '生活质量较低';
+      } else if (percentage < 60) {
+        return '生活质量中等';
+      } else {
+        return '生活质量较高';
+      }
+    } else if (testTypeId === 'custom') {
+      // 自定义测试
+      return '自定义测试完成';
     } else {
-      return '重度异常';
+      // 默认情况
+      return '测试完成';
     }
   };
 
@@ -451,14 +500,63 @@ const TestQuestionScreen: React.FC = () => {
     const maxPossibleScore = currentTest.questions.length * 5;
     const percentage = (score / maxPossibleScore) * 100;
     
-    if (percentage < 20) {
-      return '您的测试结果正常，继续保持良好的生活习惯。';
-    } else if (percentage < 40) {
-      return '您有轻度异常，建议适当调整生活方式，增加运动和社交活动。';
-    } else if (percentage < 60) {
-      return '您有中度异常，建议寻求专业心理咨询师的帮助。';
+    // 根据测试类型生成不同的改善建议
+    if (testTypeId === 'mental-health' || testTypeId === 'stress' || testTypeId === 'anxiety') {
+      // 心理健康相关测试
+      if (percentage < 20) {
+        return '您的测试结果正常，继续保持良好的生活习惯。';
+      } else if (percentage < 40) {
+        return '您有轻度异常，建议适当调整生活方式，增加运动和社交活动。';
+      } else if (percentage < 60) {
+        return '您有中度异常，建议寻求专业心理咨询师的帮助。';
+      } else {
+        return '您有重度异常，强烈建议尽快联系专业心理医生进行评估。';
+      }
+    } else if (testTypeId === 'personality') {
+      // 人格测试
+      return '您已完成人格特质分析，建议结合测试结果深入了解自己的性格特点，发挥优势，改善不足。';
+    } else if (testTypeId === 'cognitive') {
+      // 认知能力测试
+      if (percentage < 30) {
+        return '建议进行认知训练，如阅读、 puzzles、学习新技能等，以提升认知能力。';
+      } else if (percentage < 60) {
+        return '您的认知能力良好，继续保持学习和思考的习惯。';
+      } else {
+        return '您的认知能力优秀，可以尝试更具挑战性的认知活动。';
+      }
+    } else if (testTypeId === 'career') {
+      // 职业发展测试
+      if (percentage < 30) {
+        return '建议进行职业规划咨询，明确职业目标和发展方向。';
+      } else if (percentage < 60) {
+        return '您的职业发展意识良好，建议制定具体的职业发展计划。';
+      } else {
+        return '您的职业发展意识优秀，可以考虑职业晋升或转型的机会。';
+      }
+    } else if (testTypeId === 'relationship') {
+      // 人际关系测试
+      if (percentage < 30) {
+        return '建议学习沟通技巧，提升人际交往能力。';
+      } else if (percentage < 60) {
+        return '您的人际关系能力良好，继续保持良好的沟通习惯。';
+      } else {
+        return '您的人际关系能力优秀，可以成为他人的人际关系指导者。';
+      }
+    } else if (testTypeId === 'quality-of-life') {
+      // 生活质量测试
+      if (percentage < 30) {
+        return '建议改善生活习惯，包括规律作息、健康饮食和适量运动。';
+      } else if (percentage < 60) {
+        return '您的生活质量中等，可以进一步优化生活习惯。';
+      } else {
+        return '您的生活质量较高，继续保持健康的生活方式。';
+      }
+    } else if (testTypeId === 'custom') {
+      // 自定义测试
+      return '这是您自定义的心理测试结果，建议根据具体测试内容进行相应调整。';
     } else {
-      return '您有重度异常，强烈建议尽快联系专业心理医生进行评估。';
+      // 默认情况
+      return '测试完成，建议根据测试结果进行相应的调整和改善。';
     }
   };
 

@@ -1063,7 +1063,30 @@ const ResultDisplayScreen = () => {
                   const recordData = {
                     id: recordId,
                     userId: currentUser?.id || 'default-user',
-                    testTypeId: testResult.testName === '抑郁症评估' ? 'mental-health' : 'mbti',
+                    testTypeId: (() => {
+                      // 根据测试名称确定正确的测试类型ID
+                      if (testResult.testName.includes('心理') || testResult.testName.includes('抑郁')) {
+                        return 'mental-health';
+                      } else if (testResult.testName.includes('人格') || testResult.testName.includes('MBTI') || testResult.testName.includes('性格')) {
+                        return 'personality';
+                      } else if (testResult.testName.includes('认知')) {
+                        return 'cognitive';
+                      } else if (testResult.testName.includes('职业')) {
+                        return 'career';
+                      } else if (testResult.testName.includes('人际') || testResult.testName.includes('关系')) {
+                        return 'relationship';
+                      } else if (testResult.testName.includes('生活') || testResult.testName.includes('质量')) {
+                        return 'quality-of-life';
+                      } else if (testResult.testName.includes('自定义')) {
+                        return 'custom';
+                      } else if (testResult.testName.includes('压力')) {
+                        return 'stress';
+                      } else if (testResult.testName.includes('焦虑')) {
+                        return 'anxiety';
+                      } else {
+                        return 'mental-health'; // 默认值
+                      }
+                    })(),
                     startTime: Date.now(),
                     endTime: Date.now(),
                     totalScore: testResult.score,

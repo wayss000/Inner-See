@@ -15,7 +15,7 @@ export interface TestTypeConfig {
 export const TEST_TYPE_CONFIGS: Record<string, TestTypeConfig> = {
   'mental-health': {
     id: 'mental-health',
-    name: '抑郁症评估',
+    name: '心理健康评估',
     icon: 'heart',
     gradientColors: ['#f472b6', '#a855f7'],
     levelColor: '#fb923c'
@@ -58,6 +58,27 @@ export const TEST_TYPE_CONFIGS: Record<string, TestTypeConfig> = {
     icon: 'magic',
     gradientColors: ['#f59e0b', '#d97706'],
     levelColor: '#f59e0b'
+  },
+  'stress': {
+    id: 'stress',
+    name: '压力水平评估',
+    icon: 'wave-pulse',
+    gradientColors: ['#f97316', '#ef4444'],
+    levelColor: '#fbbf24'
+  },
+  'anxiety': {
+    id: 'anxiety',
+    name: '焦虑症筛查',
+    icon: 'wind',
+    gradientColors: ['#8b5cf6', '#ec4899'],
+    levelColor: '#f472b6'
+  },
+  'mbti': {
+    id: 'mbti',
+    name: 'MBTI性格测试',
+    icon: 'users-gear',
+    gradientColors: ['#06b6d4', '#60a5fa'],
+    levelColor: '#3b82f6'
   }
 };
 
