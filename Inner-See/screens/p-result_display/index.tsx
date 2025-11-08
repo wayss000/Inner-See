@@ -13,7 +13,7 @@ import AIAskButton from './components/AIAskButton';
 import AISupplementInput from './components/AISupplementInput';
 import AIAnalysisResultComponent from './components/AIAnalysisResult';
 import styles from './styles';
-import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, TextColors } from '../../src/constants/Colors';
 
 interface TestResult {
   id?: string;
@@ -396,14 +396,14 @@ const ResultDisplayScreen = () => {
   }
 
   return (
-    <LinearGradient colors={['#667eea', '#764ba2']} style={styles.container}>
+    <LinearGradient colors={BackgroundGradient.primary} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         {/* 顶部导航栏 */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <View style={styles.headerLeft}>
               <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-                <FontAwesome6 name="arrow-left" size={18} color="#ffffff" />
+                <FontAwesome6 name="arrow-left" size={18} color={PrimaryColors.main} />
               </TouchableOpacity>
               <View style={styles.headerTitleSection}>
                 <Text style={styles.pageTitle}>测试结果</Text>
@@ -411,7 +411,7 @@ const ResultDisplayScreen = () => {
               </View>
             </View>
             <TouchableOpacity style={styles.shareButtonHeader} onPress={handleSharePress}>
-              <FontAwesome6 name="share-nodes" size={18} color="#ffffff" />
+              <FontAwesome6 name="share-nodes" size={18} color={PrimaryColors.main} />
             </TouchableOpacity>
           </View>
         </View>
@@ -444,11 +444,11 @@ const ResultDisplayScreen = () => {
               
               <View style={styles.testMeta}>
                 <View style={styles.testMetaItem}>
-                  <FontAwesome6 name="clock" size={14} color="rgba(255, 255, 255, 0.8)" />
+                  <FontAwesome6 name="clock" size={14} color={TextColors.secondary} />
                   <Text style={styles.testMetaText}>用时 6分钟</Text>
                 </View>
                 <View style={styles.testMetaItem}>
-                  <FontAwesome6 name="calendar" size={14} color="rgba(255, 255, 255, 0.8)" />
+                  <FontAwesome6 name="calendar" size={14} color={TextColors.secondary} />
                   <Text style={styles.testMetaText}>今天 14:30</Text>
                 </View>
               </View>
@@ -463,7 +463,7 @@ const ResultDisplayScreen = () => {
                   colors={['#60a5fa', '#06b6d4']}
                   style={styles.sectionIcon}
                 >
-                  <FontAwesome6 name="lightbulb" size={18} color="#ffffff" />
+                  <FontAwesome6 name="lightbulb" size={18} color={PrimaryColors.main} />
                 </LinearGradient>
                 <Text style={styles.sectionTitle}>结果解读</Text>
               </View>
@@ -486,7 +486,7 @@ const ResultDisplayScreen = () => {
                   colors={['#4ade80', '#3b82f6']}
                   style={styles.sectionIcon}
                 >
-                  <FontAwesome6 name="heart" size={18} color="#ffffff" />
+                  <FontAwesome6 name="heart" size={18} color={PrimaryColors.main} />
                 </LinearGradient>
                 <Text style={styles.sectionTitle}>改善建议</Text>
               </View>
@@ -495,7 +495,7 @@ const ResultDisplayScreen = () => {
                 {testResult.suggestions.map((suggestion, index) => (
                   <View key={index} style={styles.suggestionItem}>
                     <View style={styles.suggestionIcon}>
-                      <FontAwesome6 name={suggestion.icon as any} size={14} color="#ffffff" />
+                      <FontAwesome6 name={suggestion.icon as any} size={14} color={TextColors.white} />
                     </View>
                     <View style={styles.suggestionContent}>
                       <Text style={styles.suggestionTitle}>{suggestion.title}</Text>
@@ -515,7 +515,7 @@ const ResultDisplayScreen = () => {
                   colors={['#a78bfa', '#ec4899']}
                   style={styles.sectionIcon}
                 >
-                  <FontAwesome6 name="book" size={18} color="#ffffff" />
+                  <FontAwesome6 name="book" size={18} color={PrimaryColors.main} />
                 </LinearGradient>
                 <Text style={styles.sectionTitle}>专业参考</Text>
               </View>
@@ -563,7 +563,7 @@ const ResultDisplayScreen = () => {
                     colors={['#f59e0b', '#eab308']}
                     style={styles.sectionIcon}
                   >
-                    <FontAwesome6 name="list-ol" size={18} color="#ffffff" />
+                    <FontAwesome6 name="list-ol" size={18} color={PrimaryColors.main} />
                   </LinearGradient>
                   <Text style={styles.sectionTitle}>答题详情</Text>
                 </View>
@@ -600,12 +600,12 @@ const ResultDisplayScreen = () => {
                 colors={[PrimaryColors.main, PrimaryColors.secondary]}
                 style={styles.shareButtonGradient}
               >
-                <FontAwesome6 name="share-nodes" size={16} color="#ffffff" />
+                <FontAwesome6 name="share-nodes" size={16} color={TextColors.white} />
                 <Text style={styles.shareButtonText}>分享结果</Text>
               </LinearGradient>
             </TouchableOpacity>
             <TouchableOpacity style={styles.homeButton} onPress={handleHomePress}>
-              <FontAwesome6 name="house" size={16} color="#ffffff" />
+              <FontAwesome6 name="house" size={16} color={PrimaryColors.main} />
               <Text style={styles.homeButtonText}>返回首页</Text>
             </TouchableOpacity>
           </View>
@@ -640,15 +640,24 @@ const ResultDisplayScreen = () => {
             <FontAwesome6
               name={getButtonIconName()}
               size={18}
-              color="#ffffff"
+              color={TextColors.white}
             />
           </LinearGradient>
         </TouchableOpacity>
+      </SafeAreaView>
 
-        {/* AI分析结果弹窗 */}
-        {showAiResult && (aiAnalysisState.result || aiAnalysisState.status === 'analyzing') && (
-          <View style={styles.aiModalOverlay}>
-            <View style={styles.aiModalContent}>
+      {/* AI分析结果弹窗 - 移到SafeAreaView外部 */}
+      {(() => {
+        console.log('弹窗渲染检查:', {
+          showAiResult,
+          hasResult: !!aiAnalysisState.result,
+          status: aiAnalysisState.status,
+          shouldShow: showAiResult && (aiAnalysisState.result || aiAnalysisState.status === 'analyzing')
+        });
+        return showAiResult && (aiAnalysisState.result || aiAnalysisState.status === 'analyzing');
+      })() && (
+        <View style={styles.aiModalOverlay}>
+          <View style={styles.aiModalContent}>
               <View style={styles.aiModalHeader}>
                 <Text style={styles.aiModalTitle}>AI深度分析</Text>
                 <TouchableOpacity
@@ -660,7 +669,16 @@ const ResultDisplayScreen = () => {
                   <FontAwesome6 name="times" size={16} color="#6b7280" />
                 </TouchableOpacity>
               </View>
-              <ScrollView style={styles.aiModalScrollView}>
+              <ScrollView 
+                style={styles.aiModalScrollView}
+                contentContainerStyle={{ 
+                  padding: 16, 
+                  paddingBottom: 100, // 大幅增加底部内边距，确保所有内容可见
+                  flexGrow: 1, // 确保内容可以完整显示
+                }}
+                showsVerticalScrollIndicator={true}
+                nestedScrollEnabled={true}
+              >
                 <AIAnalysisResultComponent
                   result={aiAnalysisState.result || {
                     currentSituation: 'AI正在分析您的测试结果...',
@@ -705,11 +723,11 @@ const ResultDisplayScreen = () => {
           </View>
         )}
 
-        {/* AI补充信息输入弹窗 */}
-        <AISupplementInput
-          visible={showSupplementInput}
-          onClose={() => setShowSupplementInput(false)}
-          onSubmit={async (supplement) => {
+      {/* AI补充信息输入弹窗 */}
+      <AISupplementInput
+        visible={showSupplementInput}
+        onClose={() => setShowSupplementInput(false)}
+        onSubmit={async (supplement) => {
             setShowSupplementInput(false);
             setAiSupplement(supplement);
             
@@ -851,7 +869,6 @@ const ResultDisplayScreen = () => {
           }}
           loading={aiButtonState === 'loading'}
         />
-      </SafeAreaView>
     </LinearGradient>
   );
 };

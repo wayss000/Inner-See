@@ -2,8 +2,9 @@ import React from 'react';
 import { View, Text, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
+import MarkdownRenderer from './MarkdownRenderer';
 import { AIAnalysisResult as AIResultType } from '../../../src/types/AITypes';
-import { PrimaryColors } from '../../../src/constants/Colors';
+import { PrimaryColors, TextColors } from '../../../src/constants/Colors';
 
 const { width } = Dimensions.get('window');
 
@@ -14,6 +15,20 @@ interface AIAnalysisResultProps {
 }
 
 const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, onClose, onRegenerate }) => {
+  // 添加调试信息
+  console.log('AIAnalysisResultComponent - result:', result);
+  console.log('AIAnalysisResultComponent - currentSituation:', result?.currentSituation);
+  console.log('AIAnalysisResultComponent - adjustmentSuggestions:', result?.adjustmentSuggestions);
+  console.log('AIAnalysisResultComponent - 注意事项:', result?.注意事项);
+
+  if (!result) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>暂无数据</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -21,7 +36,7 @@ const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, on
         <Text style={styles.title}>AI心理分析报告</Text>
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <View style={styles.content}>
         {/* 当前情况分析 */}
         <LinearGradient
           colors={['#60a5fa', '#3b82f6']}
@@ -33,7 +48,11 @@ const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, on
             <FontAwesome6 name="chart-line" size={20} color="#ffffff" />
             <Text style={styles.sectionTitle}>当前情况分析</Text>
           </View>
-          <Text style={styles.sectionContent}>{result.currentSituation}</Text>
+          {result.currentSituation ? (
+            <MarkdownRenderer>{result.currentSituation}</MarkdownRenderer>
+          ) : (
+            <Text style={styles.sectionContent}>暂无内容</Text>
+          )}
         </LinearGradient>
 
         {/* 调整建议 */}
@@ -47,7 +66,13 @@ const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, on
             <FontAwesome6 name="lightbulb" size={20} color="#ffffff" />
             <Text style={styles.sectionTitle}>调整建议</Text>
           </View>
-          <Text style={styles.sectionContent}>{result.adjustmentSuggestions}</Text>
+          {result.adjustmentSuggestions ? (
+            <View style={{ minHeight: 20 }}>
+              <MarkdownRenderer>{result.adjustmentSuggestions}</MarkdownRenderer>
+            </View>
+          ) : (
+            <Text style={styles.sectionContent}>暂无内容</Text>
+          )}
         </LinearGradient>
 
         {/* 注意事项 */}
@@ -61,7 +86,11 @@ const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, on
             <FontAwesome6 name="exclamation-triangle" size={20} color="#ffffff" />
             <Text style={styles.sectionTitle}>注意事项</Text>
           </View>
-          <Text style={styles.sectionContent}>{result.注意事项}</Text>
+          {result.注意事项 ? (
+            <MarkdownRenderer>{result.注意事项}</MarkdownRenderer>
+          ) : (
+            <Text style={styles.sectionContent}>暂无内容</Text>
+          )}
         </LinearGradient>
 
         {/* 免责声明 */}
@@ -69,7 +98,10 @@ const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, on
           <FontAwesome6 name="info-circle" size={16} color="#6b7280" />
           <Text style={styles.disclaimerText}>{result.disclaimer}</Text>
         </View>
-      </ScrollView>
+      </View>
+      
+      {/* 底部间距，确保内容不被按钮遮挡 */}
+      <View style={{ height: 20 }} />
       
       {/* 操作按钮区域 */}
       <View style={styles.actionButtons}>
@@ -94,8 +126,9 @@ const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, on
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
-    marginHorizontal: 20,
+    width: '100%',
+    minHeight: 200, // 确保容器有最小高度
+    backgroundColor: 'transparent', // 确保背景透明
   },
   header: {
     flexDirection: 'row',
@@ -112,12 +145,16 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   content: {
-    flex: 1,
+    width: '100%',
+    paddingBottom: 80, // 大幅增加底部内边距，确保所有内容可见
+    minHeight: 200, // 确保内容区域有最小高度
+    backgroundColor: 'transparent', // 确保背景透明，内容可见
   },
   section: {
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
+    minHeight: 50, // 确保section有最小高度
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

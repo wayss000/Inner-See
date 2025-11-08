@@ -1,7 +1,7 @@
 
 
 import { StyleSheet, Platform } from 'react-native';
-import { PrimaryColors, CardColors } from '../../src/constants/Colors';
+import { PrimaryColors, CardColors, TextColors } from '../../src/constants/Colors';
 
 export default StyleSheet.create({
   container: {
@@ -16,7 +16,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    color: '#ffffff',
+    color: TextColors.primary,
     fontSize: 16,
     fontWeight: '500',
   },
@@ -60,11 +60,11 @@ export default StyleSheet.create({
   pageTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   testName: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
     marginTop: 4,
   },
   shareButtonHeader: {
@@ -98,17 +98,8 @@ export default StyleSheet.create({
     borderRadius: 24,
     padding: 32,
     alignItems: 'center',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   scoreCircleContainer: {
     marginBottom: 24,
@@ -146,7 +137,7 @@ export default StyleSheet.create({
   levelTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
     textAlign: 'center',
     marginBottom: 8,
   },
@@ -168,7 +159,7 @@ export default StyleSheet.create({
   },
   levelRangeText: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
   },
   testMeta: {
     flexDirection: 'row',
@@ -182,7 +173,7 @@ export default StyleSheet.create({
   },
   testMetaText: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
   },
   interpretationSection: {
     paddingHorizontal: 24,
@@ -192,17 +183,8 @@ export default StyleSheet.create({
     backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 24,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -220,7 +202,7 @@ export default StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   interpretationContent: {
     gap: 12,
@@ -228,7 +210,7 @@ export default StyleSheet.create({
   interpretationText: {
     fontSize: 16,
     lineHeight: 24,
-    color: 'rgba(255, 255, 255, 0.9)',
+    color: TextColors.primary,
   },
   suggestionsSection: {
     paddingHorizontal: 24,
@@ -238,17 +220,8 @@ export default StyleSheet.create({
     backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 24,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   suggestionsList: {
     gap: 16,
@@ -273,13 +246,13 @@ export default StyleSheet.create({
   suggestionTitle: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 4,
   },
   suggestionText: {
     fontSize: 14,
     lineHeight: 20,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
   },
   referencesSection: {
     paddingHorizontal: 24,
@@ -289,17 +262,8 @@ export default StyleSheet.create({
     backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 24,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   referencesContent: {
     gap: 16,
@@ -312,13 +276,13 @@ export default StyleSheet.create({
   referenceTitle: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 8,
   },
   referenceText: {
     fontSize: 14,
     lineHeight: 20,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
     marginBottom: 8,
   },
   referenceScoring: {
@@ -326,7 +290,7 @@ export default StyleSheet.create({
   },
   referenceScoringText: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
   },
   emergencyNotice: {
     backgroundColor: 'rgba(239, 68, 68, 0.2)',
@@ -395,7 +359,7 @@ export default StyleSheet.create({
   shareButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.white,
   },
   homeButton: {
     flex: 1,
@@ -411,7 +375,7 @@ export default StyleSheet.create({
   homeButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
 
   // 答题详情区域样式
@@ -423,17 +387,8 @@ export default StyleSheet.create({
     backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 24,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   questionDetailsList: {
     gap: 16,
@@ -463,7 +418,7 @@ export default StyleSheet.create({
   questionText: {
     fontSize: 16,
     lineHeight: 24,
-    color: 'rgba(255, 255, 255, 0.9)',
+    color: TextColors.primary,
     marginBottom: 8,
   },
   userAnswerSection: {
@@ -481,7 +436,7 @@ export default StyleSheet.create({
   },
   userAnswerText: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
   },
 
   // AI分析区域样式
@@ -493,17 +448,8 @@ export default StyleSheet.create({
     backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 24,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   aiContent: {
     alignItems: 'center',
@@ -512,7 +458,7 @@ export default StyleSheet.create({
   aiDescription: {
     fontSize: 16,
     lineHeight: 24,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
     textAlign: 'center',
     marginBottom: 16,
   },
@@ -527,13 +473,24 @@ export default StyleSheet.create({
     alignItems: 'center',
     padding: 24,
     zIndex: 1000,
+    // 确保overlay可见
+    minHeight: 400,
+    minWidth: 300,
   },
   aiModalContent: {
     backgroundColor: '#ffffff',
     borderRadius: 24,
     width: '100%',
-    maxHeight: '80%',
+    maxHeight: '92%', // 增加最大高度到92%，占据更多屏幕空间
+    minHeight: 500, // 增加最小高度
     overflow: 'hidden',
+    flexDirection: 'column', // 确保垂直布局
+    // 确保内容可见
+    elevation: 10, // Android
+    shadowColor: '#000', // iOS
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
   },
   aiModalHeader: {
     flexDirection: 'row',
@@ -557,7 +514,9 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   aiModalScrollView: {
-    padding: 16,
+    flex: 1, // 确保ScrollView可以滚动
+    backgroundColor: 'transparent', // 确保背景透明
+    minHeight: 200, // 确保ScrollView有最小高度
   },
   aiFloatingButton: {
     position: 'absolute',

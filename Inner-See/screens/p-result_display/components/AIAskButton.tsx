@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ActivityIndicator, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
-import { PrimaryColors } from '../../../src/constants/Colors';
+import { PrimaryColors, TextColors } from '../../../src/constants/Colors';
 
 interface AIAskButtonProps {
   onPress: () => void;
@@ -64,13 +64,13 @@ const AIAskButton: React.FC<AIAskButtonProps> = ({
         end={{ x: 1, y: 1 }}
       >
         {loading ? (
-          <ActivityIndicator size="small" color="#ffffff" />
+          <ActivityIndicator size="small" color={TextColors.white} />
         ) : (
           <>
             <FontAwesome6 
               name={completed ? "eye" : error ? "refresh" : "robot"} 
               size={16} 
-              color="#ffffff" 
+              color={TextColors.white} 
               style={styles.buttonIcon}
             />
             <Text style={styles.buttonText}>{getButtonText()}</Text>

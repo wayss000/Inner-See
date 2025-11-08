@@ -6,7 +6,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { DatabaseManager } from '../../src/database/DatabaseManager';
 import { styles } from './styles';
-import { BackgroundGradient } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
 
 interface ModelOption {
   label: string;
@@ -71,7 +71,7 @@ const ModelSelectionScreen = () => {
         {/* 标题栏 */}
         <View style={styles.header}>
           <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <FontAwesome6 name="arrow-left" size={20} color="#ffffff" />
+            <FontAwesome6 name="arrow-left" size={20} color={PrimaryColors.main} />
           </TouchableOpacity>
           <Text style={styles.title}>模型选择</Text>
           <View style={styles.rightPlaceholder} />
@@ -98,7 +98,7 @@ const ModelSelectionScreen = () => {
               <FontAwesome6
                 name={isDropdownOpen ? "chevron-up" : "chevron-down"}
                 size={20}
-                color="rgba(255, 255, 255, 0.6)"
+                color={PrimaryColors.main}
               />
             </TouchableOpacity>
 

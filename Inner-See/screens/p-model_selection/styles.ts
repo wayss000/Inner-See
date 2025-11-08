@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { TextColors, CardColors, PrimaryColors } from '../../src/constants/Colors';
 
 export const styles = StyleSheet.create({
   container: {
@@ -26,7 +27,7 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
     textAlign: 'center',
     flex: 1,
   },
@@ -47,13 +48,13 @@ export const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 8,
     textAlign: 'center',
   },
   sectionDesc: {
     fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.7)',
+    color: TextColors.secondary,
     marginBottom: 32,
     textAlign: 'center',
     lineHeight: 24,
@@ -63,10 +64,10 @@ export const styles = StyleSheet.create({
   },
   dropdown: {
     height: 56,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
     paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
@@ -78,64 +79,64 @@ export const styles = StyleSheet.create({
     top: 92,
     left: 24,
     right: 24,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
     maxHeight: 200,
     zIndex: 10,
   },
   dropdownItem: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
+    borderBottomColor: CardColors.borderColor,
   },
   selectedDropdownItem: {
-    backgroundColor: 'rgba(34, 197, 94, 0.3)',
+    backgroundColor: 'rgba(217, 119, 87, 0.2)', // PrimaryColors.main with 0.2 opacity
   },
   dropdownItemText: {
     fontSize: 16,
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   selectedDropdownItemText: {
-    color: '#22c55e',
+    color: PrimaryColors.main,
     fontWeight: '600',
   },
   placeholderStyle: {
     fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
   },
   selectedTextStyle: {
     fontSize: 16,
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   inputSearchStyle: {
     fontSize: 16,
-    color: '#ffffff',
+    color: TextColors.primary,
     backgroundColor: 'transparent',
   },
   iconStyle: {
     width: 20,
     height: 20,
-    tintColor: 'rgba(255, 255, 255, 0.6)',
+    tintColor: TextColors.tertiary,
   },
   currentModelContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: CardColors.background,
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
     padding: 20,
     alignItems: 'center',
   },
   currentModelTitle: {
     fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.7)',
+    color: TextColors.secondary,
     marginBottom: 4,
   },
   currentModelValue: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   bottomContainer: {
     paddingHorizontal: 24,
@@ -150,22 +151,22 @@ export const styles = StyleSheet.create({
     flex: 1,
     height: 56,
     borderRadius: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: CardColors.background,
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
     alignItems: 'center',
     justifyContent: 'center',
   },
   saveButton: {
-    backgroundColor: 'rgba(34, 197, 94, 0.9)',
-    borderColor: 'rgba(34, 197, 94, 0.3)',
+    backgroundColor: PrimaryColors.main,
+    borderColor: PrimaryColors.main,
   },
   buttonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   saveButtonText: {
-    color: '#ffffff',
+    color: TextColors.white,
   },
 });
