@@ -21,7 +21,9 @@ export const PrimaryColors = {
 // 卡片样式
 export const CardColors = {
   background: 'rgba(255, 255, 255, 0.25)', // 卡片背景（从0.15提高到0.25）
-  border: 'rgba(255, 255, 255, 0.3)',      // 卡片边框
+  border: 'rgba(255, 255, 255, 0.3)',      // 卡片边框（旧样式，保留兼容）
+  borderWidth: 1.5,                         // 统一边框宽度
+  borderColor: 'rgba(0, 0, 0, 0.12)',      // 统一边框颜色（更清晰的深色半透明）
   shadow: 'rgba(0, 0, 0, 0.1)',            // 柔和阴影
 };
 

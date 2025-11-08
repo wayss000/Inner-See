@@ -5,6 +5,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from './styles';
+import { PrimaryColors } from '../../../../src/constants/Colors';
 
 interface EmptyStateProps {
   onStartTest: () => void;
@@ -20,7 +21,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ onStartTest }) => {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
         >
-          <FontAwesome6 name="clock-rotate-left" size={24} color="#ffffff" />
+          <FontAwesome6 name="clock-rotate-left" size={24} color={PrimaryColors.main} />
         </LinearGradient>
         
         <Text style={styles.title}>暂无测试记录</Text>
@@ -33,7 +34,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ onStartTest }) => {
           onPress={onStartTest}
           activeOpacity={0.7}
         >
-          <FontAwesome6 name="play" size={14} color="#ffffff" style={styles.startIcon} />
+          <FontAwesome6 name="play" size={14} color={PrimaryColors.main} style={styles.startIcon} />
           <Text style={styles.startButtonText}>开始测试</Text>
         </TouchableOpacity>
       </View>

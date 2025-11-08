@@ -81,8 +81,8 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: CardColors.border,
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -123,19 +123,8 @@ export default StyleSheet.create({
     padding: 20,
     marginRight: 16,
     minWidth: 280,
-    borderWidth: 1,
-    borderColor: CardColors.border,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 32,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   hotTestIcon: {
     width: 48,
@@ -180,19 +169,8 @@ export default StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     width: '48%',
-    borderWidth: 1,
-    borderColor: CardColors.border,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 32,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
     marginBottom: 16,
   },
   categoryIcon: {
@@ -217,19 +195,8 @@ export default StyleSheet.create({
     backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 20,
-    borderWidth: 1,
-    borderColor: CardColors.border,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 32,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   activityContent: {
     flexDirection: 'row',

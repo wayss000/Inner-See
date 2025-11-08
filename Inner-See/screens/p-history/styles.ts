@@ -1,6 +1,7 @@
 
 
 import { StyleSheet, Platform } from 'react-native';
+import { TextColors } from '../../src/constants/Colors';
 
 export default StyleSheet.create({
   container: {
@@ -54,12 +55,12 @@ export default StyleSheet.create({
   pageTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 4,
   },
   pageSubtitle: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
   },
   statsSection: {
     paddingHorizontal: 24,
@@ -77,11 +78,11 @@ export default StyleSheet.create({
   recordsTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   recordsCount: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
   },
   recordsList: {
     gap: 16,
@@ -115,7 +116,7 @@ export default StyleSheet.create({
   loadMoreText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   loadingContainer: {
     flex: 1,
@@ -124,7 +125,7 @@ export default StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#ffffff',
+    color: TextColors.primary,
     marginTop: 12,
   },
   errorContainer: {
@@ -136,13 +137,13 @@ export default StyleSheet.create({
   errorTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginTop: 16,
     marginBottom: 8,
   },
   errorText: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: TextColors.secondary,
     textAlign: 'center',
     marginBottom: 24,
   },
@@ -155,7 +156,7 @@ export default StyleSheet.create({
   errorButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
 });
 

@@ -12,7 +12,7 @@ import TestRecordItem from './components/TestRecordItem';
 import EmptyState from './components/EmptyState';
 import { DatabaseManager } from '../../src/database/DatabaseManager';
 import { convertDbRecordToUI, PAGINATION_CONFIG } from '../../src/utils/HistoryUtils';
-import { BackgroundGradient } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
 
 interface TestRecord {
   id: string;
@@ -160,7 +160,7 @@ const HistoryScreen: React.FC = () => {
             onPress={handleBackPress}
             activeOpacity={0.7}
           >
-            <FontAwesome6 name="arrow-left" size={18} color="#ffffff" />
+            <FontAwesome6 name="arrow-left" size={18} color={PrimaryColors.main} />
           </TouchableOpacity>
           <View style={styles.pageTitleSection}>
             <Text style={styles.pageTitle}>测试历史</Text>
@@ -205,7 +205,7 @@ const HistoryScreen: React.FC = () => {
             <FontAwesome6
               name="chevron-down"
               size={14}
-              color="#ffffff"
+              color={PrimaryColors.main}
               style={styles.loadMoreIcon}
             />
             <Text style={styles.loadMoreText}>
@@ -219,7 +219,7 @@ const HistoryScreen: React.FC = () => {
 
   const renderLoading = () => (
     <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color="#ffffff" />
+      <ActivityIndicator size="large" color={PrimaryColors.main} />
       <Text style={styles.loadingText}>加载中...</Text>
     </View>
   );

@@ -1,7 +1,7 @@
 
 
 import { StyleSheet, Dimensions } from 'react-native';
-import { PrimaryColors, CardColors } from '../../src/constants/Colors';
+import { PrimaryColors, CardColors, TextColors } from '../../src/constants/Colors';
 
 const { width } = Dimensions.get('window');
 
@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
   pageTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   headerActions: {
     flexDirection: 'row',
@@ -60,8 +60,8 @@ export const styles = StyleSheet.create({
   userInfoCard: {
     backgroundColor: CardColors.background,
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: CardColors.border,
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
     padding: 24,
   },
   userInfoContent: {
@@ -96,12 +96,12 @@ export const styles = StyleSheet.create({
   userNickname: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 4,
   },
   userJoinDate: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.7)',
+    color: TextColors.secondary,
     marginBottom: 8,
   },
   userStats: {
@@ -115,11 +115,11 @@ export const styles = StyleSheet.create({
   statCount: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   statLabel: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
   },
   userArrow: {
     alignItems: 'center',
@@ -135,8 +135,8 @@ export const styles = StyleSheet.create({
   menuItem: {
     backgroundColor: CardColors.background,
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: CardColors.border,
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
     padding: 16,
   },
   menuItemContent: {
@@ -163,12 +163,12 @@ export const styles = StyleSheet.create({
   menuItemTitle: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 2,
   },
   menuItemDesc: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.7)',
+    color: TextColors.secondary,
   },
   menuItemArrow: {
     alignItems: 'center',
@@ -181,8 +181,8 @@ export const styles = StyleSheet.create({
   appInfoCard: {
     backgroundColor: CardColors.background,
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: CardColors.border,
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
     padding: 20,
   },
   appInfoContent: {
@@ -199,17 +199,17 @@ export const styles = StyleSheet.create({
   appName: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 4,
   },
   appVersion: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.7)',
+    color: TextColors.secondary,
     marginBottom: 8,
   },
   appDescription: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
   },
 });
 

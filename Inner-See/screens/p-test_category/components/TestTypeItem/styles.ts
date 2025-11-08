@@ -8,19 +8,8 @@ export default StyleSheet.create({
     backgroundColor: CardColors.background,
     borderRadius: 16,
     padding: 20,
-    borderWidth: 1,
-    borderColor: CardColors.border,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   testItemContent: {
     flexDirection: 'row',

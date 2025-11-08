@@ -5,6 +5,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from './styles';
+import { PrimaryColors } from '../../../../src/constants/Colors';
 
 interface TestRecord {
   id: string;
@@ -74,7 +75,7 @@ const TestRecordItem: React.FC<TestRecordItemProps> = ({ record, onPress }) => {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
         >
-          <FontAwesome6 name={icon} size={18} color="#ffffff" />
+          <FontAwesome6 name={icon} size={18} color={PrimaryColors.main} />
         </LinearGradient>
         
         <View style={styles.infoContainer}>

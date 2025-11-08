@@ -9,7 +9,7 @@ import { useRouter } from 'expo-router';
 import { DatabaseManager } from '../../src/database/DatabaseManager';
 import { User } from '../../src/entities/TestEntities';
 import { styles } from './styles';
-import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, TextColors } from '../../src/constants/Colors';
 
 // 导入事件发射器
 import ProfileEditScreen from '../p-profile_edit';
@@ -175,7 +175,7 @@ const PersonalCenterScreen = () => {
                       style={styles.userAvatar}
                     />
                     <View style={styles.avatarEditIndicator}>
-                      <FontAwesome6 name="pen" size={10} color="#ffffff" />
+                      <FontAwesome6 name="pen" size={10} color={TextColors.white} />
                     </View>
                   </View>
                   <View style={styles.userDetails}>
@@ -217,7 +217,7 @@ const PersonalCenterScreen = () => {
                       end={{ x: 1, y: 1 }}
                       style={styles.menuIcon}
                     >
-                      <FontAwesome6 name="user-pen" size={18} color="#ffffff" />
+                      <FontAwesome6 name="user-pen" size={18} color={PrimaryColors.main} />
                     </LinearGradient>
                     <View style={styles.menuItemInfo}>
                       <Text style={styles.menuItemTitle}>个人资料管理</Text>
@@ -244,7 +244,7 @@ const PersonalCenterScreen = () => {
                       end={{ x: 1, y: 1 }}
                       style={styles.menuIcon}
                     >
-                      <FontAwesome6 name="clock-rotate-left" size={18} color="#ffffff" />
+                      <FontAwesome6 name="clock-rotate-left" size={18} color={PrimaryColors.main} />
                     </LinearGradient>
                     <View style={styles.menuItemInfo}>
                       <Text style={styles.menuItemTitle}>测试历史记录</Text>
@@ -272,7 +272,7 @@ const PersonalCenterScreen = () => {
                       end={{ x: 1, y: 1 }}
                       style={styles.menuIcon}
                     >
-                      <FontAwesome6 name="comment-dots" size={18} color="#ffffff" />
+                      <FontAwesome6 name="comment-dots" size={18} color={PrimaryColors.main} />
                     </LinearGradient>
                     <View style={styles.menuItemInfo}>
                       <Text style={styles.menuItemTitle}>反馈建议</Text>
@@ -300,7 +300,7 @@ const PersonalCenterScreen = () => {
                       end={{ x: 1, y: 1 }}
                       style={styles.menuIcon}
                     >
-                      <FontAwesome6 name="brain" size={18} color="#ffffff" />
+                      <FontAwesome6 name="brain" size={18} color={PrimaryColors.main} />
                     </LinearGradient>
                     <View style={styles.menuItemInfo}>
                       <Text style={styles.menuItemTitle}>模型选择</Text>
@@ -327,7 +327,7 @@ const PersonalCenterScreen = () => {
                       end={{ x: 1, y: 1 }}
                       style={styles.menuIcon}
                     >
-                      <FontAwesome6 name="shield-halved" size={18} color="#ffffff" />
+                      <FontAwesome6 name="shield-halved" size={18} color={PrimaryColors.main} />
                     </LinearGradient>
                     <View style={styles.menuItemInfo}>
                       <Text style={styles.menuItemTitle}>隐私设置</Text>
@@ -352,7 +352,7 @@ const PersonalCenterScreen = () => {
                   end={{ x: 1, y: 1 }}
                   style={styles.appLogo}
                 >
-                  <FontAwesome6 name="heart" size={24} color="#ffffff" />
+                  <FontAwesome6 name="heart" size={24} color={TextColors.white} />
                 </LinearGradient>
                 <Text style={styles.appName}>心探</Text>
                 <Text style={styles.appVersion}>版本 1.0.0</Text>

@@ -1,6 +1,7 @@
 
 
 import { StyleSheet, Platform } from 'react-native';
+import { TextColors, CardColors } from '../../../../src/constants/Colors';
 
 export default StyleSheet.create({
   container: {
@@ -12,19 +13,8 @@ export default StyleSheet.create({
     borderRadius: 16,
     padding: 32,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#1f2937',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
   },
   iconContainer: {
     width: 80,
@@ -37,12 +27,12 @@ export default StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 8,
   },
   description: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.tertiary,
     textAlign: 'center',
     lineHeight: 20,
     marginBottom: 24,
@@ -72,7 +62,7 @@ export default StyleSheet.create({
   startButtonText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
 });
 
