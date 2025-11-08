@@ -483,7 +483,7 @@ export default StyleSheet.create({
     width: '100%',
     maxHeight: '92%', // 增加最大高度到92%，占据更多屏幕空间
     minHeight: 500, // 增加最小高度
-    overflow: 'hidden',
+    // 移除 overflow: 'hidden'，允许内容完全显示
     flexDirection: 'column', // 确保垂直布局
     // 确保内容可见
     elevation: 10, // Android
@@ -516,7 +516,7 @@ export default StyleSheet.create({
   aiModalScrollView: {
     flex: 1, // 确保ScrollView可以滚动
     backgroundColor: 'transparent', // 确保背景透明
-    minHeight: 200, // 确保ScrollView有最小高度
+    // 移除 minHeight，让ScrollView根据内容自适应
   },
   aiFloatingButton: {
     position: 'absolute',

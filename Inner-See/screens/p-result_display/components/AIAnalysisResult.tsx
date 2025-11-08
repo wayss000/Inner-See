@@ -15,11 +15,6 @@ interface AIAnalysisResultProps {
 }
 
 const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, onClose, onRegenerate }) => {
-  // 添加调试信息
-  console.log('AIAnalysisResultComponent - result:', result);
-  console.log('AIAnalysisResultComponent - currentSituation:', result?.currentSituation);
-  console.log('AIAnalysisResultComponent - adjustmentSuggestions:', result?.adjustmentSuggestions);
-  console.log('AIAnalysisResultComponent - 注意事项:', result?.注意事项);
 
   if (!result) {
     return (
@@ -67,9 +62,7 @@ const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, on
             <Text style={styles.sectionTitle}>调整建议</Text>
           </View>
           {result.adjustmentSuggestions ? (
-            <View style={{ minHeight: 20 }}>
-              <MarkdownRenderer>{result.adjustmentSuggestions}</MarkdownRenderer>
-            </View>
+            <MarkdownRenderer>{result.adjustmentSuggestions}</MarkdownRenderer>
           ) : (
             <Text style={styles.sectionContent}>暂无内容</Text>
           )}
@@ -127,7 +120,7 @@ const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, on
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    minHeight: 200, // 确保容器有最小高度
+    // 移除 minHeight，让容器根据内容自适应高度
     backgroundColor: 'transparent', // 确保背景透明
   },
   header: {
@@ -146,15 +139,15 @@ const styles = StyleSheet.create({
   },
   content: {
     width: '100%',
-    paddingBottom: 80, // 大幅增加底部内边距，确保所有内容可见
-    minHeight: 200, // 确保内容区域有最小高度
+    paddingBottom: 100, // 增加底部内边距，确保所有内容可见
+    // 移除 minHeight，让内容根据实际内容自适应高度
     backgroundColor: 'transparent', // 确保背景透明，内容可见
   },
   section: {
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
-    minHeight: 50, // 确保section有最小高度
+    // 移除 minHeight，让section根据内容自适应高度
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

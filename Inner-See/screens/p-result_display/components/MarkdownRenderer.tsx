@@ -12,12 +12,8 @@ interface MarkdownRendererProps {
  */
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ children, style }) => {
   if (!children) {
-    console.log('MarkdownRenderer: children is empty');
     return <Text style={[styles.paragraph, style]}>内容为空</Text>;
   }
-
-  console.log('MarkdownRenderer: children length:', children.length);
-  console.log('MarkdownRenderer: children preview:', children.substring(0, 100));
 
   // 简单的markdown解析函数
   const parseMarkdown = (text: string): React.ReactNode[] => {
@@ -155,7 +151,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ children, style }) 
     const boldMatches: Array<{ start: number; end: number }> = [];
 
     // 先匹配粗体
-    let match;
+    let match: RegExpExecArray | null;
     boldRegex.lastIndex = 0;
     while ((match = boldRegex.exec(text)) !== null) {
       matches.push({
@@ -175,8 +171,8 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ children, style }) 
     while ((match = italicRegex.exec(text)) !== null) {
       // 检查是否与粗体匹配重叠
       const overlaps = boldMatches.some(m => 
-        (match.index >= m.start && match.index < m.end) ||
-        (match.index + match[0].length > m.start && match.index + match[0].length <= m.end)
+        (match!.index >= m.start && match!.index < m.end) ||
+        (match!.index + match![0].length > m.start && match!.index + match![0].length <= m.end)
       );
       if (!overlaps) {
         matches.push({
@@ -251,7 +247,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ children, style }) 
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    minHeight: 20, // 确保容器有最小高度
+    // 移除 minHeight，让容器根据内容自适应高度
   },
   paragraph: {
     fontSize: 14,

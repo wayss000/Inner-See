@@ -673,8 +673,8 @@ const ResultDisplayScreen = () => {
                 style={styles.aiModalScrollView}
                 contentContainerStyle={{ 
                   padding: 16, 
-                  paddingBottom: 100, // 大幅增加底部内边距，确保所有内容可见
-                  flexGrow: 1, // 确保内容可以完整显示
+                  paddingBottom: 150, // 增加底部内边距，确保所有内容可见且不被遮挡
+                  // 移除 flexGrow: 1，让内容自然展开
                 }}
                 showsVerticalScrollIndicator={true}
                 nestedScrollEnabled={true}
@@ -728,12 +728,21 @@ const ResultDisplayScreen = () => {
         visible={showSupplementInput}
         onClose={() => setShowSupplementInput(false)}
         onSubmit={async (supplement) => {
+            console.log('=== AI分析开始，onSubmit被调用 ===');
+            console.log('当前状态:', {
+              aiButtonState,
+              aiAnalysisStateStatus: aiAnalysisState.status,
+              hasTestResult: !!testResult,
+              supplement: supplement?.substring(0, 50),
+            });
+            
             setShowSupplementInput(false);
             setAiSupplement(supplement);
             
             try {
               // 判断是首次分析还是重新生成
               const isRegenerating = aiButtonState === 'viewable' || aiButtonState === 'completed';
+              console.log('分析类型判断:', { isRegenerating, currentButtonState: aiButtonState });
               
               if (isRegenerating) {
                 setAiButtonState('regenerating');
@@ -772,10 +781,24 @@ const ResultDisplayScreen = () => {
 
               // 调用AI服务
               const aiService = AIService.getInstance();
+              console.log('准备调用AI服务，请求数据:', {
+                testType: aiRequestData.testInfo.testType,
+                questionCount: aiRequestData.testInfo.testQuestions.length,
+                hasSupplement: !!aiRequestData.userSupplement,
+              });
+              
               const analysisResult = await aiService.analyzeTestResult(aiRequestData);
+              
+              console.log('AI服务调用完成，返回结果:', {
+                hasResult: !!analysisResult,
+                resultType: typeof analysisResult,
+                resultLength: analysisResult?.length || 0,
+                resultPreview: analysisResult ? analysisResult.substring(0, 100) : 'null',
+              });
 
-              // 解析AI响应并更新状态
+              // 解析AI响应并更新状态 - 使用滑动窗口方式
               const parseAIResponse = (response: string): AIAnalysisResult => {
+                console.log('开始解析AI响应，响应长度:', response?.length || 0);
                 const sections = {
                   currentSituation: '',
                   adjustmentSuggestions: '',
@@ -784,25 +807,212 @@ const ResultDisplayScreen = () => {
                   fullResponse: response,
                 };
 
-                // 使用正则表达式提取分章节内容
-                const currentSituationMatch = response.match(/1\.\s*当前情况分析[^2]*/i);
-                const suggestionsMatch = response.match(/2\.\s*具体调整建议[^3]*/i);
-                const notesMatch = response.match(/3\.\s*注意事项[^4]*/i);
-
-                if (currentSituationMatch) {
-                  sections.currentSituation = currentSituationMatch[0].replace('1. 当前情况分析', '').trim();
-                }
-                if (suggestionsMatch) {
-                  sections.adjustmentSuggestions = suggestionsMatch[0].replace('2. 具体调整建议', '').trim();
-                }
-                if (notesMatch) {
-                  sections.注意事项 = notesMatch[0].replace('3. 注意事项', '').trim();
+                // 定义章节标题模式 - 支持多种格式（包括 Markdown ### 格式）
+                interface SectionPattern {
+                  key: 'currentSituation' | 'adjustmentSuggestions' | '注意事项';
+                  patterns: RegExp[];
                 }
 
+                const sectionPatterns: SectionPattern[] = [
+                  {
+                    key: 'currentSituation',
+                    patterns: [
+                      /###\s*1[\.、]\s*当前情况分析(?:\s*\([^)]*\))?/i,  // Markdown 格式：### 1. 当前情况分析（可能有括号内容）
+                      /1[\.、]\s*当前情况分析(?:\s*\([^)]*\))?/i,        // 普通格式：1. 当前情况分析
+                      /一[\.、]\s*当前情况分析/i,
+                      /①\s*当前情况分析/i,
+                    ],
+                  },
+                  {
+                    key: 'adjustmentSuggestions',
+                    patterns: [
+                      /###\s*2[\.、]\s*具体调整建议(?:\s*\([^)]*\))?/i,  // Markdown 格式：### 2. 具体调整建议（可能有括号内容）
+                      /2[\.、]\s*具体调整建议(?:\s*\([^)]*\))?/i,        // 普通格式：2. 具体调整建议
+                      /二[\.、]\s*具体调整建议/i,
+                      /②\s*具体调整建议/i,
+                    ],
+                  },
+                  {
+                    key: '注意事项',
+                    patterns: [
+                      /###\s*3[\.、]\s*注意事项(?:\s*\([^)]*\))?/i,      // Markdown 格式：### 3. 注意事项（可能包含"和预警"等）
+                      /3[\.、]\s*注意事项(?:\s*\([^)]*\))?/i,            // 普通格式：3. 注意事项
+                      /三[\.、]\s*注意事项/i,
+                      /③\s*注意事项/i,
+                    ],
+                  },
+                ];
+
+                // 滑动窗口扫描：找到所有章节标题的位置
+                interface SectionMatch {
+                  key: 'currentSituation' | 'adjustmentSuggestions' | '注意事项';
+                  startIndex: number;
+                  endIndex: number; // 标题结束位置（标题文本的结束）
+                  fullMatch: string;
+                }
+
+                const sectionMatches: SectionMatch[] = [];
+
+                console.log('开始匹配章节标题模式...');
+                // 遍历所有章节模式，找到匹配的标题位置
+                // 改进策略：每个章节只找第一个匹配，避免重复匹配导致的问题
+                sectionPatterns.forEach((sectionPattern, sectionIndex) => {
+                  console.log(`处理章节模式 ${sectionIndex + 1}: ${sectionPattern.key}`);
+                  
+                  // 如果已经找到这个章节的匹配，跳过
+                  const existingMatch = sectionMatches.find(m => m.key === sectionPattern.key);
+                  if (existingMatch) {
+                    console.log(`  章节 ${sectionPattern.key} 已有匹配，跳过`);
+                    return;
+                  }
+                  
+                  // 尝试每个模式，找到第一个有效匹配就停止
+                  for (let patternIndex = 0; patternIndex < sectionPattern.patterns.length; patternIndex++) {
+                    const pattern = sectionPattern.patterns[patternIndex];
+                    console.log(`  尝试模式 ${patternIndex + 1}: ${pattern}`);
+                    
+                    // 使用match方法而不是exec，只找第一个匹配
+                    const match = response.match(pattern);
+                    
+                    if (match && match.index !== undefined) {
+                      const startIndex = match.index;
+                      const matchLength = match[0].length;
+                      
+                      // 确保匹配长度不为0
+                      if (matchLength === 0) {
+                        console.warn(`  模式 ${patternIndex + 1} 匹配到空字符串，跳过`);
+                        continue;
+                      }
+                      
+                      const endIndex = startIndex + matchLength;
+                      
+                      console.log(`    找到匹配: index=${startIndex}, length=${matchLength}, text="${match[0].substring(0, 30)}"`);
+                      
+                      // 添加匹配
+                      sectionMatches.push({
+                        key: sectionPattern.key,
+                        startIndex,
+                        endIndex,
+                        fullMatch: match[0],
+                      });
+                      console.log(`    已添加匹配到 ${sectionPattern.key}，停止尝试其他模式`);
+                      break; // 找到匹配后，停止尝试其他模式
+                    } else {
+                      console.log(`  模式 ${patternIndex + 1} 未找到匹配`);
+                    }
+                  }
+                });
+
+                console.log('章节标题匹配完成，找到的匹配数:', sectionMatches.length);
+                console.log('匹配到的章节:', sectionMatches.map(m => ({ key: m.key, startIndex: m.startIndex, match: m.fullMatch.substring(0, 30) })));
+
+                // 按位置排序
+                sectionMatches.sort((a, b) => a.startIndex - b.startIndex);
+                console.log('章节已按位置排序');
+
+                // 根据标题位置切分内容
+                console.log('开始切分内容，章节数:', sectionMatches.length);
+                for (let i = 0; i < sectionMatches.length; i++) {
+                  const currentMatch = sectionMatches[i];
+                  const nextMatch = sectionMatches[i + 1];
+                  
+                  console.log(`处理第${i + 1}个章节:`, {
+                    key: currentMatch.key,
+                    startIndex: currentMatch.startIndex,
+                    endIndex: currentMatch.endIndex,
+                    nextStartIndex: nextMatch?.startIndex,
+                  });
+                  
+                  // 计算内容开始位置（标题结束位置）
+                  // 对于 Markdown 格式（###），需要找到标题行的结束位置
+                  let contentStartIndex = currentMatch.endIndex;
+                  
+                  // 如果标题后面还有换行，跳过换行
+                  while (contentStartIndex < response.length && 
+                         (response[contentStartIndex] === '\n' || response[contentStartIndex] === '\r')) {
+                    contentStartIndex++;
+                  }
+                  
+                  // 计算内容结束位置
+                  const contentEndIndex = nextMatch ? nextMatch.startIndex : response.length;
+                  
+                  console.log(`章节${currentMatch.key}内容范围:`, {
+                    contentStartIndex,
+                    contentEndIndex,
+                    contentLength: contentEndIndex - contentStartIndex,
+                  });
+                  
+                  // 提取内容（不包括标题本身）
+                  // 使用 substring 精确提取，保留所有格式（包括换行、空格等）
+                  let content = response.substring(contentStartIndex, contentEndIndex);
+                  
+                  // 只移除开头的空白字符（保留内容中的格式）
+                  content = content.replace(/^[\s\n\r]+/, '');
+                  
+                  // 移除末尾的空白字符
+                  content = content.replace(/[\s\n\r]+$/, '');
+                  
+                  sections[currentMatch.key] = content;
+                  console.log(`章节${currentMatch.key}内容提取完成，长度:`, content.length);
+                }
+                console.log('所有章节内容切分完成');
+
+                // 检查是否有章节未找到
+                const foundKeys = sectionMatches.map(m => m.key);
+                const allKeys: Array<'currentSituation' | 'adjustmentSuggestions' | '注意事项'> = ['currentSituation', 'adjustmentSuggestions', '注意事项'];
+                const missingKeys = allKeys.filter(key => !foundKeys.includes(key));
+                if (missingKeys.length > 0) {
+                  console.warn('⚠️ 以下章节未找到:', missingKeys);
+                }
+
+                console.log('parseAIResponse解析完成，返回sections:', {
+                  hasCurrentSituation: !!sections.currentSituation,
+                  hasAdjustmentSuggestions: !!sections.adjustmentSuggestions,
+                  has注意事项: !!sections['注意事项'],
+                });
                 return sections;
               };
 
-              const parsedResult = parseAIResponse(analysisResult);
+              console.log('准备调用parseAIResponse，analysisResult类型:', typeof analysisResult);
+              
+              if (!analysisResult) {
+                console.error('❌ analysisResult为空，无法解析');
+                throw new Error('AI分析结果为空');
+              }
+              
+              let parsedResult: AIAnalysisResult;
+              try {
+                console.log('开始调用parseAIResponse函数...');
+                parsedResult = parseAIResponse(analysisResult);
+                console.log('parseAIResponse函数调用成功');
+              } catch (parseError) {
+                console.error('❌ parseAIResponse函数执行出错:', parseError);
+                console.error('错误详情:', {
+                  errorMessage: parseError instanceof Error ? parseError.message : String(parseError),
+                  errorStack: parseError instanceof Error ? parseError.stack : undefined,
+                });
+                // 即使解析失败，也创建一个基本的结果结构，避免完全失败
+                parsedResult = {
+                  currentSituation: '解析AI响应时出错，显示原始内容',
+                  adjustmentSuggestions: '',
+                  注意事项: '',
+                  disclaimer: '本回答由 AI 生成，内容仅供参考，请仔细甄别。',
+                  fullResponse: analysisResult,
+                };
+                console.log('已创建默认解析结果，使用原始响应');
+              }
+              
+              // 添加解析后的详细日志
+              console.log('AI响应解析完成:', {
+                hasParsedResult: !!parsedResult,
+                parsedResultKeys: parsedResult ? Object.keys(parsedResult) : [],
+                hasCurrentSituation: !!parsedResult?.currentSituation,
+                hasAdjustmentSuggestions: !!parsedResult?.adjustmentSuggestions,
+                has注意事项: !!parsedResult?.['注意事项'],
+                testResultExists: !!testResult,
+                testResultId: testResult?.id,
+                testResultName: testResult?.testName,
+              });
               
               // 更新状态
               setAiAnalysisState({
@@ -814,22 +1024,45 @@ const ResultDisplayScreen = () => {
               
               if (isRegenerating) {
                 setAiButtonState('viewable');
+                console.log('按钮状态已更新为 viewable (重新生成)');
               } else {
                 setAiButtonState('completed');
+                console.log('按钮状态已更新为 completed (首次分析)');
               }
+              
+              console.log('AI分析状态已更新:', {
+                status: 'completed',
+                hasResult: !!parsedResult,
+                hasSavedResult: true,
+                buttonState: isRegenerating ? 'viewable' : 'completed',
+              });
 
               // 保存AI分析结果到数据库
+              console.log('准备保存AI分析结果到数据库，条件检查:', {
+                testResultExists: !!testResult,
+                parsedResultExists: !!parsedResult,
+                conditionMet: !!(testResult && parsedResult),
+                testResultId: testResult?.id,
+                testResultName: testResult?.testName,
+              });
+              
               if (testResult && parsedResult) {
                 try {
+                  console.log('开始保存AI分析结果到数据库...');
                   const dbManager = DatabaseManager.getInstance();
                   await dbManager.initialize();
+                  console.log('数据库初始化完成');
                   
                   // 从当前测试记录获取必要的字段
                   const currentUser = await dbManager.getCurrentUser();
+                  console.log('获取当前用户:', {
+                    hasUser: !!currentUser,
+                    userId: currentUser?.id || 'default-user',
+                  });
                   
-                  // 更新测试记录，保存AI分析结果
-                  await dbManager.saveTestRecord({
-                    id: testResult.id || params.record_id as string,
+                  const recordId = testResult.id || params.record_id as string;
+                  const recordData = {
+                    id: recordId,
                     userId: currentUser?.id || 'default-user',
                     testTypeId: testResult.testName === '抑郁症评估' ? 'mental-health' : 'mbti',
                     startTime: Date.now(),
@@ -840,9 +1073,21 @@ const ResultDisplayScreen = () => {
                     referenceMaterials: null,
                     aiAnalysisResult: JSON.stringify(parsedResult),
                     createdAt: Date.now(),
-                  } as any);
+                  };
                   
-                  console.log('AI分析结果已保存到数据库');
+                  console.log('准备保存的测试记录数据:', {
+                    id: recordData.id,
+                    userId: recordData.userId,
+                    testTypeId: recordData.testTypeId,
+                    totalScore: recordData.totalScore,
+                    hasAiAnalysisResult: !!recordData.aiAnalysisResult,
+                    aiAnalysisResultLength: recordData.aiAnalysisResult?.length || 0,
+                  });
+                  
+                  // 更新测试记录，保存AI分析结果
+                  await dbManager.saveTestRecord(recordData as any);
+                  
+                  console.log('✅ AI分析结果已成功保存到数据库，记录ID:', recordId);
                   
                   // 更新本地状态，显示AI分析结果
                   setTestResult(prev => prev ? {
@@ -850,14 +1095,35 @@ const ResultDisplayScreen = () => {
                     aiAnalysisResult: parsedResult
                   } : null);
                   
+                  console.log('本地testResult状态已更新，包含AI分析结果');
+                  
                 } catch (dbError) {
-                  console.error('保存AI分析结果到数据库失败:', dbError);
+                  console.error('❌ 保存AI分析结果到数据库失败:', dbError);
+                  console.error('错误详情:', {
+                    errorMessage: dbError instanceof Error ? dbError.message : String(dbError),
+                    errorStack: dbError instanceof Error ? dbError.stack : undefined,
+                    testResultId: testResult?.id,
+                    hasParsedResult: !!parsedResult,
+                  });
                   // 不阻止AI分析的完成，只是记录错误
+                  // 但确保按钮状态已经正确更新
+                  console.log('数据库保存失败，但按钮状态已更新，用户可以查看结果');
                 }
+              } else {
+                console.warn('⚠️ 跳过保存AI分析结果到数据库，原因:', {
+                  testResultExists: !!testResult,
+                  parsedResultExists: !!parsedResult,
+                  reason: !testResult ? 'testResult为空' : !parsedResult ? 'parsedResult为空' : '未知原因',
+                });
               }
 
             } catch (error) {
-              console.error('AI分析失败:', error);
+              console.error('❌ AI分析失败，捕获到异常:', error);
+              console.error('错误详情:', {
+                errorMessage: error instanceof Error ? error.message : String(error),
+                errorStack: error instanceof Error ? error.stack : undefined,
+                errorType: error?.constructor?.name || typeof error,
+              });
               setAiAnalysisState({
                 status: 'error',
                 result: null,
@@ -865,6 +1131,7 @@ const ResultDisplayScreen = () => {
                 hasSavedResult: false,
               });
               setAiButtonState('error');
+              console.log('错误状态已设置，按钮状态已更新为error');
             }
           }}
           loading={aiButtonState === 'loading'}
