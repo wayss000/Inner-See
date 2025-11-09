@@ -88,7 +88,6 @@ const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, on
 
         {/* 免责声明 */}
         <View style={styles.disclaimerSection}>
-          <FontAwesome6 name="info-circle" size={16} color="#6b7280" />
           <Text style={styles.disclaimerText}>{result.disclaimer}</Text>
         </View>
       </View>
@@ -178,8 +177,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 8,
-    padding: 12,
-    marginTop: 16,
+    padding: 8,
+    marginTop: 8,
+    marginBottom: 8,
   },
   disclaimerText: {
     fontSize: 12,
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   actionButtonsContainer: {
-    marginTop: 16, // 在按钮上方添加间距
+    marginTop: 8, // 在按钮上方添加间距
     paddingBottom: 8, // 减少底部间距
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderTopWidth: 1,
