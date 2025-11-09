@@ -348,10 +348,20 @@ const FALLBACK_DATA = {
       id: 'Q-C-005',
       questionId: 'Q-C-005',
       testTypeId: 'cognitive',
-      questionType: 'open-ended',
-      questionText: '砖头可以用来做什么？（请列举至少3个用途）',
-      options: JSON.stringify([]),
-      scoreMapping: JSON.stringify({}),
+      questionType: 'multiple-choice',
+      questionText: '砖头通常可以用来做什么？请选择最合适的选项',
+      options: JSON.stringify([
+        { value: 'A', label: '建造房屋和墙体' },
+        { value: 'B', label: '作为绘画工具' },
+        { value: 'C', label: '制作食品' },
+        { value: 'D', label: '清洁牙齿' }
+      ]),
+      scoreMapping: JSON.stringify({
+        'A': 10,
+        'B': 0,
+        'C': 0,
+        'D': 0
+      }),
       sourceReference: '创造力测试',
       aiReviewStatus: 'approved',
       sortOrder: 5
