@@ -78,22 +78,10 @@ export default StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: CardColors.borderWidth,
-    borderColor: CardColors.borderColor,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.37,
-        shadowRadius: 32,
-      },
-      android: {
-        elevation: 8,
-      },
-    }),
+    // 移除边框和阴影，避免形成"六边形图层"效果
   },
   section: {
     paddingHorizontal: 24,
