@@ -1,12 +1,47 @@
+[中文](./readme_cn.md) | [English](./README.md)
+
 ## 项目介绍
 一个基于AI的探索内心、了解自我的App。支持安卓和IOS。
 
 ## 开发说明
-本项目几乎全部使用 KAT-Coder-Pro V1 模型进行开发。
+本项目几乎全部使用 **KAT-Coder-Pro V1** 模型进行开发。
 
-### KAT-Coder-Pro V1 模型优势
+### 项目技术栈
 
-KAT-Coder-Pro V1 是一个高性能的AI代码助手，在本项目的开发过程中展现了以下显著优势：
+#### 前端架构
+- **框架**: React Native + Expo
+- **路由**: Expo Router (支持文件系统路由)
+- **状态管理**: React Context + Hooks
+- **类型系统**: TypeScript
+- **UI组件**: React Native Elements + 自定义组件
+
+#### 跨平台支持
+- **平台**: iOS、Android、Web
+- **构建工具**: Expo CLI
+- **新架构**: 支持 React Native 新架构 (New Architecture)
+- **原生模块**: 支持原生功能集成 (相机、相册、震动等)
+
+#### 数据存储
+- **本地数据库**: SQLite (Expo SQLite)
+- **数据持久化**: AsyncStorage
+- **ORM**: TypeORM (轻量级对象关系映射)
+- **数据模型**: 用户数据、测试记录、答题历史
+
+#### AI服务集成
+- **AI模型**: KwaiKAT (万擎API)
+- **服务架构**: RESTful API 调用
+- **功能**: 心理分析、测试生成、个性化建议
+- **数据格式**: JSON 标准化交互
+
+#### 开发工具
+- **代码规范**: ESLint + TypeScript ESLint
+- **测试框架**: Jest + Expo Testing Library
+- **包管理**: npm
+- **环境配置**: Expo 环境变量管理
+
+### **KAT-Coder-Pro V1** 模型优势
+
+**KAT-Coder-Pro V1** 是一个高性能的AI代码助手，在本项目的开发过程中展现了以下显著优势：
 
 #### 🚀 高效开发速度
 - **快速响应**: 模型具有出色的处理速度，能够在短时间内生成高质量的代码
@@ -29,4 +64,4 @@ KAT-Coder-Pro V1 是一个高性能的AI代码助手，在本项目的开发过�
 - **模块化设计**: 生成高度模块化的组件，便于维护和扩展
 - **接口设计**: 设计合理的API接口，确保前后端数据交互的稳定性
 
-正是得益于KAT-Coder-Pro V1模型的这些优势，本项目能够在短时间内高质量地完成开发，展现了AI辅助开发的巨大潜力。
+正是得益于**KAT-Coder-Pro**模型的这些优势，本项目能够在短时间内高质量地完成开发，展现了AI辅助开发的巨大潜力。

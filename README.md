@@ -1,12 +1,47 @@
+[中文](./readme_cn.md) | English
+
 ## Development Introduction
 An AI-powered app for exploring inner self and self-discovery. Supports both Android and iOS platforms.
 
 ## Development Notes
 This project was developed almost entirely using the **KAT-Coder-Pro V1** model.
 
+### Project Technology Stack
+
+#### Frontend Architecture
+- **Framework**: React Native + Expo
+- **Routing**: Expo Router (file-system based routing)
+- **State Management**: React Context + Hooks
+- **Type System**: TypeScript
+- **UI Components**: React Native Elements + Custom Components
+
+#### Cross-Platform Support
+- **Platforms**: iOS, Android, Web
+- **Build Tool**: Expo CLI
+- **New Architecture**: Supports React Native New Architecture
+- **Native Modules**: Native functionality integration (camera, photo library, haptics, etc.)
+
+#### Data Storage
+- **Local Database**: SQLite (Expo SQLite)
+- **Data Persistence**: AsyncStorage
+- **ORM**: TypeORM (lightweight object-relational mapping)
+- **Data Models**: User data, test records, answer history
+
+#### AI Service Integration
+- **AI Model**: KwaiKAT (WanQing API)
+- **Service Architecture**: RESTful API calls
+- **Features**: Psychological analysis, test generation, personalized recommendations
+- **Data Format**: Standardized JSON interaction
+
+#### Development Tools
+- **Code Standards**: ESLint + TypeScript ESLint
+- **Testing Framework**: Jest + Expo Testing Library
+- **Package Management**: npm
+- **Environment Configuration**: Expo environment variable management
+
 ### Advantages of **KAT-Coder-Pro V1**
 
-KAT-Coder-Pro V1 is a high-performance AI coding assistant that demonstrated significant advantages during the development of this project:
+**KAT-Coder-Pro V1** is a high-performance AI coding assistant that demonstrated significant advantages during the development of this project:
 
 #### 🚀 High Development Efficiency
 - **Fast Response**: The model has excellent processing speed, capable of generating high-quality code in a short time
