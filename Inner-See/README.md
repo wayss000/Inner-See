@@ -1,10 +1,6 @@
-# Welcome to your Expo app 👋
-
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
-
 ## Inner See
-看见内在.
-Tagline “See inward, live outward.”
+
+Inner See — Journey to the Real Me.
 
 ## Get started
 
@@ -22,21 +18,17 @@ Tagline “See inward, live outward.”
 
 3. Open this app in the Expo Go sandbox environment on your mobile device (Android or iPhone)
 
-In the output, you'll find options to open the app in a
+   **Why install Expo Go?**
+   Expo Go is a sandbox environment for running React Native apps, allowing you to test the app on a real device without building a native app.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   **How to install Expo Go:**
+   - **iOS users**: Search for "Expo Go" in the App Store and install
+   - **Android users**: Search for "Expo Go" in the Google Play Store and install
+   
+   **How to use:**
+   1. Install the Expo Go app on your phone
+   2. After running `npx expo start`, a QR code will appear in the terminal
+   3. Open the Expo Go app on your phone
+   4. Scan the QR code displayed in the terminal
+   5. The app will automatically load and run on your device
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
