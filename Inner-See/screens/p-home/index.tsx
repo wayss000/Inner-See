@@ -35,6 +35,7 @@ interface CategoryItem {
   id: string;
   title: string;
   count: string;
+  duration: string;
   icon: string;
   gradientColors: [string, string, ...string[]];
 }
@@ -76,6 +77,7 @@ const HomeScreen: React.FC = () => {
           id: testType.id,
           title: testType.name,
           count: `${testType.questionCount}题`,
+          duration: `${testType.estimatedDuration}分钟`,
           icon: testType.icon,
           gradientColors: getTestTypeGradient(testType.category)
         }));
@@ -229,7 +231,10 @@ const HomeScreen: React.FC = () => {
         <FontAwesome6 name={item.icon} size={24} color="#ffffff" />
       </LinearGradient>
       <Text style={styles.categoryTitle}>{item.title}</Text>
-      <Text style={styles.categoryCount}>{item.count}</Text>
+      <View style={styles.categoryMeta}>
+        <Text style={styles.categoryCount}>{item.count}</Text>
+        <Text style={styles.categoryDuration}>{item.duration}</Text>
+      </View>
     </TouchableOpacity>
   );
 

@@ -7,8 +7,8 @@ const FALLBACK_DATA = {
       id: 'mental-health',
       name: '心理健康评估',
       description: '评估您的情绪状态、压力水平、焦虑程度和抑郁倾向',
-      estimatedDuration: 10,
-      questionCount: 20,
+      estimatedDuration: 5,
+      questionCount: 2,
       category: '心理健康',
       icon: 'heart'
     },
@@ -16,8 +16,8 @@ const FALLBACK_DATA = {
       id: 'personality',
       name: '人格特质分析',
       description: '分析您的性格类型、行为倾向和价值观',
-      estimatedDuration: 15,
-      questionCount: 25,
+      estimatedDuration: 3,
+      questionCount: 1,
       category: '人格',
       icon: 'person'
     },
@@ -25,8 +25,8 @@ const FALLBACK_DATA = {
       id: 'cognitive',
       name: '认知能力测试',
       description: '测试您的逻辑思维、空间想象和语言理解能力',
-      estimatedDuration: 12,
-      questionCount: 15,
+      estimatedDuration: 15,
+      questionCount: 5,
       category: '认知',
       icon: 'brain'
     },
@@ -34,8 +34,8 @@ const FALLBACK_DATA = {
       id: 'career',
       name: '职业发展评估',
       description: '评估您的职业兴趣、工作满意度和职业规划',
-      estimatedDuration: 10,
-      questionCount: 18,
+      estimatedDuration: 12,
+      questionCount: 5,
       category: '职业',
       icon: 'briefcase'
     },
@@ -43,8 +43,8 @@ const FALLBACK_DATA = {
       id: 'relationship',
       name: '人际关系测评',
       description: '评估您的亲密关系、社交能力和沟通风格',
-      estimatedDuration: 8,
-      questionCount: 16,
+      estimatedDuration: 10,
+      questionCount: 5,
       category: '人际',
       icon: 'users'
     },
@@ -53,7 +53,7 @@ const FALLBACK_DATA = {
       name: '生活质量评估',
       description: '评估您的睡眠质量、生活习惯和情绪管理能力',
       estimatedDuration: 10,
-      questionCount: 14,
+      questionCount: 5,
       category: '生活',
       icon: 'leaf'
     }

@@ -191,6 +191,16 @@ export default StyleSheet.create({
     fontSize: 12,
     color: TextColors.tertiary,
   },
+  categoryMeta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 4,
+  },
+  categoryDuration: {
+    fontSize: 12,
+    color: TextColors.tertiary,
+  },
   recentActivityCard: {
     backgroundColor: CardColors.background,
     borderRadius: 16,
