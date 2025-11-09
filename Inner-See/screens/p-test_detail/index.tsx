@@ -8,6 +8,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from './styles';
 import { BackgroundGradient, PrimaryColors, TextColors } from '../../src/constants/Colors';
+import { ApiService } from '../../src/services/ApiService';
 
 interface TestData {
   title: string;
@@ -21,135 +22,101 @@ interface TestData {
   features: string[];
 }
 
+// 自定义测试的配置
+const getCustomTestConfig = (): TestData => ({
+  title: '自定义测试',
+  category: '自定义测试',
+  icon: 'puzzle-piece',
+  iconGradient: ['#f59e0b', '#d97706'],
+  duration: '个性化时长',
+  questions: '个性化题数',
+  difficulty: '自定义',
+  description: '根据您的需求定制专属心理健康测试，灵活调整测试内容和难度，为您提供个性化的心理健康评估体验。',
+  features: [
+    '个性化定制：根据您的需求调整测试内容',
+    '灵活配置：可选择测试难度和时长',
+    '专业指导：基于您的具体情况提供专业建议',
+    '隐私保护：所有数据本地存储，确保隐私安全'
+  ]
+});
+
 const TestDetailScreen = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
   const testType = (params.test_type_id as string) || 'depression';
   const [currentTestData, setCurrentTestData] = useState<TestData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const apiService = ApiService.getInstance();
 
-  // 测试数据模拟
-  const testDataMap: Record<string, TestData> = {
-    'mental-health': {
-      title: '心理健康评估',
-      category: '心理健康评估',
-      icon: 'heart',
-      iconGradient: ['#f472b6', '#a855f7'],
-      duration: '10分钟',
-      questions: '20题',
-      difficulty: '简单',
-      description: '全面的心理健康评估，涵盖情绪状态、压力水平、焦虑程度和抑郁倾向的综合测评。通过科学的量表和专业的评估方法，帮助您全面了解自己的心理状态。',
-      features: [
-        '全面评估：涵盖多个心理健康维度',
-        '专业权威：基于国际标准量表',
-        '隐私保护：所有数据本地存储',
-        '详细解读：提供专业改善建议'
-      ]
-    },
-    'personality': {
-      title: '人格特质分析',
-      category: '人格特质分析',
-      icon: 'user',
-      iconGradient: ['#60a5fa', '#06b6d4'],
-      duration: '15分钟',
-      questions: '25题',
-      difficulty: '中等',
-      description: '专业的人格特质分析测试，基于MBTI理论和大五人格模型，深入分析您的性格类型、行为倾向和价值观取向。',
-      features: [
-        '科学理论：基于MBTI和大五人格',
-        '深度分析：多维度人格特质解读',
-        '实用建议：基于性格的发展指导',
-        '职业匹配：提供职业发展建议'
-      ]
-    },
-    'cognitive': {
-      title: '认知能力测试',
-      category: '认知能力测试',
-      icon: 'brain',
-      iconGradient: ['#8b5cf6', '#06b6d4'],
-      duration: '12分钟',
-      questions: '15题',
-      difficulty: '中等',
-      description: '全面的认知能力评估，测试您的逻辑思维、空间想象、语言理解和记忆力等核心认知能力。',
-      features: [
-        '全面测试：涵盖多种认知能力',
-        '科学设计：基于认知心理学研究',
-        '能力评估：准确评估认知水平',
-        '发展建议：提供能力提升指导'
-      ]
-    },
-    'career': {
-      title: '职业发展评估',
-      category: '职业发展评估',
-      icon: 'briefcase',
-      iconGradient: ['#fb923c', '#ef4444'],
-      duration: '10分钟',
-      questions: '18题',
-      difficulty: '简单',
-      description: '专业的职业发展评估，涵盖职业兴趣、工作满意度、职业规划和职业技能的全面测评。',
-      features: [
-        '职业规划：明确职业发展方向',
-        '兴趣匹配：发现适合的职业类型',
-        '能力评估：了解职业技能水平',
-        '发展建议：提供职业发展指导'
-      ]
-    },
-    'relationship': {
-      title: '人际关系测评',
-      category: '人际关系测评',
-      icon: 'users',
-      iconGradient: ['#4ade80', '#3b82f6'],
-      duration: '8分钟',
-      questions: '16题',
-      difficulty: '简单',
-      description: '全面的人际关系测评，评估您的亲密关系、社交能力、沟通风格和冲突处理能力。',
-      features: [
-        '关系评估：全面评估人际关系',
-        '沟通分析：了解沟通风格',
-        '社交能力：评估社交技巧',
-        '改善建议：提供关系改善指导'
-      ]
-    },
-    'quality-of-life': {
-      title: '生活质量评估',
-      category: '生活质量评估',
-      icon: 'leaf',
-      iconGradient: ['#10b981', '#f59e0b'],
-      duration: '10分钟',
-      questions: '14题',
-      difficulty: '简单',
-      description: '全面的生活质量评估，涵盖睡眠质量、生活习惯、情绪管理和生活平衡的综合测评。',
-      features: [
-        '全面评估：涵盖生活质量多个维度',
-        '健康指导：提供健康生活建议',
-        '平衡评估：评估工作生活平衡',
-        '改善方案：提供生活质量提升建议'
-      ]
+  // 根据测试类型获取对应的渐变色
+  const getTestTypeGradient = (category: string): [string, string, ...string[]] => {
+    const gradients: Record<string, [string, string, ...string[]]> = {
+      '心理健康': ['#f472b6', '#a855f7'],
+      '人格': ['#60a5fa', '#06b6d4'],
+      '认知': ['#fb923c', '#ef4444'],
+      '职业': ['#2dd4bf', '#06b6d4'],
+      '人际': ['#818cf8', '#a855f7'],
+      '生活': ['#4ade80', '#3b82f6'],
+    };
+    
+    return gradients[category] || ['#f59e0b', '#d97706'];
+  };
+
+  // 获取测试难度等级
+  const getDifficultyLevel = (duration: number): string => {
+    if (duration <= 5) return '简单';
+    if (duration <= 10) return '中等';
+    return '困难';
+  };
+
+  // 加载测试数据
+  const loadTestData = async () => {
+    try {
+      setIsLoading(true);
+      
+      // 如果是自定义测试，直接返回配置
+      if (testType === 'custom') {
+        setCurrentTestData(getCustomTestConfig());
+        return;
+      }
+      
+      // 从 API 获取测试类型数据
+      const testTypeData = await apiService.getTestTypeById(testType);
+      
+      if (!testTypeData) {
+        Alert.alert('错误', '测试类型不存在');
+        router.back();
+        return;
+      }
+      
+      // 转换 API 数据为 UI 格式
+      const testData: TestData = {
+        title: testTypeData.name,
+        category: testTypeData.name,
+        icon: testTypeData.icon,
+        iconGradient: getTestTypeGradient(testTypeData.category),
+        duration: `${testTypeData.estimatedDuration}分钟`,
+        questions: `${testTypeData.questionCount}题`,
+        difficulty: getDifficultyLevel(testTypeData.estimatedDuration),
+        description: testTypeData.description,
+        features: [
+          '科学评估：基于专业量表和研究',
+          '个性化反馈：根据您的情况提供定制建议',
+          '隐私保护：所有数据本地存储',
+          '专业指导：提供改善建议和发展方向'
+        ]
+      };
+      
+      setCurrentTestData(testData);
+    } catch (error) {
+      console.error('加载测试数据失败:', error);
+      Alert.alert('错误', '加载数据失败，请重试');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    const loadTestData = () => {
-      try {
-        setIsLoading(true);
-        const testTypeKey = testType || 'depression';
-        const testData = testDataMap[testTypeKey];
-        
-        if (!testData) {
-          Alert.alert('错误', '测试类型不存在');
-          router.back();
-          return;
-        }
-        
-        setCurrentTestData(testData);
-      } catch (error) {
-        console.error('加载测试数据失败:', error);
-        Alert.alert('错误', '加载数据失败，请重试');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     loadTestData();
   }, [testType, router]);
 
@@ -163,6 +130,12 @@ const TestDetailScreen = () => {
 
   const handleStartTestPress = () => {
     if (!currentTestData) return;
+    
+    // 如果是自定义测试，跳转到自定义测试页面
+    if (testType === 'custom') {
+      router.push('/p-custom_test');
+      return;
+    }
     
     // 添加点击反馈效果的逻辑可以通过动画库实现
     router.push(`/p-test_question?test_type_id=${testType || 'depression'}`);

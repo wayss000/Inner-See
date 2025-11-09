@@ -793,6 +793,19 @@ export class ApiService {
 
   // 获取单个测试类型
   async getTestTypeById(id: string): Promise<TestType | null> {
+    // 特殊处理自定义测试
+    if (id === 'custom') {
+      return {
+        id: 'custom',
+        name: '自定义测试',
+        description: '根据您的需求定制专属心理健康测试',
+        estimatedDuration: 10, // 默认时长
+        questionCount: 5, // 默认题数
+        category: '自定义',
+        icon: 'puzzle-piece'
+      };
+    }
+    
     try {
       const isOnline = await apiClient.checkNetworkStatus();
       

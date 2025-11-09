@@ -52,6 +52,22 @@ function getTestTypeGradient(category: string): [string, string] {
 }
 
 
+/**
+ * 获取自定义测试的配置
+ * @returns 自定义测试配置
+ */
+function getCustomTestConfig(): TestType {
+  return {
+    id: 'custom',
+    title: '自定义测试',
+    description: '根据您的需求定制专属心理健康测试',
+    duration: '个性化时长',
+    questions: '个性化题数',
+    icon: 'puzzle-piece',
+    gradientColors: ['#f59e0b', '#d97706']
+  };
+}
+
 const TestCategoryScreen = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -281,6 +297,13 @@ const TestCategoryScreen = () => {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.testTypesList}>
+            {/* 自定义测试置顶显示 */}
+            <TestTypeItem
+              key="custom"
+              testType={getCustomTestConfig()}
+              onPress={() => router.push('/p-custom_test')}
+            />
+            
             {/* 其他测试类型 */}
             {testTypes.map((testType) => (
               <TestTypeItem
