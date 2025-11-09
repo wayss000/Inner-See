@@ -267,7 +267,7 @@ const CustomTestScreen = () => {
                   <ActivityIndicator size="small" color="#ffffff" />
                 ) : (
                   <>
-                    <FontAwesome6 name="magic" size={20} color="#ffffff" />
+                    <FontAwesome6 name="puzzle-piece" size={20} color="#ffffff" />
                     <Text style={styles.generateButtonText}>生成测试</Text>
                   </>
                 )}

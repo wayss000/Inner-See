@@ -8,7 +8,7 @@ import { DatabaseManager } from '../../src/database/DatabaseManager';
 import { User } from '../../src/entities/TestEntities';
 import AvatarSelector from '../../src/components/AvatarSelector';
 import styles from './styles';
-import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, ButtonColors } from '../../src/constants/Colors';
 
 // 创建一个简单的事件系统来通知数据更新
 const eventEmitter = {
@@ -160,7 +160,7 @@ const ProfileEditScreen = () => {
   }
 
   return (
-    <LinearGradient colors={['#667eea', '#764ba2']} style={styles.container}>
+    <LinearGradient colors={BackgroundGradient.primary} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
           {/* 顶部导航栏 */}
@@ -256,7 +256,7 @@ const ProfileEditScreen = () => {
                 disabled={isSaving}
               >
                 <LinearGradient
-                  colors={[PrimaryColors.main, PrimaryColors.secondary]}
+                  colors={ButtonColors.primary}
                   style={styles.saveButtonGradient}
                 >
                   <Text style={styles.saveButtonText}>

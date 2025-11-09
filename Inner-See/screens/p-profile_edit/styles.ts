@@ -1,5 +1,5 @@
 import { StyleSheet, Platform } from 'react-native';
-import { PrimaryColors, CardColors } from '../../src/constants/Colors';
+import { PrimaryColors, CardColors, TextColors } from '../../src/constants/Colors';
 
 export default StyleSheet.create({
   container: {
@@ -29,7 +29,7 @@ export default StyleSheet.create({
   pageTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   headerRight: {
     width: 40,
@@ -45,34 +45,23 @@ export default StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
     marginBottom: 12,
   },
   input: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: CardColors.background,
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#ffffff',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
+    color: TextColors.primary,
   },
   characterCount: {
     textAlign: 'right',
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: TextColors.secondary,
     marginTop: 4,
   },
   genderContainer: {
@@ -83,22 +72,11 @@ export default StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: CardColors.background,
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
     borderRadius: 12,
     alignItems: 'center',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
   },
   selectedGenderButton: {
     backgroundColor: 'rgba(217, 119, 87, 0.3)', // PrimaryColors.main with 0.3 opacity
@@ -106,7 +84,7 @@ export default StyleSheet.create({
   },
   genderText: {
     fontSize: 16,
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   selectedGenderText: {
     color: PrimaryColors.main,
@@ -124,17 +102,6 @@ export default StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
   },
   saveButtonText: {
     fontSize: 16,
@@ -145,27 +112,16 @@ export default StyleSheet.create({
     flex: 1,
     paddingVertical: 16,
     paddingHorizontal: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: CardColors.background,
+    borderWidth: CardColors.borderWidth,
+    borderColor: CardColors.borderColor,
     borderRadius: 12,
     alignItems: 'center',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
   },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
+    color: TextColors.primary,
   },
   loadingContainer: {
     flex: 1,
@@ -177,6 +133,6 @@ export default StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#ffffff',
+    color: TextColors.primary,
   },
 });
