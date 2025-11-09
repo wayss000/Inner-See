@@ -21,6 +21,16 @@ interface HotTestItem {
   gradientColors: [string, string, ...string[]];
 }
 
+interface CustomTestItem {
+  id: string;
+  title: string;
+  description: string;
+  duration: string;
+  questions: string;
+  icon: string;
+  gradientColors: [string, string, ...string[]];
+}
+
 interface CategoryItem {
   id: string;
   title: string;
@@ -31,7 +41,7 @@ interface CategoryItem {
 
 const HomeScreen: React.FC = () => {
   const router = useRouter();
-  const [hotTests, setHotTests] = useState<HotTestItem[]>([]);
+  const [hotTests, setHotTests] = useState<(HotTestItem | CustomTestItem)[]>([]);
   const [categories, setCategories] = useState<CategoryItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -45,7 +55,7 @@ const HomeScreen: React.FC = () => {
       const testTypes = await apiService.getTestTypes();
       
       if (testTypes && testTypes.length > 0) {
-        // 从API数据中随机选择3个作为热门测试
+        // 从API数据中随机选择2个作为热门测试（自定义测试会占第一个位置）
         const hotTestOptions = testTypes.map(testType => ({
           id: testType.id,
           title: testType.name,
@@ -56,8 +66,10 @@ const HomeScreen: React.FC = () => {
           gradientColors: getTestTypeGradient(testType.category)
         }));
         
-        const selectedHotTests = getRandomItems(hotTestOptions, 3);
-        setHotTests(selectedHotTests);
+        const selectedHotTests = getRandomItems(hotTestOptions, 2);
+        // 将自定义测试添加到热门测试的第一个位置
+        const customTest = getCustomTestConfig();
+        setHotTests([customTest, ...selectedHotTests]);
         
         // 从API数据中随机选择4个作为首页展示的分类
         const categoryOptions = testTypes.map(testType => ({
@@ -72,13 +84,17 @@ const HomeScreen: React.FC = () => {
         setCategories(selectedCategories);
       } else {
         // API数据不可用时，使用备用的随机数据
-        setHotTests(generateRandomHotTests(3));
+        const backupHotTests = generateRandomHotTests(2);
+        const customTest = getCustomTestConfig();
+        setHotTests([customTest, ...backupHotTests]);
         setCategories(generateRandomCategories(4));
       }
     } catch (error) {
       console.error('加载测试数据失败:', error);
       // 出错时使用备用的随机数据
-      setHotTests(generateRandomHotTests(3));
+      const backupHotTests = generateRandomHotTests(2);
+      const customTest = getCustomTestConfig();
+      setHotTests([customTest, ...backupHotTests]);
       setCategories(generateRandomCategories(4));
     } finally {
       setLoading(false);
@@ -97,6 +113,22 @@ const HomeScreen: React.FC = () => {
     };
     
     return gradients[category] || ['#f59e0b', '#ea580c'];
+  };
+
+  /**
+   * 获取自定义测试的配置
+   * @returns 自定义测试配置
+   */
+  const getCustomTestConfig = (): CustomTestItem => {
+    return {
+      id: 'custom',
+      title: '自定义测试',
+      description: '根据您的需求定制专属心理健康测试',
+      duration: '个性化时长',
+      questions: '个性化题数',
+      icon: 'puzzle-piece',
+      gradientColors: ['#f59e0b', '#d97706']
+    };
   };
 
   useEffect(() => {
@@ -145,10 +177,16 @@ const HomeScreen: React.FC = () => {
     router.push('/p-result_display?record_id=recent_activity_1');
   };
 
-  const renderHotTestItem = ({ item }: { item: HotTestItem }) => (
+  const renderHotTestItem = ({ item }: { item: HotTestItem | CustomTestItem }) => (
     <TouchableOpacity
       style={styles.hotTestCard}
-      onPress={() => handleHotTestPress(item.id)}
+      onPress={() => {
+        if (item.id === 'custom') {
+          router.push('/p-custom_test');
+        } else {
+          handleHotTestPress(item.id);
+        }
+      }}
       activeOpacity={0.8}
     >
       <LinearGradient
@@ -166,10 +204,12 @@ const HomeScreen: React.FC = () => {
           <FontAwesome6 name="clock" size={10} color="rgba(255, 255, 255, 0.6)" />
           <Text style={styles.hotTestMetaText}>{item.duration}</Text>
         </View>
-        <View style={styles.hotTestMetaItem}>
-          <FontAwesome6 name="star" size={10} color="rgba(255, 255, 255, 0.6)" />
-          <Text style={styles.hotTestMetaText}>{item.difficulty}</Text>
-        </View>
+        {item.id !== 'custom' && (
+          <View style={styles.hotTestMetaItem}>
+            <FontAwesome6 name="star" size={10} color="rgba(255, 255, 255, 0.6)" />
+            <Text style={styles.hotTestMetaText}>{(item as HotTestItem).difficulty}</Text>
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
