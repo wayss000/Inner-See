@@ -12,7 +12,7 @@ import TestRecordItem from './components/TestRecordItem';
 import EmptyState from './components/EmptyState';
 import { DatabaseManager } from '../../src/database/DatabaseManager';
 import { convertDbRecordToUI, PAGINATION_CONFIG } from '../../src/utils/HistoryUtils';
-import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, BackButtonStyles } from '../../src/constants/Colors';
 
 interface TestRecord {
   id: string;
@@ -156,11 +156,11 @@ const HistoryScreen: React.FC = () => {
       <View style={styles.headerContent}>
         <View style={styles.headerLeft}>
           <TouchableOpacity
-            style={styles.backButton}
+            style={BackButtonStyles.container}
             onPress={handleBackPress}
             activeOpacity={0.7}
           >
-            <FontAwesome6 name="arrow-left" size={18} color={PrimaryColors.main} />
+            <FontAwesome6 name="arrow-left" size={18} style={BackButtonStyles.icon} />
           </TouchableOpacity>
           <View style={styles.pageTitleSection}>
             <Text style={styles.pageTitle}>测试历史</Text>

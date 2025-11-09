@@ -48,7 +48,7 @@ export default StyleSheet.create({
     }),
   },
   backIcon: {
-    color: '#ffffff',
+    color: '#d97757',
     fontSize: 18,
   },
   headerTitleSection: {

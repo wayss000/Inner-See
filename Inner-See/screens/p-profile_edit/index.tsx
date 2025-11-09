@@ -8,7 +8,7 @@ import { DatabaseManager } from '../../src/database/DatabaseManager';
 import { User } from '../../src/entities/TestEntities';
 import AvatarSelector from '../../src/components/AvatarSelector';
 import styles from './styles';
-import { BackgroundGradient, PrimaryColors, ButtonColors } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, ButtonColors, BackButtonStyles } from '../../src/constants/Colors';
 
 // 创建一个简单的事件系统来通知数据更新
 const eventEmitter = {
@@ -165,8 +165,8 @@ const ProfileEditScreen = () => {
         <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
           {/* 顶部导航栏 */}
           <View style={styles.header}>
-            <TouchableOpacity style={styles.backButton} onPress={handleCancel} activeOpacity={0.7}>
-              <FontAwesome6 name="arrow-left" size={18} color="#ffffff" />
+            <TouchableOpacity style={BackButtonStyles.container} onPress={handleCancel} activeOpacity={0.7}>
+              <FontAwesome6 name="arrow-left" size={18} style={BackButtonStyles.icon} />
             </TouchableOpacity>
             <Text style={styles.pageTitle}>编辑个人信息</Text>
             <View style={styles.headerRight} />

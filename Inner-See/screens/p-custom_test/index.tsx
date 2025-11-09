@@ -7,7 +7,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import styles from './styles';
 import { CustomTestConfig, GeneratedTest } from '../../src/types/AITypes';
 import { AIService } from '../../src/services/AIService';
-import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, BackButtonStyles } from '../../src/constants/Colors';
 
 const CustomTestScreen = () => {
   console.log('CustomTestScreen 组件开始渲染');
@@ -225,11 +225,11 @@ const CustomTestScreen = () => {
         {/* 顶部导航栏 */}
         <View style={styles.header}>
           <TouchableOpacity
-            style={styles.backButton}
+            style={BackButtonStyles.container}
             onPress={handleBackPress}
             activeOpacity={0.7}
           >
-            <FontAwesome6 name="arrow-left" size={18} color="#ffffff" />
+            <FontAwesome6 name="arrow-left" size={18} style={BackButtonStyles.icon} />
           </TouchableOpacity>
           <View style={styles.titleSection}>
             <Text style={styles.pageTitle}>自定义测试</Text>

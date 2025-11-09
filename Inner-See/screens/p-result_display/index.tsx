@@ -13,7 +13,7 @@ import AIAskButton from './components/AIAskButton';
 import AISupplementInput from './components/AISupplementInput';
 import AIAnalysisResultComponent from './components/AIAnalysisResult';
 import styles from './styles';
-import { BackgroundGradient, PrimaryColors, TextColors } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, TextColors, BackButtonStyles } from '../../src/constants/Colors';
 
 interface TestResult {
   id?: string;
@@ -402,8 +402,8 @@ const ResultDisplayScreen = () => {
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <View style={styles.headerLeft}>
-              <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-                <FontAwesome6 name="arrow-left" size={18} color={PrimaryColors.main} />
+              <TouchableOpacity style={BackButtonStyles.container} onPress={handleBackPress}>
+                <FontAwesome6 name="arrow-left" size={18} style={BackButtonStyles.icon} />
               </TouchableOpacity>
               <View style={styles.headerTitleSection}>
                 <Text style={styles.pageTitle}>测试结果</Text>

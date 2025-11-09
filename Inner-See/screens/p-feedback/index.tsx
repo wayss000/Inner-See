@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from './styles';
-import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, BackButtonStyles } from '../../src/constants/Colors';
 
 type FeedbackType = '建议' | '问题' | '其他';
 
@@ -161,11 +161,11 @@ const FeedbackScreen: React.FC = () => {
             {/* 顶部导航栏 */}
             <View style={styles.header}>
               <TouchableOpacity
-                style={styles.backButton}
+                style={BackButtonStyles.container}
                 onPress={handleBackPress}
                 activeOpacity={0.7}
               >
-                <FontAwesome6 name="arrow-left" style={styles.backIcon} />
+                <FontAwesome6 name="arrow-left" size={18} style={BackButtonStyles.icon} />
               </TouchableOpacity>
               <View style={styles.headerTitleSection}>
                 <Text style={styles.pageTitle}>反馈建议</Text>

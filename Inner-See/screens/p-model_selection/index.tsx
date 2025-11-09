@@ -6,7 +6,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { DatabaseManager } from '../../src/database/DatabaseManager';
 import { styles } from './styles';
-import { BackgroundGradient, PrimaryColors } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, BackButtonStyles } from '../../src/constants/Colors';
 
 interface ModelOption {
   label: string;
@@ -70,8 +70,8 @@ const ModelSelectionScreen = () => {
       <SafeAreaView style={styles.safeArea}>
         {/* 标题栏 */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <FontAwesome6 name="arrow-left" size={20} color={PrimaryColors.main} />
+          <TouchableOpacity style={BackButtonStyles.container} onPress={handleBack}>
+            <FontAwesome6 name="arrow-left" size={18} style={BackButtonStyles.icon} />
           </TouchableOpacity>
           <Text style={styles.title}>模型选择</Text>
           <View style={styles.rightPlaceholder} />

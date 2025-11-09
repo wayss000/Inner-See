@@ -3,6 +3,8 @@
  * 温暖、人文风格的配色，适合全年龄段用户
  */
 
+import { StyleSheet } from 'react-native';
+
 // 背景渐变
 export const BackgroundGradient = {
   primary: ['#fef3e2', '#f5e6d3'] as [string, string], // 温暖米色渐变
@@ -63,6 +65,21 @@ export const NavigationColors = {
   tabBarActive: '#d97757',      // 底部导航激活色
   tabBarInactive: '#9a9a9a',   // 底部导航未激活色
   tabBarBackground: '#ffffffcc', // 底部导航背景
+};
+
+// 返回按钮样式
+export const BackButtonStyles = {
+  container: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
+  },
+  icon: {
+    color: '#d97757',
+  }
 };
 
 // 旧配色（用于对比和迁移参考）

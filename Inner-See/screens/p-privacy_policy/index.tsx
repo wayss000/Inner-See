@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import styles from './styles';
-import { BackgroundGradient, PrimaryColors, TextColors } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, TextColors, BackButtonStyles } from '../../src/constants/Colors';
 
 const PrivacyPolicyScreen = () => {
   const router = useRouter();
@@ -35,7 +35,7 @@ const PrivacyPolicyScreen = () => {
                 onPress={handleBack}
                 activeOpacity={0.7}
               >
-                <FontAwesome6 name="arrow-left" size={18} color={TextColors.white} />
+                <FontAwesome6 name="arrow-left" size={18} color={PrimaryColors.main} />
               </TouchableOpacity>
               <View style={styles.pageTitleSection}>
                 <Text style={styles.pageTitle}>隐私政策</Text>

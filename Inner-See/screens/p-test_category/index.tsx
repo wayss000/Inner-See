@@ -9,7 +9,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import TestTypeItem from './components/TestTypeItem';
 import styles from './styles';
 import { ApiService } from '../../src/services/ApiService';
-import { BackgroundGradient } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, BackButtonStyles } from '../../src/constants/Colors';
 
 const { useEffect, useState } = React;
 
@@ -278,11 +278,11 @@ const TestCategoryScreen = () => {
         {/* 顶部导航栏 */}
         <View style={styles.header}>
           <TouchableOpacity
-            style={styles.backButton}
+            style={BackButtonStyles.container}
             onPress={handleBackPress}
             activeOpacity={0.7}
           >
-            <FontAwesome6 name="arrow-left" size={18} color="#ffffff" />
+            <FontAwesome6 name="arrow-left" size={18} style={BackButtonStyles.icon} />
           </TouchableOpacity>
           <View style={styles.titleSection}>
             <Text style={styles.pageTitle}>测试分类</Text>

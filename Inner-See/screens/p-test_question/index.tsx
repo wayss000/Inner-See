@@ -631,7 +631,7 @@ const TestQuestionScreen: React.FC = () => {
               <TouchableOpacity
                 style={styles.backButton}
                 onPress={handleBackPress}
-                activeOpacity={0.8}
+                activeOpacity={0.7}
               >
                 <FontAwesome6 name="arrow-left" size={18} color={PrimaryColors.main} />
               </TouchableOpacity>

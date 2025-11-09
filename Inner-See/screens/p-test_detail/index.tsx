@@ -7,7 +7,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from './styles';
-import { BackgroundGradient, PrimaryColors, TextColors } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, TextColors, BackButtonStyles } from '../../src/constants/Colors';
 import { ApiService } from '../../src/services/ApiService';
 
 interface TestData {
@@ -173,12 +173,12 @@ const TestDetailScreen = () => {
         >
           {/* 顶部导航栏 */}
           <View style={styles.header}>
-            <TouchableOpacity 
-              style={styles.backButton}
+            <TouchableOpacity
+              style={BackButtonStyles.container}
               onPress={handleBackPress}
               activeOpacity={0.7}
             >
-              <FontAwesome6 name="arrow-left" size={18} color={PrimaryColors.main} />
+              <FontAwesome6 name="arrow-left" size={18} style={BackButtonStyles.icon} />
             </TouchableOpacity>
             <View style={styles.headerTitleSection}>
               <Text style={styles.pageTitle}>测试详情</Text>
