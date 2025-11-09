@@ -2,9 +2,9 @@
 An AI-powered app for exploring inner self and self-discovery. Supports both Android and iOS platforms.
 
 ## Development Notes
-This project was developed almost entirely using the KAT-Coder-Pro V1 model.
+This project was developed almost entirely using the **KAT-Coder-Pro V1** model.
 
-### Advantages of KAT-Coder-Pro V1
+### Advantages of **KAT-Coder-Pro V1**
 
 KAT-Coder-Pro V1 is a high-performance AI coding assistant that demonstrated significant advantages during the development of this project:
 
@@ -29,4 +29,4 @@ KAT-Coder-Pro V1 is a high-performance AI coding assistant that demonstrated sig
 - **Modular Design**: Generates highly modular components, facilitating maintenance and extension
 - **Interface Design**: Designs reasonable API interfaces, ensuring stable front-end and back-end data interaction
 
-Thanks to these advantages of the KAT-Coder-Pro V1 model, this project was able to complete development quickly and with high quality, demonstrating the great potential of AI-assisted development.
+Thanks to these advantages of the **KAT-Coder-Pro** model, this project was able to complete development quickly and with high quality, demonstrating the great potential of AI-assisted development.
