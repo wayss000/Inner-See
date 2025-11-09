@@ -82,6 +82,33 @@ export const BackButtonStyles = {
   }
 };
 
+// 关闭按钮样式
+export const CloseButtonStyles = {
+  container: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(139, 92, 246, 0.2)',
+    shadowColor: '#8b5cf6',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  icon: {
+    color: '#d97757',
+  },
+  disabled: {
+    backgroundColor: 'rgba(156, 163, 175, 0.1)',
+    borderColor: 'rgba(156, 163, 175, 0.3)',
+    opacity: 0.6,
+  }
+};
+
 // 旧配色（用于对比和迁移参考）
 export const LegacyColors = {
   backgroundGradient: ['#667eea', '#764ba2'] as [string, string],

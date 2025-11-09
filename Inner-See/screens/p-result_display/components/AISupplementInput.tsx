@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, Dimensions, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
-import { PrimaryColors } from '../../../src/constants/Colors';
+import { PrimaryColors, CloseButtonStyles } from '../../../src/constants/Colors';
 
 const { width: screenWidth } = Dimensions.get('window');
 const MODAL_WIDTH = Math.min(screenWidth * 0.9, 360);
@@ -65,11 +65,19 @@ const AISupplementInput: React.FC<AISupplementInputProps> = ({
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>补充更多信息</Text>
                 <TouchableOpacity
-                  style={styles.closeButton}
+                  style={[
+                    CloseButtonStyles.container,
+                    loading && CloseButtonStyles.disabled
+                  ]}
                   onPress={handleClose}
                   disabled={loading}
+                  activeOpacity={0.7}
                 >
-                  <FontAwesome6 name="times" size={20} color="#6b7280" />
+                  <FontAwesome6
+                    name="xmark"
+                    size={20}
+                    color={CloseButtonStyles.icon.color}
+                  />
                 </TouchableOpacity>
               </View>
 
@@ -166,13 +174,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#1f2937',
     flex: 1,
-  },
-  closeButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   inputContainer: {
     marginBottom: 16,

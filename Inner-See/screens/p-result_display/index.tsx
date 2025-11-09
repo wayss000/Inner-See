@@ -13,7 +13,7 @@ import AIAskButton from './components/AIAskButton';
 import AISupplementInput from './components/AISupplementInput';
 import AIAnalysisResultComponent from './components/AIAnalysisResult';
 import styles from './styles';
-import { BackgroundGradient, PrimaryColors, TextColors, BackButtonStyles } from '../../src/constants/Colors';
+import { BackgroundGradient, PrimaryColors, TextColors, BackButtonStyles, CloseButtonStyles } from '../../src/constants/Colors';
 
 interface TestResult {
   id?: string;
@@ -661,12 +661,13 @@ const ResultDisplayScreen = () => {
               <View style={styles.aiModalHeader}>
                 <Text style={styles.aiModalTitle}>AI深度分析</Text>
                 <TouchableOpacity
-                  style={styles.aiModalCloseButton}
+                  style={CloseButtonStyles.container}
                   onPress={() => {
                     setShowAiResult(false);
                   }}
+                  activeOpacity={0.7}
                 >
-                  <FontAwesome6 name="times" size={16} color="#6b7280" />
+                  <FontAwesome6 name="xmark" size={16} color={CloseButtonStyles.icon.color} />
                 </TouchableOpacity>
               </View>
               <ScrollView 
