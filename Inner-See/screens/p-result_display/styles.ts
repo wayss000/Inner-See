@@ -544,5 +544,62 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+ // 自定义测试提示区域样式
+ customTestHintSection: {
+   paddingHorizontal: 24,
+   marginBottom: 32,
+ },
+ customTestHintCard: {
+   backgroundColor: CardColors.background,
+   borderRadius: 16,
+   padding: 24,
+   borderWidth: CardColors.borderWidth,
+   borderColor: CardColors.borderColor,
+ },
+ customTestHintContent: {
+   gap: 20,
+ },
+ customTestHintText: {
+   fontSize: 16,
+   lineHeight: 24,
+   color: TextColors.primary,
+   textAlign: 'center',
+   marginBottom: 16,
+ },
+ customTestHintFeatures: {
+   flexDirection: 'row',
+   justifyContent: 'space-around',
+   alignItems: 'center',
+   paddingVertical: 12,
+   backgroundColor: 'rgba(245, 158, 11, 0.1)',
+   borderRadius: 12,
+ },
+ hintFeatureItem: {
+   alignItems: 'center',
+   gap: 6,
+ },
+ hintFeatureText: {
+   fontSize: 12,
+   fontWeight: '500',
+   color: PrimaryColors.main,
+ },
+ aiActionButton: {
+   borderRadius: 12,
+   overflow: 'hidden',
+   marginTop: 12,
+ },
+ aiActionButtonGradient: {
+   flexDirection: 'row',
+   alignItems: 'center',
+   justifyContent: 'center',
+   paddingVertical: 14,
+   paddingHorizontal: 24,
+   gap: 8,
+ },
+ aiActionButtonText: {
+   fontSize: 16,
+   fontWeight: '600',
+   color: TextColors.white,
+ },
 });
 

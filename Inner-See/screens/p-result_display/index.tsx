@@ -201,37 +201,47 @@ const ResultDisplayScreen = () => {
           console.log('testRecord.totalScore:', testRecord.totalScore);
           console.log('testRecord.aiAnalysisResult:', testRecord.aiAnalysisResult);
           console.log('testRecord.aiAnalysisResult是否为空:', !testRecord.aiAnalysisResult);
+          console.log('testRecord.testTypeId:', testRecord.testTypeId);
+          
+          // 判断是否为自定义测试
+          const isCustomTest = testRecord.testTypeId === 'custom';
           
           // 从数据库记录生成测试结果
           const result: TestResult = {
                        id: testRecord.id,
-                       testName: testRecord.testTypeId === 'mental-health' ? '抑郁症评估' : 'MBTI性格测试',
+                       testName: isCustomTest ? '自定义测试' :
+                                testRecord.testTypeId === 'mental-health' ? '抑郁症评估' : 'MBTI性格测试',
                        score: testRecord.totalScore || 0,
                        level: testRecord.resultSummary || '未知',
                        levelPercentage: Math.min((testRecord.totalScore || 0) * 10, 100), // 简单的百分比计算
-                       interpretation: [
-                         `根据您的测试结果，${testRecord.resultSummary || '测试完成'}。`,
-                         '这是基于您答题情况生成的个性化结果。',
-                         '建议定期进行心理状态评估，保持良好的生活习惯。'
-                       ],
-                       suggestions: testRecord.improvementSuggestions ? [
-                         {
-                           title: '改善建议',
-                           text: testRecord.improvementSuggestions,
-                           icon: 'lightbulb'
-                         }
-                       ] : [
-                         {
-                           title: '增加体育锻炼',
-                           text: '每天进行30分钟的有氧运动，有助于改善情绪状态。',
-                           icon: 'person-walking'
-                         },
-                         {
-                           title: '改善睡眠质量',
-                           text: '保持规律的作息时间，创造舒适的睡眠环境。',
-                           icon: 'moon'
-                         }
-                       ],
+                       // 自定义测试不显示结果解读
+                       interpretation: isCustomTest ?
+                         ['这是您创建的自定义测试结果。由于题目由AI生成，传统解读可能不够准确。'] :
+                         [
+                           `根据您的测试结果，${testRecord.resultSummary || '测试完成'}。`,
+                           '这是基于您答题情况生成的个性化结果。',
+                           '建议定期进行心理状态评估，保持良好的生活习惯。'
+                         ],
+                       // 自定义测试不显示改善建议
+                       suggestions: isCustomTest ? [] :
+                         (testRecord.improvementSuggestions ? [
+                           {
+                             title: '改善建议',
+                             text: testRecord.improvementSuggestions,
+                             icon: 'lightbulb'
+                           }
+                         ] : [
+                           {
+                             title: '增加体育锻炼',
+                             text: '每天进行30分钟的有氧运动，有助于改善情绪状态。',
+                             icon: 'person-walking'
+                           },
+                           {
+                             title: '改善睡眠质量',
+                             text: '保持规律的作息时间，创造舒适的睡眠环境。',
+                             icon: 'moon'
+                           }
+                         ]),
                        aiAnalysisResult: testRecord.aiAnalysisResult ? JSON.parse(testRecord.aiAnalysisResult) : null,
                        questionResults: [] // 将通过updateQuestionResults函数从user_answers表获取
                      };
@@ -460,104 +470,187 @@ const ResultDisplayScreen = () => {
             </View>
           </View>
 
-          {/* 结果解读区 */}
-          <View style={styles.interpretationSection}>
-            <View style={styles.interpretationCard}>
-              <View style={styles.sectionHeader}>
-                <LinearGradient
-                  colors={['#60a5fa', '#06b6d4']}
-                  style={styles.sectionIcon}
-                >
-                  <FontAwesome6 name="lightbulb" size={18} color={PrimaryColors.main} />
-                </LinearGradient>
-                <Text style={styles.sectionTitle}>结果解读</Text>
-              </View>
-              
-              <View style={styles.interpretationContent}>
-                {testResult.interpretation.map((text, index) => (
-                  <Text key={index} style={styles.interpretationText}>
-                    {text}
-                  </Text>
-                ))}
-              </View>
-            </View>
-          </View>
-
-          {/* 改善建议区 */}
-          <View style={styles.suggestionsSection}>
-            <View style={styles.suggestionsCard}>
-              <View style={styles.sectionHeader}>
-                <LinearGradient
-                  colors={['#4ade80', '#3b82f6']}
-                  style={styles.sectionIcon}
-                >
-                  <FontAwesome6 name="heart" size={18} color={PrimaryColors.main} />
-                </LinearGradient>
-                <Text style={styles.sectionTitle}>改善建议</Text>
-              </View>
-              
-              <View style={styles.suggestionsList}>
-                {testResult.suggestions.map((suggestion, index) => (
-                  <View key={index} style={styles.suggestionItem}>
-                    <View style={styles.suggestionIcon}>
-                      <FontAwesome6 name={suggestion.icon as any} size={14} color={TextColors.white} />
+          {/* 自定义测试提示区 */}
+          {(() => {
+            const isCustomTest = testResult.testName.includes('自定义');
+            if (isCustomTest) {
+              return (
+                <View style={styles.customTestHintSection}>
+                  <View style={styles.customTestHintCard}>
+                    <View style={styles.sectionHeader}>
+                      <LinearGradient
+                        colors={['#f59e0b', '#eab308']}
+                        style={styles.sectionIcon}
+                      >
+                        <FontAwesome6 name="sparkles" size={18} color={TextColors.white} />
+                      </LinearGradient>
+                      <Text style={styles.sectionTitle}>AI深度分析</Text>
                     </View>
-                    <View style={styles.suggestionContent}>
-                      <Text style={styles.suggestionTitle}>{suggestion.title}</Text>
-                      <Text style={styles.suggestionText}>{suggestion.text}</Text>
+                    
+                    <View style={styles.customTestHintContent}>
+                      <Text style={styles.customTestHintText}>
+                        您的自定义测试已完成！由于题目由AI生成，为了获得更准确的分析结果，建议您点击AI分析按钮，获取个性化的深度解读。
+                      </Text>
+                      
+                      <View style={styles.customTestHintFeatures}>
+                        <View style={styles.hintFeatureItem}>
+                          <FontAwesome6 name="brain" size={14} color={PrimaryColors.main} />
+                          <Text style={styles.hintFeatureText}>AI智能分析</Text>
+                        </View>
+                        <View style={styles.hintFeatureItem}>
+                          <FontAwesome6 name="chart-line" size={14} color={PrimaryColors.main} />
+                          <Text style={styles.hintFeatureText}>个性化解读</Text>
+                        </View>
+                        <View style={styles.hintFeatureItem}>
+                          <FontAwesome6 name="lightbulb" size={14} color={PrimaryColors.main} />
+                          <Text style={styles.hintFeatureText}>专业建议</Text>
+                        </View>
+                      </View>
+                      
+                      <TouchableOpacity
+                        style={styles.aiActionButton}
+                        onPress={() => {
+                          // 根据AI分析状态决定行为
+                          console.log('自定义测试提示中的AI分析按钮被点击，当前状态:', {
+                            aiButtonState,
+                            hasSavedResult: aiAnalysisState.hasSavedResult,
+                            aiAnalysisResult: testResult?.aiAnalysisResult
+                          });
+                          
+                          if (aiButtonState === 'viewable' || aiButtonState === 'completed') {
+                            // 如果有保存的结果，直接显示结果
+                            console.log('显示保存的AI分析结果');
+                            setShowAiResult(true);
+                          } else {
+                            // 否则进入补充信息输入
+                            console.log('进入补充信息输入');
+                            setShowSupplementInput(true);
+                          }
+                        }}
+                        disabled={aiButtonState === 'loading' || aiButtonState === 'regenerating'}
+                      >
+                        <LinearGradient
+                          colors={getButtonColors()}
+                          style={styles.aiActionButtonGradient}
+                        >
+                          <FontAwesome6 name={getButtonIconName()} size={16} color={TextColors.white} />
+                          <Text style={styles.aiActionButtonText}>
+                            {aiButtonState === 'viewable' || aiButtonState === 'completed' ? '查看结果' :
+                             aiButtonState === 'loading' || aiButtonState === 'regenerating' ? 'AI分析中' : '立即分析'}
+                          </Text>
+                        </LinearGradient>
+                      </TouchableOpacity>
                     </View>
                   </View>
-                ))}
-              </View>
-            </View>
-          </View>
+                </View>
+              );
+            }
+          })()}
 
-          {/* 专业参考资料区 */}
-          <View style={styles.referencesSection}>
-            <View style={styles.referencesCard}>
-              <View style={styles.sectionHeader}>
-                <LinearGradient
-                  colors={['#a78bfa', '#ec4899']}
-                  style={styles.sectionIcon}
-                >
-                  <FontAwesome6 name="book" size={18} color={PrimaryColors.main} />
-                </LinearGradient>
-                <Text style={styles.sectionTitle}>专业参考</Text>
-              </View>
-              
-              <View style={styles.referencesContent}>
-                <View style={styles.referenceItem}>
-                  <Text style={styles.referenceTitle}>PHQ-9 抑郁症筛查量表</Text>
-                  <Text style={styles.referenceText}>
-                    本测试基于PHQ-9量表，是国际通用的抑郁症筛查工具，具有良好的信度和效度。
-                  </Text>
-                  <View style={styles.referenceScoring}>
-                    <Text style={styles.referenceScoringText}>• 0-4分：无抑郁症状</Text>
-                    <Text style={styles.referenceScoringText}>• 5-9分：轻度抑郁倾向</Text>
-                    <Text style={styles.referenceScoringText}>• 10-14分：中度抑郁</Text>
-                    <Text style={styles.referenceScoringText}>• 15-27分：重度抑郁</Text>
-                  </View>
+          {/* 结果解读区 - 仅非自定义测试显示 */}
+          {!testResult.testName.includes('自定义') && (
+            <View style={styles.interpretationSection}>
+              <View style={styles.interpretationCard}>
+                <View style={styles.sectionHeader}>
+                  <LinearGradient
+                    colors={['#60a5fa', '#06b6d4']}
+                    style={styles.sectionIcon}
+                  >
+                    <FontAwesome6 name="lightbulb" size={18} color={PrimaryColors.main} />
+                  </LinearGradient>
+                  <Text style={styles.sectionTitle}>结果解读</Text>
                 </View>
                 
-                <View style={styles.referenceItem}>
-                  <Text style={styles.referenceTitle}>专业建议</Text>
-                  <Text style={styles.referenceText}>
-                    如果您的症状持续超过两周，或对日常生活造成明显影响，建议咨询专业心理医生或精神科医师进行进一步评估。
-                  </Text>
-                </View>
-                
-                <View style={styles.emergencyNotice}>
-                  <View style={styles.emergencyHeader}>
-                    <FontAwesome6 name="triangle-exclamation" size={14} color="#fb923c" />
-                    <Text style={styles.emergencyTitle}>重要提醒</Text>
-                  </View>
-                  <Text style={styles.emergencyText}>
-                    本测试仅供参考，不能替代专业医疗诊断。如有严重心理困扰，请及时寻求专业帮助。
-                  </Text>
+                <View style={styles.interpretationContent}>
+                  {testResult.interpretation.map((text, index) => (
+                    <Text key={`interpretation-${index}`} style={styles.interpretationText}>
+                      {text}
+                    </Text>
+                  ))}
                 </View>
               </View>
             </View>
-          </View>
+          )}
+
+          {/* 改善建议区 - 仅非自定义测试显示 */}
+          {!testResult.testName.includes('自定义') && testResult.suggestions.length > 0 && (
+            <View style={styles.suggestionsSection}>
+              <View style={styles.suggestionsCard}>
+                <View style={styles.sectionHeader}>
+                  <LinearGradient
+                    colors={['#4ade80', '#3b82f6']}
+                    style={styles.sectionIcon}
+                  >
+                    <FontAwesome6 name="heart" size={18} color={PrimaryColors.main} />
+                  </LinearGradient>
+                  <Text style={styles.sectionTitle}>改善建议</Text>
+                </View>
+                
+                <View style={styles.suggestionsList}>
+                  {testResult.suggestions.map((suggestion, index) => (
+                    <View key={`suggestion-${index}`} style={styles.suggestionItem}>
+                      <View style={styles.suggestionIcon}>
+                        <FontAwesome6 name={suggestion.icon as any} size={14} color={TextColors.white} />
+                      </View>
+                      <View style={styles.suggestionContent}>
+                        <Text style={styles.suggestionTitle}>{suggestion.title}</Text>
+                        <Text style={styles.suggestionText}>{suggestion.text}</Text>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            </View>
+          )}
+
+          {/* 专业参考资料区 - 仅非自定义测试显示 */}
+          {!testResult.testName.includes('自定义') && (
+            <View style={styles.referencesSection}>
+              <View style={styles.referencesCard}>
+                <View style={styles.sectionHeader}>
+                  <LinearGradient
+                    colors={['#a78bfa', '#ec4899']}
+                    style={styles.sectionIcon}
+                  >
+                    <FontAwesome6 name="book" size={18} color={PrimaryColors.main} />
+                  </LinearGradient>
+                  <Text style={styles.sectionTitle}>专业参考</Text>
+                </View>
+                
+                <View style={styles.referencesContent}>
+                  <View style={styles.referenceItem}>
+                    <Text style={styles.referenceTitle}>PHQ-9 抑郁症筛查量表</Text>
+                    <Text style={styles.referenceText}>
+                      本测试基于PHQ-9量表，是国际通用的抑郁症筛查工具，具有良好的信度和效度。
+                    </Text>
+                    <View style={styles.referenceScoring}>
+                      <Text style={styles.referenceScoringText}>• 0-4分：无抑郁症状</Text>
+                      <Text style={styles.referenceScoringText}>• 5-9分：轻度抑郁倾向</Text>
+                      <Text style={styles.referenceScoringText}>• 10-14分：中度抑郁</Text>
+                      <Text style={styles.referenceScoringText}>• 15-27分：重度抑郁</Text>
+                    </View>
+                  </View>
+                  
+                  <View style={styles.referenceItem}>
+                    <Text style={styles.referenceTitle}>专业建议</Text>
+                    <Text style={styles.referenceText}>
+                      如果您的症状持续超过两周，或对日常生活造成明显影响，建议咨询专业心理医生或精神科医师进行进一步评估。
+                    </Text>
+                  </View>
+                  
+                  <View style={styles.emergencyNotice}>
+                    <View style={styles.emergencyHeader}>
+                      <FontAwesome6 name="triangle-exclamation" size={14} color="#fb923c" />
+                      <Text style={styles.emergencyTitle}>重要提醒</Text>
+                    </View>
+                    <Text style={styles.emergencyText}>
+                      本测试仅供参考，不能替代专业医疗诊断。如有严重心理困扰，请及时寻求专业帮助。
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          )}
 
           {/* 答题详情区 */}
           {testResult.questionResults && testResult.questionResults.length > 0 && (
@@ -575,7 +668,7 @@ const ResultDisplayScreen = () => {
                 
                 <View style={styles.questionDetailsList}>
                   {testResult.questionResults.map((questionResult, index) => (
-                    <View key={index} style={styles.questionDetailItem}>
+                    <View key={`question-${index}`} style={styles.questionDetailItem}>
                       <View style={styles.questionNumber}>
                         <Text style={styles.questionNumberText}>第{index + 1}题</Text>
                       </View>
@@ -731,7 +824,11 @@ const ResultDisplayScreen = () => {
       {/* AI补充信息输入弹窗 */}
       <AISupplementInput
         visible={showSupplementInput}
-        onClose={() => setShowSupplementInput(false)}
+        onClose={() => {
+          // 用户应该随时可以关闭补充信息弹窗
+          console.log('用户关闭补充信息弹窗');
+          setShowSupplementInput(false);
+        }}
         onSubmit={async (supplement) => {
             console.log('=== AI分析开始，onSubmit被调用 ===');
             console.log('当前状态:', {
