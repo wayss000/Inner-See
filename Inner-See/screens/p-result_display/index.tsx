@@ -12,6 +12,7 @@ import { AIAnalysisResult, AIButtonState, AIAnalysisState } from '../../src/type
 import AIAskButton from './components/AIAskButton';
 import AISupplementInput from './components/AISupplementInput';
 import AIAnalysisResultComponent from './components/AIAnalysisResult';
+import ErrorToast from '../../src/components/ErrorToast';
 import styles from './styles';
 import { BackgroundGradient, PrimaryColors, TextColors, BackButtonStyles, CloseButtonStyles } from '../../src/constants/Colors';
 
@@ -67,6 +68,10 @@ const ResultDisplayScreen = () => {
   const [showSupplementInput, setShowSupplementInput] = useState(false);
   const [aiSupplement, setAiSupplement] = useState('');
   const [showAiResult, setShowAiResult] = useState(false);
+  
+  // 错误提示状态
+  const [errorMessage, setErrorMessage] = useState('');
+  const [errorVisible, setErrorVisible] = useState(false);
 
   // 获取按钮图标名称
   const getButtonIconName = () => {
@@ -1147,10 +1152,16 @@ const ResultDisplayScreen = () => {
                 errorStack: error instanceof Error ? error.stack : undefined,
                 errorType: error?.constructor?.name || typeof error,
               });
+              
+              // 显示具体的错误信息
+              const errorMsg = error instanceof Error ? error.message : 'AI分析服务暂时不可用';
+              setErrorMessage(errorMsg);
+              setErrorVisible(true);
+              
               setAiAnalysisState({
                 status: 'error',
                 result: null,
-                error: error instanceof Error ? error.message : 'AI分析服务暂时不可用',
+                error: errorMsg,
                 hasSavedResult: false,
               });
               setAiButtonState('error');
@@ -1159,6 +1170,14 @@ const ResultDisplayScreen = () => {
           }}
           loading={aiButtonState === 'loading'}
         />
+    {/* 错误提示组件 */}
+    <ErrorToast
+      visible={errorVisible}
+      message={errorMessage}
+      duration={3000}
+      onClose={() => setErrorVisible(false)}
+    />
+    
     </LinearGradient>
   );
 };

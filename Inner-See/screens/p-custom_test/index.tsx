@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -8,6 +8,7 @@ import styles from './styles';
 import { CustomTestConfig, GeneratedTest } from '../../src/types/AITypes';
 import { AIService } from '../../src/services/AIService';
 import { BackgroundGradient, PrimaryColors, BackButtonStyles } from '../../src/constants/Colors';
+import ErrorToast from '../../src/components/ErrorToast';
 
 const CustomTestScreen = () => {
   console.log('CustomTestScreen 组件开始渲染');
@@ -16,6 +17,10 @@ const CustomTestScreen = () => {
   const [mode, setMode] = useState<'select' | 'interactive' | 'direct'>('select');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [userDescription, setUserDescription] = useState('');
+  
+  // 错误提示状态
+  const [errorMessage, setErrorMessage] = useState('');
+  const [errorVisible, setErrorVisible] = useState(false);
   
   // 测试分类选项
   const categoryOptions = [
@@ -56,13 +61,15 @@ const CustomTestScreen = () => {
     // 验证输入
     if (mode === 'interactive' && selectedCategories.length === 0) {
       console.log('交互式模式未选择分类');
-      Alert.alert('提示', '请至少选择一个测试分类');
+      setErrorMessage('请至少选择一个测试分类');
+      setErrorVisible(true);
       return;
     }
 
     if (mode === 'direct' && (!userDescription || userDescription.trim().length === 0)) {
       console.log('直接模式未输入描述');
-      Alert.alert('提示', '请输入您的问题描述');
+      setErrorMessage('请输入您的问题描述');
+      setErrorVisible(true);
       return;
     }
 
@@ -94,10 +101,22 @@ const CustomTestScreen = () => {
       console.log('页面跳转完成');
     } catch (error) {
       console.error('生成测试失败:', error);
-      Alert.alert('错误', '生成测试失败，请重试');
+      console.error('错误类型:', typeof error);
+      console.error('错误构造函数:', error?.constructor?.name);
+      console.error('错误消息:', error instanceof Error ? error.message : String(error));
+      
+      // 显示具体的错误信息
+      const errorMessage = error instanceof Error ? error.message : '生成测试失败，请重试';
+      console.log('将显示的错误信息:', errorMessage);
+      setErrorMessage(errorMessage);
+      setErrorVisible(true);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleErrorToastClose = () => {
+    setErrorVisible(false);
   };
 
   const renderSelectMode = () => (
@@ -222,6 +241,14 @@ const CustomTestScreen = () => {
       end={{ x: 1, y: 1 }}
     >
       <SafeAreaView style={styles.safeArea}>
+        {/* 错误提示组件 */}
+        <ErrorToast
+          visible={errorVisible}
+          message={errorMessage}
+          duration={3000}
+          onClose={handleErrorToastClose}
+        />
+
         {/* 顶部导航栏 */}
         <View style={styles.header}>
           <TouchableOpacity

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome6 } from '@expo/vector-icons';
 import MarkdownRenderer from './MarkdownRenderer';
 import { AIAnalysisResult as AIResultType } from '../../../src/types/AITypes';
 import { PrimaryColors, TextColors } from '../../../src/constants/Colors';
+import ErrorToast from '../../../src/components/ErrorToast';
 
 const { width } = Dimensions.get('window');
 
@@ -15,6 +16,24 @@ interface AIAnalysisResultProps {
 }
 
 const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, onClose, onRegenerate }) => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [errorVisible, setErrorVisible] = useState(false);
+
+  const handleErrorToastClose = () => {
+    setErrorVisible(false);
+  };
+
+  const handleRegenerate = () => {
+    if (onRegenerate) {
+      try {
+        onRegenerate();
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : '重新生成失败，请重试';
+        setErrorMessage(errorMessage);
+        setErrorVisible(true);
+      }
+    }
+  };
 
   if (!result) {
     return (
@@ -95,22 +114,25 @@ const AIAnalysisResultComponent: React.FC<AIAnalysisResultProps> = ({ result, on
       {/* 操作按钮区域 */}
       <View style={styles.actionButtonsContainer}>
         <View style={styles.actionButtons}>
-        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-          <Text style={styles.closeButtonText}>关闭</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.regenerateButton}
-          onPress={() => {
-            // 触发重新生成逻辑
-            if (onRegenerate) {
-              onRegenerate();
-            }
-          }}
-        >
-          <Text style={styles.regenerateButtonText}>重新生成</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <Text style={styles.closeButtonText}>关闭</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.regenerateButton}
+            onPress={handleRegenerate}
+          >
+            <Text style={styles.regenerateButtonText}>重新生成</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      </View>
+
+      {/* 错误提示组件 */}
+      <ErrorToast
+        visible={errorVisible}
+        message={errorMessage}
+        duration={3000}
+        onClose={handleErrorToastClose}
+      />
     </View>
   );
 };

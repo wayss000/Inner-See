@@ -105,7 +105,8 @@ export class AIService {
         apiKeySet: !!this.apiKey,
         hasApiKey: !!this.apiKey
       });
-      throw new Error('AI分析服务暂时不可用，请稍后重试');
+      // 重新抛出原始错误，保持具体的错误信息
+      throw error;
     }
   }
 
@@ -149,7 +150,8 @@ export class AIService {
       return result;
     } catch (error) {
       console.error('自定义测试生成失败:', error);
-      throw new Error('自定义测试生成服务暂时不可用，请稍后重试');
+      // 重新抛出原始错误，保持具体的错误信息
+      throw error;
     }
   }
 
@@ -297,7 +299,26 @@ ${questionsDetail}
           statusText: response.statusText,
           errorText: errorText
         });
-        throw new Error(`API请求失败: ${response.status} - ${response.statusText}`);
+        
+        // 解析具体的错误信息
+        let errorMessage = 'AI分析服务暂时不可用，请稍后重试';
+        
+        try {
+          const errorData = JSON.parse(errorText);
+          if (errorData.error && errorData.error.message) {
+            // 提取具体的错误信息，如"您的请求频率过高，请稍后再试"
+            errorMessage = errorData.error.message;
+          }
+        } catch (parseError) {
+          // 如果无法解析JSON，使用原始错误文本中的信息
+          if (errorText.includes('您的请求频率过高')) {
+            errorMessage = '您的请求频率过高，请稍后再试';
+          } else if (errorText.includes('TooManyRequests')) {
+            errorMessage = '请求过于频繁，请稍候再试';
+          }
+        }
+        
+        throw new Error(errorMessage);
       }
 
       const result = await response.json();
