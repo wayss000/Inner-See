@@ -49,5 +49,23 @@ export default StyleSheet.create({
     fontSize: 12,
     color: TextColors.tertiary,
   },
+  customTestBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    backgroundColor: '#f59e0b',
+    borderRadius: 8,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    minWidth: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  customTestBadgeText: {
+    fontSize: 8,
+    fontWeight: '600',
+    color: '#ffffff',
+    lineHeight: 12,
+  },
 });
 

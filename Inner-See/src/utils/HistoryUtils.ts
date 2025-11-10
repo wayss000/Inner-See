@@ -55,7 +55,7 @@ export const TEST_TYPE_CONFIGS: Record<string, TestTypeConfig> = {
   'custom': {
     id: 'custom',
     name: '自定义测试',
-    icon: 'magic',
+    icon: 'puzzle-piece',
     gradientColors: ['#f59e0b', '#d97706'],
     levelColor: '#f59e0b'
   },
@@ -134,10 +134,19 @@ export interface UITestRecord {
   icon: string;
   gradientColors: [string, string, ...string[]];
   levelColor?: string;
+  testTypeId?: string; // 添加测试类型ID字段用于前端区分
+  isCustomTest?: boolean; // 添加自定义测试标识字段
 }
 
 export function convertDbRecordToUI(dbRecord: DbTestRecord): UITestRecord {
   const config = TEST_TYPE_CONFIGS[dbRecord.testTypeId] || TEST_TYPE_CONFIGS['mental-health'];
+  
+  console.log('convertDbRecordToUI 转换数据:', {
+    originalTestTypeId: dbRecord.testTypeId,
+    configName: config.name,
+    configIcon: config.icon,
+    isCustomTest: dbRecord.testTypeId === 'custom'
+  });
   
   return {
     id: dbRecord.id,
@@ -149,7 +158,9 @@ export function convertDbRecordToUI(dbRecord: DbTestRecord): UITestRecord {
     description: dbRecord.testTypeId === 'personality' && dbRecord.resultSummary ? `${dbRecord.resultSummary}类型` : undefined,
     icon: config.icon,
     gradientColors: config.gradientColors,
-    levelColor: config.levelColor
+    levelColor: config.levelColor,
+    testTypeId: dbRecord.testTypeId,
+    isCustomTest: dbRecord.testTypeId === 'custom'
   };
 }
 

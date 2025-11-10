@@ -341,6 +341,7 @@ const TestQuestionScreen: React.FC = () => {
         id: recordId,
         userId: 'user_1',
         testTypeId,
+        testTypeIdFinal: testTypeId === 'custom' ? 'custom' : testTypeId,
         totalScore,
         resultSummary,
         improvementSuggestions

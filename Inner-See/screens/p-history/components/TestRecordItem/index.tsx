@@ -5,7 +5,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from './styles';
-import { PrimaryColors } from '../../../../src/constants/Colors';
+import { PrimaryColors, IconColors } from '../../../../src/constants/Colors';
 
 interface TestRecord {
   id: string;
@@ -18,6 +18,8 @@ interface TestRecord {
   icon: string;
   gradientColors: [string, string, ...string[]];
   levelColor?: string;
+  testTypeId?: string;
+  isCustomTest?: boolean;
 }
 
 interface TestRecordItemProps {
@@ -36,6 +38,8 @@ const TestRecordItem: React.FC<TestRecordItemProps> = ({ record, onPress }) => {
     icon,
     gradientColors,
     levelColor,
+    testTypeId,
+    isCustomTest,
   } = record;
 
   const renderResult = () => {
@@ -75,7 +79,13 @@ const TestRecordItem: React.FC<TestRecordItemProps> = ({ record, onPress }) => {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
         >
-          <FontAwesome6 name={icon} size={18} color={PrimaryColors.main} />
+          <FontAwesome6 name={icon} size={18} color={IconColors.customTest} />
+          {/* 为自定义测试添加特殊标识 */}
+          {isCustomTest && (
+            <View style={styles.customTestBadge}>
+              <Text style={styles.customTestBadgeText}>自定义</Text>
+            </View>
+          )}
         </LinearGradient>
         
         <View style={styles.infoContainer}>

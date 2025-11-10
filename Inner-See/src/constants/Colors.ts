@@ -40,6 +40,14 @@ export const TextColors = {
   white60: 'rgba(255, 255, 255, 0.6)',
 };
 
+// 图标颜色
+export const IconColors = {
+  primary: '#ffffff',     // 主要图标颜色（白色）
+  secondary: '#d97757',   // 次要图标颜色（温暖珊瑚色）
+  tertiary: '#9a9a9a',    // 辅助图标颜色（浅灰）
+  customTest: '#ffffff',  // 自定义测试图标颜色（白色）
+};
+
 // 按钮颜色
 export const ButtonColors = {
   primary: ['#d97757', '#c0847c'] as [string, string], // 主按钮渐变
