@@ -18,10 +18,21 @@ const PersonalCenterScreen = () => {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [statsData, setStatsData] = useState({
+    completedTests: 0,
+    testDays: 0
+  });
 
   useEffect(() => {
     loadUserData();
   }, []);
+
+  // 在用户数据加载完成后，立即加载统计数据
+  useEffect(() => {
+    if (user !== null) {
+      loadStatsData();
+    }
+  }, [user]);
 
   // 监听用户数据更新事件
   useEffect(() => {
@@ -54,6 +65,44 @@ const PersonalCenterScreen = () => {
       });
     }
   }, [user]);
+
+  // 加载测试统计数据
+  const loadStatsData = async () => {
+    try {
+      const dbManager = DatabaseManager.getInstance();
+      await dbManager.initialize();
+
+      // 获取所有测试记录
+      const allRecords = await dbManager.getAllTestRecords();
+      
+      // 计算完成测试数
+      const completedTests = allRecords.length;
+      
+      // 计算测试天数（参与测试的不同天数）
+      const uniqueTestDays = new Set(
+        allRecords.map(record => {
+          // 将时间戳转换为日期字符串（格式：YYYY-MM-DD）
+          const date = new Date(record.createdAt);
+          return date.toISOString().split('T')[0];
+        })
+      );
+      const testDays = uniqueTestDays.size;
+      
+      setStatsData({
+        completedTests,
+        testDays
+      });
+      
+      console.log('统计数据加载完成:', { completedTests, testDays });
+    } catch (error) {
+      console.error('加载统计数据失败:', error);
+      // 如果加载失败，保持默认值
+      setStatsData({
+        completedTests: 0,
+        testDays: 0
+      });
+    }
+  };
 
   const loadUserData = async () => {
     try {
@@ -183,11 +232,11 @@ const PersonalCenterScreen = () => {
                     <Text style={styles.userJoinDate}>加入心探 {user.joinDate ? `${Math.ceil((new Date().getTime() - new Date(user.joinDate).getTime()) / (1000 * 3600 * 24 * 30))} 个月` : '3 个月'}</Text>
                     <View style={styles.userStats}>
                       <View style={styles.statItem}>
-                        <Text style={styles.statCount}>12</Text>
+                        <Text style={styles.statCount}>{statsData.completedTests}</Text>
                         <Text style={styles.statLabel}>完成测试</Text>
                       </View>
                       <View style={styles.statItem}>
-                        <Text style={styles.statCount}>45</Text>
+                        <Text style={styles.statCount}>{statsData.testDays}</Text>
                         <Text style={styles.statLabel}>测试天数</Text>
                       </View>
                     </View>
