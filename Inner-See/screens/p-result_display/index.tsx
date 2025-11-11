@@ -85,7 +85,7 @@ const ResultDisplayScreen = () => {
       case 'viewable':
         return 'eye';
       case 'error':
-        return 'refresh';
+        return 'wifi-exclamation';
       default:
         return 'brain';
     }
