@@ -10,7 +10,9 @@
 
 观看我们的应用演示视频：
 
-<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=115531768205559&bvid=BV12LkyBuEHh&cid=33924710953&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+[![应用演示视频](https://i2.hdslb.com/bfs/archive/487baaaba3093d5ca4b74d2bd6422ee00fa48caa.jpg@.avif)](https://www.bilibili.com/video/BV12LkyBuEHh)
+
+点击上图观看完整演示视频
 
 ### 界面展示
 

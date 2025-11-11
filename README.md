@@ -10,8 +10,9 @@ This project was developed almost entirely using the **KAT-Coder-Pro V1** model.
 
 Watch our application demo video:
 
-<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=115531768205559&bvid=BV12LkyBuEHh&cid=33924710953&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+[![Application Demo Video](https://i2.hdslb.com/bfs/archive/487baaaba3093d5ca4b74d2bd6422ee00fa48caa.jpg@.avif)](https://www.bilibili.com/video/BV12LkyBuEHh)
 
+Click the image above to watch the full demo video
 ### Interface Showcase
 
 Below are screenshots of our application interface:
