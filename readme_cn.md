@@ -8,7 +8,7 @@
 
 ### 应用演示视频
 
-观看我们的应用演示视频：
+观看应用演示视频：
 
 [![应用演示视频](https://i2.hdslb.com/bfs/archive/487baaaba3093d5ca4b74d2bd6422ee00fa48caa.jpg@.avif)](https://www.bilibili.com/video/BV12LkyBuEHh)
 

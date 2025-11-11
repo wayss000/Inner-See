@@ -8,7 +8,7 @@ This project was developed almost entirely using the **KAT-Coder-Pro V1** model.
 
 ### Application Demo Video
 
-Watch our application demo video:
+Watch application demo video:
 
 [![Application Demo Video](https://i2.hdslb.com/bfs/archive/487baaaba3093d5ca4b74d2bd6422ee00fa48caa.jpg@.avif)](https://www.bilibili.com/video/BV12LkyBuEHh)
 
