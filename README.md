@@ -6,6 +6,12 @@ An AI-powered app for exploring inner self and self-discovery. Supports both And
 ## Development Notes
 This project was developed almost entirely using the **KAT-Coder-Pro V1** model.
 
+### Application Demo Video
+
+Watch our application demo video:
+
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=115531768205559&bvid=BV12LkyBuEHh&cid=33924710953&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+
 ### Interface Showcase
 
 Below are screenshots of our application interface:

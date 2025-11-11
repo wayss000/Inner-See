@@ -6,6 +6,12 @@
 ## 开发说明
 本项目几乎全部使用 **KAT-Coder-Pro V1** 模型进行开发.
 
+### 应用演示视频
+
+观看我们的应用演示视频：
+
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=115531768205559&bvid=BV12LkyBuEHh&cid=33924710953&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+
 ### 界面展示
 
 以下是我们应用的界面截图展示：
