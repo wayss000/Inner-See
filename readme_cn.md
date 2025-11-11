@@ -6,6 +6,55 @@
 ## 开发说明
 本项目几乎全部使用 **KAT-Coder-Pro V1** 模型进行开发.
 
+### 界面展示
+
+以下是我们应用的界面截图展示：
+
+<table>
+  <tr>
+    <td><img src="demo/1.jpg" width="200" alt="界面截图1"></td>
+    <td><img src="demo/2.jpg" width="200" alt="界面截图2"></td>
+    <td><img src="demo/3.jpg" width="200" alt="界面截图3"></td>
+    <td><img src="demo/4.jpg" width="200" alt="界面截图4"></td>
+    <td><img src="demo/5.jpg" width="200" alt="界面截图5"></td>
+  </tr>
+  <tr>
+    <td align="center">界面1</td>
+    <td align="center">界面2</td>
+    <td align="center">界面3</td>
+    <td align="center">界面4</td>
+    <td align="center">界面5</td>
+  </tr>
+  <tr>
+    <td><img src="demo/6.jpg" width="200" alt="界面截图6"></td>
+    <td><img src="demo/7.jpg" width="200" alt="界面截图7"></td>
+    <td><img src="demo/8.jpg" width="200" alt="界面截图8"></td>
+    <td><img src="demo/9.jpg" width="200" alt="界面截图9"></td>
+    <td><img src="demo/10.jpg" width="200" alt="界面截图10"></td>
+  </tr>
+  <tr>
+    <td align="center">界面6</td>
+    <td align="center">界面7</td>
+    <td align="center">界面8</td>
+    <td align="center">界面9</td>
+    <td align="center">界面10</td>
+  </tr>
+  <tr>
+    <td><img src="demo/11.jpg" width="200" alt="界面截图11"></td>
+    <td><img src="demo/12.jpg" width="200" alt="界面截图12"></td>
+    <td><img src="demo/13.jpg" width="200" alt="界面截图13"></td>
+    <td><img src="demo/14.jpg" width="200" alt="界面截图14"></td>
+    <td><img src="demo/15.jpg" width="200" alt="界面截图15"></td>
+  </tr>
+  <tr>
+    <td align="center">界面11</td>
+    <td align="center">界面12</td>
+    <td align="center">界面13</td>
+    <td align="center">界面14</td>
+    <td align="center">界面15</td>
+  </tr>
+</table>
+
 
 ### 使用**KAT-Coder-Pro V1**开发历程
 
